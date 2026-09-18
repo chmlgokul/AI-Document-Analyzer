@@ -1,0 +1,405 @@
+INTERN PROJECT TASK
+
+Project Title
+
+AI Document Analyzer
+
+Project Objective
+
+Develop a web application that allows users to upload documents and automatically extract, analyze, summarize, and search the content.
+
+The project must be developed WITHOUT any paid API keys.
+
+Technology Stack
+
+Frontend: HTML, CSS, JavaScript / React.js
+
+Backend: Python Flask or FastAPI
+
+Database: SQLite / Firebase
+
+OCR: Tesseract OCR
+
+PDF Processing: PyMuPDF
+
+DOCX Processing: python-docx
+
+
+Main Features
+
+1. User Login
+
+User Registration
+
+Login
+
+Logout
+
+Protected Dashboard
+
+
+2. Document Upload
+
+Users should be able to upload:
+
+PDF
+
+DOCX
+
+TXT
+
+JPG
+
+PNG
+
+
+Display:
+
+File name
+
+File type
+
+File size
+
+Upload date
+
+Processing status
+
+
+3. Text Extraction
+
+Extract text automatically from:
+
+PDF
+
+DOCX
+
+TXT
+
+
+For scanned PDFs or images, use OCR to extract the text.
+
+4. OCR
+
+Implement OCR using Tesseract.
+
+The system should:
+
+Detect scanned documents
+
+Extract text from images
+
+Display extracted text
+
+Handle OCR errors properly
+
+
+5. Keyword Extraction
+
+Automatically identify important keywords from the document.
+
+Example:
+
+Input: "Python developer with experience in Django, Flask and PostgreSQL."
+
+Keywords:
+
+Python
+
+Django
+
+Flask
+
+PostgreSQL
+
+Developer
+
+
+6. Summary Generation
+
+Generate a short summary of the uploaded document.
+
+Display:
+
+Short Summary
+
+Key Points
+
+Important Information
+
+
+The summary should work without paid AI APIs. The intern can use an open-source/local NLP approach.
+
+7. Important Information Extraction
+
+Extract useful information such as:
+
+Names
+
+Email addresses
+
+Phone numbers
+
+Dates
+
+Companies
+
+Locations
+
+Amounts
+
+Percentages
+
+
+8. Search Within Document
+
+Users should be able to search for any word or phrase inside the document.
+
+Example:
+
+Search: "salary"
+
+Display:
+
+Number of matches
+
+Matching text
+
+Page number where possible
+
+Highlight searched keyword
+
+
+9. Document Dashboard
+
+Create a dashboard showing:
+
+Total Documents
+
+Processed Documents
+
+Processing Documents
+
+Failed Documents
+
+Recent Documents
+
+
+10. Document History
+
+Users should be able to:
+
+View uploaded documents
+
+Search documents
+
+Filter documents
+
+Open document analysis
+
+Delete documents
+
+Re-analyze documents
+
+
+11. Document Analysis Page
+
+For every uploaded document, display:
+
+Document Name
+File Type
+Pages
+Word Count
+Summary
+Keywords
+Important Information
+Extracted Text
+Search Option
+
+12. Export
+
+Allow users to export the analysis as:
+
+PDF
+
+TXT
+
+
+Required Pages
+
+1. Login Page
+
+
+2. Registration Page
+
+
+3. Dashboard
+
+
+4. Upload Document Page
+
+
+5. Document List Page
+
+
+6. Document Analysis Page
+
+
+7. Profile Page
+
+
+
+UI Requirements
+
+Modern and clean design
+
+Responsive for mobile and desktop
+
+Sidebar navigation
+
+Dashboard cards
+
+Search bar
+
+Upload drag-and-drop
+
+Loading indicator
+
+Success/Error messages
+
+Proper empty states
+
+
+Security Requirements
+
+User authentication
+
+Protected routes
+
+File type validation
+
+File size validation
+
+Secure document access
+
+Users should only see their own documents
+
+
+Edge Cases
+
+The application should handle:
+
+Empty documents
+
+Corrupted files
+
+Unsupported files
+
+Password-protected PDFs
+
+Scanned PDFs
+
+OCR failure
+
+Large documents
+
+No text detected
+
+
+The application should show a proper error message instead of crashing.
+
+Expected Workflow
+
+User Login
+↓
+Dashboard
+↓
+Upload Document
+↓
+Validate File
+↓
+Extract Text
+↓
+OCR if Required
+↓
+Analyze Document
+↓
+Extract Keywords
+↓
+Generate Summary
+↓
+Extract Important Information
+↓
+Store Results
+↓
+Display Analysis
+↓
+Search / Export
+
+Deliverables
+
+The intern must submit:
+
+1. Complete source code
+
+
+2. GitHub repository
+
+
+3. Working project
+
+
+4. Database structure
+
+
+5. README documentation
+
+
+6. Installation instructions
+
+
+7. Test cases
+
+
+8. Test report
+
+
+9. Project presentation
+
+
+10. Demo video
+
+
+
+Important Rules
+
+No paid API keys
+
+No copied source code
+
+Use GitHub for version control
+
+Write clean and reusable code
+
+Add proper comments where required
+
+Validate all user inputs
+
+Handle errors properly
+
+The project must be fully functional at the time of submission
+
+
+Evaluation
+
+UI/UX - 15%
+Frontend - 15%
+Backend - 15%
+Document Processing - 15%
+OCR - 10%
+AI/NLP Features - 15%
+Database & Security - 5%
+Testing - 5%
+Documentation & Presentation - 5%
+
+TOTAL - 100%

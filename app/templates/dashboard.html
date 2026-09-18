@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard - AI Document Analyzer
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h1>Dashboard</h1>
+
+    <p>
+        Welcome back, {{ current_user.username }}.
+    </p>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+
+        <h3>Upload Document</h3>
+
+        <p>
+            Upload a PDF, DOCX, TXT or image
+            for analysis.
+        </p>
+
+        <br>
+
+        <a
+            href="{{ url_for('documents.upload_document') }}"
+            class="btn"
+        >
+            Upload Document
+        </a>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h3>My Documents</h3>
+
+        <p>
+            View, search, analyze and manage
+            your uploaded documents.
+        </p>
+
+        <br>
+
+        <a
+            href="{{ url_for('documents.list_documents') }}"
+            class="btn"
+        >
+            View Documents
+        </a>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h3>Document Analysis</h3>
+
+        <p>
+            Extract text, keywords,
+            important information and summaries.
+        </p>
+
+        <br>
+
+        <a
+            href="{{ url_for('documents.list_documents') }}"
+            class="btn"
+        >
+            Open Analysis
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card dashboard-info">
+
+    <h2>How It Works</h2>
+
+    <br>
+
+    <div class="workflow">
+
+        <div class="workflow-step">
+            <strong>1. Upload</strong>
+            <p>
+                Upload your document.
+            </p>
+        </div>
+
+
+        <div class="workflow-step">
+            <strong>2. Extract</strong>
+            <p>
+                Text is extracted from the document.
+            </p>
+        </div>
+
+
+        <div class="workflow-step">
+            <strong>3. Analyze</strong>
+            <p>
+                Keywords and important information
+                are identified.
+            </p>
+        </div>
+
+
+        <div class="workflow-step">
+            <strong>4. Summarize</strong>
+            <p>
+                A concise summary is generated.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Documents - AI Document Analyzer
+{% endblock %}
+
+{% block content %}
+
+<div class="documents-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1>My Documents</h1>
+
+            <p>
+                Manage and analyze your uploaded documents.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('documents.upload_document') }}"
+            class="btn"
+        >
+            Upload Document
+        </a>
+
+    </div>
+
+
+    <div class="search-card">
+
+        <form
+            action="{{ url_for('documents.list_documents') }}"
+            method="GET"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="q"
+                placeholder="Search documents..."
+                value="{{ search_query }}"
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+            {% if search_query %}
+
+                <a
+                    href="{{ url_for('documents.list_documents') }}"
+                    class="btn btn-secondary"
+                >
+                    Clear
+                </a>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+
+
+    {% if search_query %}
+
+        <div class="search-result-message">
+
+            Search results for:
+            <strong>{{ search_query }}</strong>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if documents %}
+
+        <div class="documents-card">
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Uploaded At
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for document in documents %}
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        {{ document.filename }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+                                    {{ document.uploaded_at }}
+                                </td>
+
+
+                                <td>
+
+                                    <span class="badge badge-success">
+                                        Uploaded
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="document-actions">
+
+                                        <a
+                                            href="{{ url_for(
+                                                'documents.analyze_document',
+                                                document_id=document.id
+                                            ) }}"
+                                            class="btn btn-small"
+                                        >
+                                            Analyze
+                                        </a>
+
+
+                                        <form
+                                            action="{{ url_for(
+                                                'documents.reanalyze_document',
+                                                document_id=document.id
+                                            ) }}"
+                                            method="POST"
+                                            onsubmit="return confirm(
+                                                'Re-analyze this document?'
+                                            );"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-small btn-secondary"
+                                            >
+                                                Re-analyze
+                                            </button>
+
+                                        </form>
+
+
+                                        <form
+                                            action="{{ url_for(
+                                                'documents.delete_document',
+                                                document_id=document.id
+                                            ) }}"
+                                            method="POST"
+                                            onsubmit="return confirm(
+                                                'Are you sure you want to delete this document?'
+                                            );"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-small btn-danger"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h2>No Documents Found</h2>
+
+            {% if search_query %}
+
+                <p>
+                    No documents found for
+                    <strong>{{ search_query }}</strong>.
+                </p>
+
+                <br>
+
+                <a
+                    href="{{ url_for('documents.list_documents') }}"
+                    class="btn btn-secondary"
+                >
+                    View All Documents
+                </a>
+
+            {% else %}
+
+                <p>
+                    You have not uploaded any documents yet.
+                </p>
+
+                <br>
+
+                <a
+                    href="{{ url_for('documents.upload_document') }}"
+                    class="btn"
+                >
+                    Upload Your First Document
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

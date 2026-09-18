@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile - AI Document Analyzer
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    <div class="profile-card">
+
+        <h1>My Profile</h1>
+
+        <div class="profile-info">
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Username
+                </span>
+
+                <span class="profile-value">
+                    {{ user.username }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Email Address
+                </span>
+
+                <span class="profile-value">
+                    {{ user.email }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Account Created
+                </span>
+
+                <span class="profile-value">
+                    {{ user.created_at }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-actions">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn"
+            >
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

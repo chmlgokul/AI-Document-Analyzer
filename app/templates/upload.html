@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+Upload Document - AI Document Analyzer
+{% endblock %}
+
+{% block content %}
+
+<div class="upload-container">
+
+    <div class="upload-box">
+
+        <h1>
+            Upload Document
+        </h1>
+
+        <p>
+            Upload a document to extract and analyze its content.
+        </p>
+
+        <br>
+
+
+        <form
+            action="{{ url_for('documents.upload_document') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="form-group">
+
+                <label for="document">
+                    Select Document
+                </label>
+
+                <input
+                    type="file"
+                    id="document"
+                    name="document"
+                    class="file-input"
+                    accept=".pdf,.docx,.txt,.jpg,.jpeg,.png"
+                    required
+                >
+
+            </div>
+
+
+            <div class="supported-formats">
+
+                <strong>
+                    Supported formats
+                </strong>
+
+                <p>
+                    PDF, DOCX, TXT, JPG, JPEG and PNG
+                </p>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Upload and Analyze
+            </button>
+
+        </form>
+
+
+        <div class="upload-back">
+
+            <a
+                href="{{ url_for('documents.list_documents') }}"
+            >
+                Back to My Documents
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

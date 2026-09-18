@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="analysis-container">
+
+    <h1>Document Analysis</h1>
+
+    <h2>{{ document.filename }}</h2>
+
+    <p>
+        Uploaded At: {{ document.uploaded_at }}
+    </p>
+
+    <hr>
+
+
+    <!-- Export Options -->
+
+    <h3>📥 Export Analysis</h3>
+
+    <a
+        href="{{ url_for(
+            'documents.export_txt',
+            document_id=document.id
+        ) }}"
+    >
+        📄 Download TXT
+    </a>
+
+    &nbsp;&nbsp;
+
+    <a
+        href="{{ url_for(
+            'documents.export_pdf',
+            document_id=document.id
+        ) }}"
+    >
+        📑 Download PDF
+    </a>
+
+
+    <hr>
+
+
+    <!-- Keywords -->
+
+    <h3>🔑 Keywords</h3>
+
+    {% if keywords %}
+
+        <ul>
+
+            {% for keyword in keywords %}
+
+                <li>
+                    {{ keyword }}
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>
+            No keywords found.
+        </p>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- Extracted Information -->
+
+    <h3>📌 Extracted Information</h3>
+
+    {% if information %}
+
+        <ul>
+
+            {% for key, value in information.items() %}
+
+                <li>
+
+                    <strong>
+                        {{ key.replace("_", " ").title() }}:
+                    </strong>
+
+                    {{ value }}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>
+            No structured information found.
+        </p>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- Summary -->
+
+    <h3>📝 Summary</h3>
+
+    {% if summary %}
+
+        <div class="summary">
+
+            <p>
+                {{ summary }}
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No summary available.
+        </p>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- Extracted Text -->
+
+    <h3>
+        Extracted Text
+    </h3>
+
+    {% if document.extracted_text %}
+
+        <div class="extracted-text">
+
+            <pre>{{ document.extracted_text }}</pre>
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No text could be extracted
+            from this document.
+        </p>
+
+    {% endif %}
+
+
+    <br>
+
+    <a
+        href="{{ url_for(
+            'documents.list_documents'
+        ) }}"
+    >
+        Back to My Documents
+    </a>
+
+</div>
+
+{% endblock %}
