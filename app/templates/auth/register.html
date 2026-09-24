@@ -6,21 +6,34 @@ Register - AI Document Analyzer
 
 {% block content %}
 
-<div class="auth-container">
+<div class="auth-page">
 
     <div class="auth-card">
 
-        <h1>Create Account</h1>
+        <!-- Header -->
+        <div class="auth-header">
 
-        <p class="auth-subtitle">
-            Register to use AI Document Analyzer
-        </p>
+            <div class="auth-icon">
+                AI
+            </div>
 
+            <h1>Create Your Account</h1>
+
+            <p>
+                Register to start using AI Document Analyzer
+            </p>
+
+        </div>
+
+
+        <!-- Registration Form -->
         <form
             method="POST"
             action="{{ url_for('auth.register') }}"
+            class="auth-form"
         >
 
+            <!-- Username -->
             <div class="form-group">
 
                 <label for="username">
@@ -32,12 +45,14 @@ Register - AI Document Analyzer
                     id="username"
                     name="username"
                     placeholder="Enter your username"
+                    autocomplete="username"
                     required
                 >
 
             </div>
 
 
+            <!-- Email -->
             <div class="form-group">
 
                 <label for="email">
@@ -48,13 +63,15 @@ Register - AI Document Analyzer
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="Enter your email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
                     required
                 >
 
             </div>
 
 
+            <!-- Password -->
             <div class="form-group">
 
                 <label for="password">
@@ -65,13 +82,15 @@ Register - AI Document Analyzer
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="Enter your password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
                     required
                 >
 
             </div>
 
 
+            <!-- Confirm Password -->
             <div class="form-group">
 
                 <label for="confirm_password">
@@ -82,29 +101,37 @@ Register - AI Document Analyzer
                     type="password"
                     id="confirm_password"
                     name="confirm_password"
-                    placeholder="Confirm your password"
+                    placeholder="Re-enter your password"
+                    autocomplete="new-password"
                     required
                 >
 
             </div>
 
 
-            <button type="submit">
+            <!-- Submit -->
+            <button
+                type="submit"
+                class="auth-submit"
+            >
                 Create Account
             </button>
 
         </form>
 
 
-        <p class="auth-link">
+        <!-- Login Link -->
+        <div class="auth-footer">
 
-            Already have an account?
+            <p>
+                Already have an account?
 
-            <a href="{{ url_for('auth.login') }}">
-                Login
-            </a>
+                <a href="{{ url_for('auth.login') }}">
+                    Sign In
+                </a>
+            </p>
 
-        </p>
+        </div>
 
     </div>
 

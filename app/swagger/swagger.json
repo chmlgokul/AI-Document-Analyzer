@@ -1,0 +1,444 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AI Document Analyzer API",
+    "description": "REST API for document upload, extraction and AI-powered analysis.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "default",
+      "description": "AI Document Analyzer API endpoints"
+    }
+  ],
+  "paths": {
+    "/api/test": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Test API",
+        "description": "Check whether the main API is working.",
+        "responses": {
+          "200": {
+            "description": "API is working"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "API health check",
+        "description": "Check the health status of the main API.",
+        "responses": {
+          "200": {
+            "description": "API is healthy"
+          }
+        }
+      }
+    },
+    "/api/documents": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Get user documents",
+        "description": "Return all documents belonging to the logged-in user.",
+        "responses": {
+          "200": {
+            "description": "Documents retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/documents/{document_id}": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Get a single document",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document retrieved successfully"
+          },
+          "404": {
+            "description": "Document not found"
+          }
+        }
+      }
+    },
+    "/api/upload": {
+      "post": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Upload and analyze a document",
+        "description": "Upload a PDF, DOCX, TXT, JPG, JPEG or PNG document and perform extraction and analysis.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Document uploaded and analyzed successfully"
+          },
+          "400": {
+            "description": "Invalid upload"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/test": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Test API v1",
+        "description": "Check whether API version 1 is working.",
+        "responses": {
+          "200": {
+            "description": "API v1 is working"
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "API v1 health check",
+        "description": "Check the health status of API version 1.",
+        "responses": {
+          "200": {
+            "description": "API v1 is healthy"
+          }
+        }
+      }
+    },
+    "/api/v1/documents": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Get user documents - API v1",
+        "description": "Return all documents belonging to the logged-in user.",
+        "responses": {
+          "200": {
+            "description": "Documents retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Get a single document - API v1",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document retrieved successfully"
+          },
+          "404": {
+            "description": "Document not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Delete a document - API v1",
+        "description": "Delete an existing document and its stored physical file.",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the document to delete",
+            "schema": {
+              "type": "integer",
+              "example": 16
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "version": "v1",
+                  "message": "Document deleted successfully.",
+                  "document": {
+                    "id": 16
+                  },
+                  "file_deleted": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Document not found"
+          },
+          "500": {
+            "description": "Failed to delete document"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}/analysis": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Get document analysis - API v1",
+        "description": "Analyze an already uploaded document without creating a new document record.",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the document to analyze",
+            "schema": {
+              "type": "integer",
+              "example": 16
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document analysis generated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "version": "v1",
+                  "document": {
+                    "id": 16,
+                    "filename": "Gokulakkannan_Jadhagam.png"
+                  },
+                  "analysis": {
+                    "keywords": [
+                      "animation",
+                      "computer",
+                      "science"
+                    ],
+                    "information": {},
+                    "summary": "Document summary",
+                    "ai_analysis": {
+                      "success": true,
+                      "summary": "AI generated summary",
+                      "insights": [
+                        "Insight 1",
+                        "Insight 2"
+                      ],
+                      "message": "AI analysis completed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Document not found"
+          },
+          "400": {
+            "description": "Document has no extracted text"
+          },
+          "500": {
+            "description": "Analysis failed"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}/reanalyze": {
+      "post": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Re-analyze document - API v1",
+        "description": "Re-extract text from the original uploaded file and run the complete analysis again. This does not create a new document record.",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the document to re-analyze",
+            "schema": {
+              "type": "integer",
+              "example": 16
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document re-analyzed successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "version": "v1",
+                  "message": "Document re-analyzed successfully.",
+                  "document": {
+                    "id": 16,
+                    "filename": "Gokulakkannan_Jadhagam.png",
+                    "uploaded_at": "2026-09-24T14:53:26.158457"
+                  },
+                  "analysis": {
+                    "keywords": [
+                      "animation",
+                      "computer",
+                      "science",
+                      "greengold",
+                      "hyderabad"
+                    ],
+                    "information": {
+                      "name": "இல.கோகுலக்கண்ணன்",
+                      "date_of_birth": "20.12.1994",
+                      "education": "BA VFX and Animation MSc Computer Science"
+                    },
+                    "summary": "Document summary",
+                    "ai_analysis": {
+                      "success": true,
+                      "summary": "AI generated summary",
+                      "insights": [
+                        "Insight 1",
+                        "Insight 2",
+                        "Insight 3",
+                        "Insight 4",
+                        "Insight 5"
+                      ],
+                      "message": "AI analysis completed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Document or original file not found"
+          },
+          "400": {
+            "description": "Document text extraction failed or returned empty text"
+          },
+          "500": {
+            "description": "Re-analysis failed"
+          }
+        }
+      }
+    },
+    "/api/v1/upload": {
+      "post": {
+        "tags": [
+          "default"
+        ],
+        "summary": "Upload and analyze a document - API v1",
+        "description": "Upload a PDF, DOCX, TXT, JPG, JPEG or PNG document and perform extraction and AI analysis.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "document"
+                ],
+                "properties": {
+                  "document": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Document file to upload"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Alternative file field"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Document uploaded and analyzed successfully"
+          },
+          "400": {
+            "description": "Invalid upload"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  }
+}

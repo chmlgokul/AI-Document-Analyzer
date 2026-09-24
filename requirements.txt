@@ -8,3 +8,5 @@ pytesseract
 Pillow
 reportlab
 pytest
+anthropic
+python-dotenv

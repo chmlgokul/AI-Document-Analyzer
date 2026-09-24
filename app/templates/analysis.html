@@ -43,6 +43,82 @@
     <hr>
 
 
+    <!-- AI Powered Analysis -->
+
+    <h3>🤖 AI-Powered Analysis</h3>
+
+    {% if ai_analysis and ai_analysis.success %}
+
+        <!-- AI Summary -->
+
+        <h4>🧠 AI Summary</h4>
+
+        {% if ai_analysis.summary %}
+
+            <div class="summary ai-summary">
+
+                <p>
+                    {{ ai_analysis.summary }}
+                </p>
+
+            </div>
+
+        {% else %}
+
+            <p>
+                No AI summary was generated.
+            </p>
+
+        {% endif %}
+
+
+        <!-- AI Key Insights -->
+
+        <h4>💡 Key Insights</h4>
+
+        {% if ai_analysis.insights %}
+
+            <ul>
+
+                {% for insight in ai_analysis.insights %}
+
+                    <li>
+                        {{ insight }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        {% else %}
+
+            <p>
+                No AI insights were generated.
+            </p>
+
+        {% endif %}
+
+    {% else %}
+
+        <div class="ai-error">
+
+            <p>
+                ⚠️
+                {{ ai_analysis.message
+                    if ai_analysis
+                    else
+                    "AI analysis is not available."
+                }}
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <hr>
+
+
     <!-- Keywords -->
 
     <h3>🔑 Keywords</h3>
@@ -109,7 +185,7 @@
     <hr>
 
 
-    <!-- Summary -->
+    <!-- Rule-Based Summary -->
 
     <h3>📝 Summary</h3>
 
@@ -138,7 +214,7 @@
     <!-- Extracted Text -->
 
     <h3>
-        Extracted Text
+        📄 Extracted Text
     </h3>
 
     {% if document.extracted_text %}
@@ -166,7 +242,7 @@
             'documents.list_documents'
         ) }}"
     >
-        Back to My Documents
+        ← Back to My Documents
     </a>
 
 </div>

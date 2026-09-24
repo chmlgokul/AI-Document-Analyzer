@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -11,123 +12,317 @@
     >
 
     <title>
+
         {% block title %}
         AI Document Analyzer
         {% endblock %}
+
     </title>
+
+
+    <!-- MAIN CSS -->
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
+        href="{{ url_for(
+            'static',
+            filename='css/style.css'
+        ) }}"
     >
+
+
+    <!-- NAVBAR CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/navbar.css'
+        ) }}"
+    >
+
+
+    {% block extra_css %}
+    {% endblock %}
 
 </head>
 
 
 <body>
 
-    <!-- Navigation Bar -->
 
-    <nav class="navbar">
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
 
-        <a
-            href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('home') }}"
-            class="logo"
-        >
-            AI Document Analyzer
-        </a>
+    <header
+        class="site-header navbar-visible"
+        id="siteHeader"
+    >
+
+        <div class="navbar">
 
 
-        <div class="nav-links">
+            <!-- BRAND -->
+
+            <a
+                href="{{
+                    url_for(
+                        'dashboard'
+                    )
+                    if current_user.is_authenticated
+                    else
+                    url_for(
+                        'home'
+                    )
+                }}"
+                class="brand"
+            >
+
+                <span class="brand-icon">
+                    AI
+                </span>
+
+
+                <span class="brand-text">
+
+                    <strong>
+                        AI Document
+                    </strong>
+
+                    <small>
+                        Analyzer
+                    </small>
+
+                </span>
+
+            </a>
+
+
+            <!-- NAVIGATION -->
 
             {% if current_user.is_authenticated %}
 
-                <a href="{{ url_for('dashboard') }}">
-                    Dashboard
-                </a>
+                <nav class="nav-links">
 
-                <a href="{{ url_for('documents.list_documents') }}">
-                    My Documents
-                </a>
 
-                <a href="{{ url_for('documents.upload_document') }}">
-                    Upload
-                </a>
+                    <!-- DASHBOARD -->
 
-                <a href="{{ url_for('profile.profile_page') }}">
-                    Profile
-                </a>
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'dashboard' %}
+                                active
+                            {% endif %}
+                        "
+                    >
 
-                <a href="{{ url_for('auth.logout') }}">
-                    Logout
-                </a>
+                        Dashboard
+
+                    </a>
+
+
+                    <!-- MY DOCUMENTS -->
+
+                    <a
+                        href="{{
+                            url_for(
+                                'documents.list_documents'
+                            )
+                        }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'documents.list_documents' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+
+                        My Documents
+
+                    </a>
+
+
+                    <!-- UPLOAD -->
+
+                    <a
+                        href="{{
+                            url_for(
+                                'documents.upload_document'
+                            )
+                        }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'documents.upload_document' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+
+                        Upload Document
+
+                    </a>
+
+
+                    <!-- PROFILE -->
+
+                    <a
+                        href="{{
+                            url_for(
+                                'profile.profile_page'
+                            )
+                        }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'profile.profile_page' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+
+                        Profile
+
+                    </a>
+
+
+                    <!-- LOGOUT -->
+
+                    <a
+                        href="{{ url_for('auth.logout') }}"
+                        class="
+                            nav-link
+                            nav-logout
+                        "
+                    >
+
+                        Logout
+
+                    </a>
+
+                </nav>
+
 
             {% else %}
 
-                <a href="{{ url_for('home') }}">
-                    Home
-                </a>
 
-                <a href="{{ url_for('auth.login') }}">
-                    Login
-                </a>
+                <nav class="nav-links">
 
-                <a href="{{ url_for('auth.register') }}">
-                    Register
-                </a>
+                    <a
+                        href="{{ url_for('home') }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'home' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+                        Home
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('auth.login') }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'auth.login' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+                        Login
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('auth.register') }}"
+                        class="
+                            nav-link
+                            {% if request.endpoint == 'auth.register' %}
+                                active
+                            {% endif %}
+                        "
+                    >
+                        Register
+                    </a>
+
+                </nav>
 
             {% endif %}
 
         </div>
 
-    </nav>
+    </header>
 
 
-    <!-- Main Content -->
+    <!-- =====================================================
+         FLASH MESSAGES
+         ===================================================== -->
 
-    <main class="container">
+    {% with messages = get_flashed_messages() %}
 
-        <!-- Flash Messages -->
+        {% if messages %}
 
-        {% with messages = get_flashed_messages() %}
+            <div class="flash-container">
 
-            {% if messages %}
+                {% for message in messages %}
 
-                <div class="flash-container">
+                    <div class="flash-message">
+                        {{ message }}
+                    </div>
 
-                    {% for message in messages %}
+                {% endfor %}
 
-                        <div class="flash-message">
-                            {{ message }}
-                        </div>
+            </div>
 
-                    {% endfor %}
+        {% endif %}
 
-                </div>
-
-            {% endif %}
-
-        {% endwith %}
+    {% endwith %}
 
 
-        <!-- Page Content -->
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main>
 
         {% block content %}
-
         {% endblock %}
 
     </main>
 
 
-    <!-- Footer -->
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
 
-    <footer class="footer">
+    <footer class="site-footer">
 
         <p>
             AI Document Analyzer © 2026
         </p>
 
     </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script
+        src="{{ url_for(
+            'static',
+            filename='js/main.js'
+        ) }}"
+    ></script>
+
+
+    <script
+        src="{{ url_for(
+            'static',
+            filename='js/navbar.js'
+        ) }}"
+    ></script>
 
 
 </body>

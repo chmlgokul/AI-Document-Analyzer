@@ -1,68 +1,955 @@
 {% extends "base.html" %}
 
 {% block title %}
-Profile - AI Document Analyzer
+My Profile | AI Document Analyzer
 {% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   PROFILE PAGE
+   ========================================================= */
+
+.profile-page {
+
+    min-height:
+        calc(100vh - 140px);
+
+    padding:
+        48px 22px 65px;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(37, 99, 235, 0.08),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 75%,
+            rgba(79, 70, 229, 0.07),
+            transparent 30%
+        );
+
+}
+
+
+.profile-shell {
+
+    width:
+        min(1050px, 94%);
+
+    margin:
+        0 auto;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-kicker {
+
+    margin:
+        0 0 8px;
+
+    color:
+        #2563eb;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.5px;
+
+}
+
+
+.profile-heading {
+
+    margin-bottom:
+        28px;
+
+}
+
+
+.profile-heading h1 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        #0f172a;
+
+    font-size:
+        clamp(38px, 5vw, 58px);
+
+    line-height:
+        1.05;
+
+    letter-spacing:
+        -1.5px;
+
+}
+
+
+.profile-heading p {
+
+    margin:
+        0;
+
+    color:
+        #64748b;
+
+    line-height:
+        1.7;
+
+}
+
+
+/* =========================================================
+   PROFILE BOOK
+   ========================================================= */
+
+.profile-book {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        0.9fr 1.1fr;
+
+    min-height:
+        490px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid #dbe4ef;
+
+    border-radius:
+        25px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 28px 70px
+        rgba(15,23,42,.13);
+
+}
+
+
+/* =========================================================
+   LEFT COVER
+   ========================================================= */
+
+.profile-cover {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        space-between;
+
+    padding:
+        45px;
+
+    overflow:
+        hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1d4ed8,
+            #4f46e5
+        );
+
+    color:
+        white;
+
+}
+
+
+.profile-cover::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        280px;
+
+    height:
+        280px;
+
+    right:
+        -130px;
+
+    top:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+
+.profile-cover::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        240px;
+
+    height:
+        240px;
+
+    left:
+        -130px;
+
+    bottom:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+.profile-logo {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    width:
+        70px;
+
+    height:
+        70px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.3);
+
+    border-radius:
+        19px;
+
+    background:
+        rgba(255,255,255,.14);
+
+    font-size:
+        24px;
+
+    font-weight:
+        800;
+
+}
+
+
+.profile-cover h2 {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    margin:
+        30px 0 12px;
+
+    font-size:
+        34px;
+
+    letter-spacing:
+        -1px;
+
+}
+
+
+.profile-cover p {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    max-width:
+        350px;
+
+    margin:
+        0;
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.8;
+
+}
+
+
+.profile-cover-footer {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size:
+        10px;
+
+    letter-spacing:
+        .5px;
+
+}
+
+
+/* =========================================================
+   RIGHT INFORMATION
+   ========================================================= */
+
+.profile-info-panel {
+
+    padding:
+        45px;
+
+}
+
+
+.profile-panel-kicker {
+
+    margin:
+        0 0 8px;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.2px;
+
+}
+
+
+.profile-panel-title {
+
+    margin:
+        0 0 28px;
+
+    color:
+        #0f172a;
+
+    font-size:
+        25px;
+
+}
+
+
+/* =========================================================
+   INFO ROW
+   ========================================================= */
+
+.profile-detail {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+
+    padding:
+        18px 0;
+
+    border-bottom:
+        1px solid
+        #e2e8f0;
+
+}
+
+
+.profile-detail:last-of-type {
+
+    border-bottom:
+        0;
+
+}
+
+
+.detail-icon {
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex:
+        0 0 auto;
+
+    border-radius:
+        12px;
+
+    background:
+        #eff6ff;
+
+    color:
+        #2563eb;
+
+    font-size:
+        17px;
+
+}
+
+
+.detail-content {
+
+    min-width:
+        0;
+
+}
+
+
+.detail-label {
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .7px;
+
+}
+
+
+.detail-value {
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    color:
+        #1e293b;
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   ACCOUNT STATUS
+   ========================================================= */
+
+.account-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-top:
+        26px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #dcfce7;
+
+    border-radius:
+        12px;
+
+    background:
+        #f0fdf4;
+
+}
+
+
+.account-status-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    border-radius:
+        50%;
+
+    background:
+        #22c55e;
+
+}
+
+
+.account-status-text {
+
+    color:
+        #15803d;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.profile-actions {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        10px;
+
+    margin-top:
+        28px;
+
+}
+
+
+.profile-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        12px 17px;
+
+    border-radius:
+        10px;
+
+    text-decoration:
+        none;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+
+}
+
+
+.profile-button:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.profile-primary {
+
+    background:
+        #2563eb;
+
+    color:
+        white;
+
+}
+
+
+.profile-primary:hover {
+
+    background:
+        #1d4ed8;
+
+}
+
+
+.profile-secondary {
+
+    background:
+        #f1f5f9;
+
+    color:
+        #475569;
+
+}
+
+
+.profile-secondary:hover {
+
+    background:
+        #e2e8f0;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .profile-book {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .profile-cover {
+
+        min-height:
+            300px;
+
+        padding:
+            32px;
+
+    }
+
+
+    .profile-cover h2 {
+
+        font-size:
+            28px;
+
+    }
+
+
+    .profile-info-panel {
+
+        padding:
+            32px;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .profile-page {
+
+        padding:
+            30px 12px 45px;
+
+    }
+
+
+    .profile-cover,
+    .profile-info-panel {
+
+        padding:
+            25px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
 
 {% block content %}
 
-<div class="profile-container">
+<div class="profile-page">
 
-    <div class="profile-card">
-
-        <h1>My Profile</h1>
-
-        <div class="profile-info">
-
-            <div class="profile-item">
-
-                <span class="profile-label">
-                    Username
-                </span>
-
-                <span class="profile-value">
-                    {{ user.username }}
-                </span>
-
-            </div>
+    <div class="profile-shell">
 
 
-            <div class="profile-item">
+        <!-- =================================================
+             HEADER
+             ================================================= -->
 
-                <span class="profile-label">
-                    Email Address
-                </span>
+        <div class="profile-heading">
 
-                <span class="profile-value">
-                    {{ user.email }}
-                </span>
+            <p class="profile-kicker">
+                ACCOUNT CENTER
+            </p>
 
-            </div>
+            <h1>
+                My Profile
+            </h1>
 
-
-            <div class="profile-item">
-
-                <span class="profile-label">
-                    Account Created
-                </span>
-
-                <span class="profile-value">
-                    {{ user.created_at }}
-                </span>
-
-            </div>
+            <p>
+                View your account information and
+                document workspace details.
+            </p>
 
         </div>
 
 
-        <div class="profile-actions">
+        <!-- =================================================
+             PROFILE BOOK
+             ================================================= -->
 
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="btn"
-            >
-                Back to Dashboard
-            </a>
+        <div class="profile-book">
+
+
+            <!-- =================================================
+                 LEFT COVER
+                 ================================================= -->
+
+            <section class="profile-cover">
+
+                <div>
+
+                    <div class="profile-logo">
+                        AI
+                    </div>
+
+
+                    <h2>
+                        AI Document
+                        Analyzer
+                    </h2>
+
+
+                    <p>
+                        Your personal workspace for
+                        uploading, extracting and
+                        analyzing documents.
+                    </p>
+
+                </div>
+
+
+                <div class="profile-cover-footer">
+
+                    DOCUMENT INTELLIGENCE WORKSPACE
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE INFORMATION
+                 ================================================= -->
+
+            <section class="profile-info-panel">
+
+                <p class="profile-panel-kicker">
+                    ACCOUNT INFORMATION
+                </p>
+
+                <h2 class="profile-panel-title">
+                    Personal Details
+                </h2>
+
+
+                <!-- USERNAME -->
+
+                <div class="profile-detail">
+
+                    <div class="detail-icon">
+                        ◉
+                    </div>
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            USERNAME
+                        </span>
+
+                        <span class="detail-value">
+                            {{ user.username }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="profile-detail">
+
+                    <div class="detail-icon">
+                        @
+                    </div>
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            EMAIL ADDRESS
+                        </span>
+
+                        <span class="detail-value">
+                            {{ user.email }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CREATED -->
+
+                <div class="profile-detail">
+
+                    <div class="detail-icon">
+                        +
+                    </div>
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            ACCOUNT CREATED
+                        </span>
+
+                        <span class="detail-value">
+                            {{ user.created_at }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="account-status">
+
+                    <span class="account-status-dot"></span>
+
+                    <span class="account-status-text">
+                        Account is active
+                    </span>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="profile-actions">
+
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="profile-button profile-primary"
+                    >
+                        ← Back to Dashboard
+                    </a>
+
+
+                    <a
+                        href="{{ url_for(
+                            'documents.list_documents'
+                        ) }}"
+                        class="profile-button profile-secondary"
+                    >
+                        My Documents →
+                    </a>
+
+                </div>
+
+            </section>
 
         </div>
 

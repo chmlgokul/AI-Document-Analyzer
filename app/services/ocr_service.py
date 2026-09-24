@@ -58,7 +58,7 @@ def extract_text_from_image(filepath):
         # OCR
         text = pytesseract.image_to_string(
             image,
-            lang="eng",
+            lang="tam+eng",
             config="--psm 11"
         )
 

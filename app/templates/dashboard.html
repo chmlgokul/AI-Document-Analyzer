@@ -1,131 +1,1846 @@
 {% extends "base.html" %}
 
 {% block title %}
-Dashboard - AI Document Analyzer
+Dashboard | AI Document Analyzer
 {% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   DASHBOARD — LAYERED CARD DECK
+   ========================================================= */
+
+.deck-dashboard {
+
+    position: relative;
+
+    width: 100%;
+    min-height: calc(100vh - 150px);
+
+    padding: 45px 24px 55px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(37, 99, 235, 0.08),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(79, 70, 229, 0.07),
+            transparent 28%
+        );
+
+}
+
+
+/* =========================================================
+   BACKGROUND ORBS
+   ========================================================= */
+
+.deck-bg-orb {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(70px);
+
+    pointer-events: none;
+
+    opacity: 0.45;
+
+}
+
+
+.deck-bg-orb-one {
+
+    width: 320px;
+    height: 320px;
+
+    top: 30px;
+    left: -120px;
+
+    background: rgba(37, 99, 235, 0.12);
+
+}
+
+
+.deck-bg-orb-two {
+
+    width: 360px;
+    height: 360px;
+
+    right: -140px;
+    bottom: 80px;
+
+    background: rgba(79, 70, 229, 0.10);
+
+}
+
+
+/* =========================================================
+   GRID BACKGROUND
+   ========================================================= */
+
+.deck-grid {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.35;
+
+    background-image:
+
+        linear-gradient(
+            rgba(148, 163, 184, 0.08) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(148, 163, 184, 0.08) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.deck-hero {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(1250px, 94%);
+
+    margin: 0 auto 30px;
+
+}
+
+
+.deck-kicker {
+
+    margin-bottom: 8px;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.deck-hero h1 {
+
+    margin: 0 0 10px;
+
+    color: #0f172a;
+
+    font-size:
+        clamp(38px, 5vw, 68px);
+
+    line-height: 1.06;
+
+    letter-spacing: -1.8px;
+
+}
+
+
+.deck-hero h1 span {
+
+    color: #2563eb;
+
+}
+
+
+.deck-subtitle {
+
+    max-width: 620px;
+
+    color: #64748b;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.deck-wrapper {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(1280px, 96%);
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================================
+   COUNTER
+   ========================================================= */
+
+.deck-counter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.deck-counter-line {
+
+    width: 48px;
+
+    height: 1px;
+
+    background: #cbd5e1;
+
+}
+
+
+/* =========================================================
+   CARD STAGE
+   ========================================================= */
+
+.deck-stage {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 560px;
+
+}
+
+
+/* =========================================================
+   DECK CARD
+   ========================================================= */
+
+.deck-card {
+
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    width: min(1100px, 94%);
+
+    height: 500px;
+
+    padding: 45px 52px;
+
+    border: 1px solid rgba(226, 232, 240, 0.95);
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.10);
+
+    overflow: hidden;
+
+    transform-origin: center center;
+
+    transition:
+
+        transform 0.55s cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        ),
+
+        opacity 0.45s ease,
+
+        box-shadow 0.45s ease;
+
+}
+
+
+/* =========================================================
+   CARD TOP
+   ========================================================= */
+
+.deck-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.deck-number {
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+}
+
+
+.deck-icon {
+
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5
+        );
+
+    color: white;
+
+    font-size: 26px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 10px 25px
+        rgba(37, 99, 235, 0.18);
+
+}
+
+
+.deck-category {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   CARD MAIN
+   ========================================================= */
+
+.deck-card-main {
+
+    margin-top: 90px;
+
+}
+
+
+.deck-card-main h2 {
+
+    margin-bottom: 14px;
+
+    color: #0f172a;
+
+    font-size: 44px;
+
+    line-height: 1.15;
+
+    letter-spacing: -1px;
+
+}
+
+
+.deck-card-main p {
+
+    max-width: 760px;
+
+    color: #64748b;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+   FORMAT / FEATURE ROW
+   ========================================================= */
+
+.deck-format-list,
+.deck-feature-row {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 25px;
+
+}
+
+
+.deck-format-list span,
+.deck-feature-row span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px 11px;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+}
+
+
+/* =========================================================
+   CARD BOTTOM
+   ========================================================= */
+
+.deck-card-bottom {
+
+    position: absolute;
+
+    left: 52px;
+    right: 52px;
+    bottom: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.deck-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 20px;
+
+    border-radius: 11px;
+
+    background: #2563eb;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px
+        rgba(37, 99, 235, 0.18);
+
+    transition:
+
+        transform 0.2s ease,
+
+        background 0.2s ease,
+
+        box-shadow 0.2s ease;
+
+}
+
+
+.deck-action:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 11px 25px
+        rgba(37, 99, 235, 0.23);
+
+}
+
+
+.deck-hint {
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   CARD POSITIONS
+   ========================================================= */
+
+.deck-position-front {
+
+    z-index: 5;
+
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1)
+        rotate(0deg);
+
+}
+
+
+.deck-position-second {
+
+    z-index: 4;
+
+    opacity: 0.88;
+
+    transform:
+        translateX(-50%)
+        translateY(24px)
+        translateX(34px)
+        scale(0.96)
+        rotate(2deg);
+
+}
+
+
+.deck-position-third {
+
+    z-index: 3;
+
+    opacity: 0.72;
+
+    transform:
+        translateX(-50%)
+        translateY(46px)
+        translateX(62px)
+        scale(0.92)
+        rotate(4deg);
+
+}
+
+
+.deck-position-back {
+
+    z-index: 2;
+
+    opacity: 0.5;
+
+    transform:
+        translateX(-50%)
+        translateY(66px)
+        translateX(88px)
+        scale(0.88)
+        rotate(6deg);
+
+}
+
+
+.deck-position-hidden {
+
+    z-index: 1;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateX(-50%)
+        translateY(84px)
+        translateX(112px)
+        scale(0.84)
+        rotate(8deg);
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.deck-navigation {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    margin-top: 12px;
+
+}
+
+
+.deck-nav-button {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 11px;
+
+    background: white;
+
+    color: #2563eb;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px
+        rgba(15, 23, 42, 0.05);
+
+    transition:
+
+        transform 0.2s ease,
+
+        background 0.2s ease,
+
+        box-shadow 0.2s ease;
+
+}
+
+
+.deck-nav-button:hover {
+
+    background: #eff6ff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 16px
+        rgba(15, 23, 42, 0.08);
+
+}
+
+
+.deck-dots {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.deck-dot {
+
+    width: 8px;
+    height: 8px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #cbd5e1;
+
+    cursor: pointer;
+
+    transition:
+
+        width 0.25s ease,
+
+        background 0.25s ease;
+
+}
+
+
+.deck-dot.active {
+
+    width: 24px;
+
+    border-radius: 999px;
+
+    background: #2563eb;
+
+}
+
+
+/* =========================================================
+   BOTTOM STATUS
+   ========================================================= */
+
+.deck-bottom {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+    align-items: center;
+
+    gap: 20px;
+
+    width: min(1280px, 96%);
+
+    margin: 25px auto 0;
+
+}
+
+
+.deck-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.deck-status-dot {
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #16a34a;
+
+    box-shadow:
+        0 0 0 4px rgba(
+            22,
+            163,
+            74,
+            0.10
+        );
+
+}
+
+
+.deck-status strong {
+
+    display: block;
+
+    color: #334155;
+
+    font-size: 13px;
+
+}
+
+
+.deck-status small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+.deck-bottom-center {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.deck-bottom-center div {
+
+    width: 40px;
+
+    height: 1px;
+
+    background: #cbd5e1;
+
+}
+
+
+.deck-tagline {
+
+    justify-self: end;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .deck-dashboard {
+
+        padding-left: 18px;
+        padding-right: 18px;
+
+    }
+
+
+    .deck-card {
+
+        width: 92%;
+
+        height: 450px;
+
+        padding: 38px 40px;
+
+    }
+
+
+    .deck-card-main {
+
+        margin-top: 70px;
+
+    }
+
+
+    .deck-card-main h2 {
+
+        font-size: 36px;
+
+    }
+
+
+    .deck-card-main p {
+
+        font-size: 15px;
+
+    }
+
+
+    .deck-card-bottom {
+
+        left: 40px;
+        right: 40px;
+
+    }
+
+
+    .deck-stage {
+
+        height: 500px;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .deck-dashboard {
+
+        padding:
+            30px 12px 45px;
+
+    }
+
+
+    .deck-hero h1 {
+
+        font-size: 36px;
+
+    }
+
+
+    .deck-subtitle {
+
+        font-size: 14px;
+
+    }
+
+
+    .deck-stage {
+
+        height: 420px;
+
+    }
+
+
+    .deck-card {
+
+        width: 94%;
+
+        height: 380px;
+
+        padding: 28px 25px;
+
+        border-radius: 22px;
+
+    }
+
+
+    .deck-card-main {
+
+        margin-top: 50px;
+
+    }
+
+
+    .deck-card-main h2 {
+
+        font-size: 28px;
+
+    }
+
+
+    .deck-card-main p {
+
+        font-size: 13px;
+
+        line-height: 1.65;
+
+    }
+
+
+    .deck-icon {
+
+        width: 52px;
+        height: 52px;
+
+        font-size: 21px;
+
+    }
+
+
+    .deck-card-bottom {
+
+        left: 25px;
+        right: 25px;
+        bottom: 24px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .deck-bottom {
+
+        grid-template-columns: 1fr;
+
+        justify-items: center;
+
+        text-align: center;
+
+    }
+
+
+    .deck-status {
+
+        justify-content: center;
+
+    }
+
+
+    .deck-tagline {
+
+        justify-self: center;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
 
 {% block content %}
 
-<div class="dashboard-header">
+<div class="deck-dashboard">
 
-    <h1>Dashboard</h1>
+    <!-- =====================================================
+         BACKGROUND
+         ===================================================== -->
 
-    <p>
-        Welcome back, {{ current_user.username }}.
-    </p>
+    <div class="deck-bg-orb deck-bg-orb-one"></div>
+
+    <div class="deck-bg-orb deck-bg-orb-two"></div>
+
+    <div class="deck-grid"></div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="deck-hero">
+
+        <p class="deck-kicker">
+            DOCUMENT INTELLIGENCE
+        </p>
+
+
+        <h1>
+            What would
+            <span>you like to do?</span>
+        </h1>
+
+
+        <p class="deck-subtitle">
+            Explore your document workspace one step at a time.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         CARD DECK
+         ===================================================== -->
+
+    <section class="deck-wrapper">
+
+
+        <div class="deck-counter">
+
+            <span id="deckCurrent">
+                01
+            </span>
+
+            <span class="deck-counter-line"></span>
+
+            <span>
+                05
+            </span>
+
+        </div>
+
+
+        <div
+            class="deck-stage"
+            id="deckStage"
+        >
+
+
+            <!-- =================================================
+                 01 — UPLOAD
+                 ================================================= -->
+
+            <article
+                class="deck-card deck-card-upload"
+                data-index="0"
+            >
+
+                <div class="deck-card-top">
+
+                    <div class="deck-number">
+                        01
+                    </div>
+
+                    <div class="deck-icon">
+                        ↑
+                    </div>
+
+                    <div class="deck-category">
+                        GET STARTED
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-main">
+
+                    <h2>
+                        Upload Document
+                    </h2>
+
+                    <p>
+                        Upload PDF, DOCX, TXT, JPG or PNG files
+                        and extract their content for intelligent
+                        analysis.
+                    </p>
+
+
+                    <div class="deck-format-list">
+
+                        <span>PDF</span>
+                        <span>DOCX</span>
+                        <span>TXT</span>
+                        <span>JPG</span>
+                        <span>PNG</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-bottom">
+
+                    <a
+                        href="{{ url_for('documents.upload_document') }}"
+                        class="deck-action"
+                    >
+                        Upload Now
+                        <span>→</span>
+                    </a>
+
+                    <span class="deck-hint">
+                        Document processing
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 02 — MY DOCUMENTS
+                 ================================================= -->
+
+            <article
+                class="deck-card deck-card-documents"
+                data-index="1"
+            >
+
+                <div class="deck-card-top">
+
+                    <div class="deck-number">
+                        02
+                    </div>
+
+                    <div class="deck-icon">
+                        ▰
+                    </div>
+
+                    <div class="deck-category">
+                        YOUR FILES
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-main">
+
+                    <h2>
+                        My Documents
+                    </h2>
+
+                    <p>
+                        View, search and manage all your
+                        uploaded documents from one organized
+                        workspace.
+                    </p>
+
+
+                    <div class="deck-feature-row">
+
+                        <span>VIEW</span>
+                        <span>SEARCH</span>
+                        <span>MANAGE</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-bottom">
+
+                    <a
+                        href="{{ url_for('documents.list_documents') }}"
+                        class="deck-action"
+                    >
+                        Open Documents
+                        <span>→</span>
+                    </a>
+
+                    <span class="deck-hint">
+                        Your document library
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 03 — ANALYSIS
+                 ================================================= -->
+
+            <article
+                class="deck-card deck-card-analysis"
+                data-index="2"
+            >
+
+                <div class="deck-card-top">
+
+                    <div class="deck-number">
+                        03
+                    </div>
+
+                    <div class="deck-icon">
+                        ▥
+                    </div>
+
+                    <div class="deck-category">
+                        INSIGHTS
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-main">
+
+                    <h2>
+                        Document Analysis
+                    </h2>
+
+                    <p>
+                        Explore extracted text, keywords,
+                        information and summaries generated
+                        from your documents.
+                    </p>
+
+
+                    <div class="deck-feature-row">
+
+                        <span>TEXT</span>
+                        <span>KEYWORDS</span>
+                        <span>SUMMARY</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-bottom">
+
+                    <a
+                        href="{{ url_for('documents.list_documents') }}"
+                        class="deck-action"
+                    >
+                        View Analysis
+                        <span>→</span>
+                    </a>
+
+                    <span class="deck-hint">
+                        Intelligent document insights
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 04 — SEARCH
+                 ================================================= -->
+
+            <article
+                class="deck-card deck-card-search"
+                data-index="3"
+            >
+
+                <div class="deck-card-top">
+
+                    <div class="deck-number">
+                        04
+                    </div>
+
+                    <div class="deck-icon">
+                        ⌕
+                    </div>
+
+                    <div class="deck-category">
+                        FIND FAST
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-main">
+
+                    <h2>
+                        Search Documents
+                    </h2>
+
+                    <p>
+                        Quickly find documents and extracted
+                        content using the built-in document
+                        search feature.
+                    </p>
+
+
+                    <div class="deck-feature-row">
+
+                        <span>FILENAME</span>
+                        <span>CONTENT</span>
+                        <span>FAST</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-bottom">
+
+                    <a
+                        href="{{ url_for('documents.list_documents') }}"
+                        class="deck-action"
+                    >
+                        Search Documents
+                        <span>→</span>
+                    </a>
+
+                    <span class="deck-hint">
+                        Find information quickly
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 05 — PROFILE
+                 ================================================= -->
+
+            <article
+                class="deck-card deck-card-profile"
+                data-index="4"
+            >
+
+                <div class="deck-card-top">
+
+                    <div class="deck-number">
+                        05
+                    </div>
+
+                    <div class="deck-icon">
+                        ●
+                    </div>
+
+                    <div class="deck-category">
+                        ACCOUNT
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-main">
+
+                    <h2>
+                        Your Profile
+                    </h2>
+
+                    <p>
+                        View and manage your account information
+                        and application profile.
+                    </p>
+
+
+                    <div class="deck-feature-row">
+
+                        <span>ACCOUNT</span>
+                        <span>PROFILE</span>
+                        <span>SETTINGS</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="deck-card-bottom">
+
+                    <a
+                        href="{{ url_for('profile.profile_page') }}"
+                        class="deck-action"
+                    >
+                        Open Profile
+                        <span>→</span>
+                    </a>
+
+                    <span class="deck-hint">
+                        Manage your account
+                    </span>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             NAVIGATION
+             ===================================================== -->
+
+        <div class="deck-navigation">
+
+
+            <button
+                type="button"
+                class="deck-nav-button"
+                id="deckPrevious"
+                aria-label="Previous card"
+            >
+                ←
+            </button>
+
+
+            <div class="deck-dots">
+
+                <button
+                    type="button"
+                    class="deck-dot active"
+                    data-slide="0"
+                    aria-label="Go to slide 1"
+                ></button>
+
+                <button
+                    type="button"
+                    class="deck-dot"
+                    data-slide="1"
+                    aria-label="Go to slide 2"
+                ></button>
+
+                <button
+                    type="button"
+                    class="deck-dot"
+                    data-slide="2"
+                    aria-label="Go to slide 3"
+                ></button>
+
+                <button
+                    type="button"
+                    class="deck-dot"
+                    data-slide="3"
+                    aria-label="Go to slide 4"
+                ></button>
+
+                <button
+                    type="button"
+                    class="deck-dot"
+                    data-slide="4"
+                    aria-label="Go to slide 5"
+                ></button>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="deck-nav-button"
+                id="deckNext"
+                aria-label="Next card"
+            >
+                →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOTTOM STATUS
+         ===================================================== -->
+
+    <section class="deck-bottom">
+
+
+        <div class="deck-status">
+
+            <span class="deck-status-dot"></span>
+
+            <div>
+
+                <strong>
+                    System Ready
+                </strong>
+
+                <small>
+                    AI Document Analyzer is ready
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="deck-bottom-center">
+
+            <span>
+                01
+            </span>
+
+            <div></div>
+
+            <span>
+                05
+            </span>
+
+        </div>
+
+
+        <div class="deck-tagline">
+            Smarter Documents. Brighter Decisions.
+        </div>
+
+
+    </section>
 
 </div>
 
 
-<div class="dashboard-grid">
+<script>
 
-    <div class="dashboard-card">
+/* =========================================================
+   DASHBOARD CARD DECK
+   ========================================================= */
 
-        <h3>Upload Document</h3>
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-        <p>
-            Upload a PDF, DOCX, TXT or image
-            for analysis.
-        </p>
+        const cards =
+            document.querySelectorAll(
+                ".deck-card"
+            );
 
-        <br>
+        const dots =
+            document.querySelectorAll(
+                ".deck-dot"
+            );
 
-        <a
-            href="{{ url_for('documents.upload_document') }}"
-            class="btn"
-        >
-            Upload Document
-        </a>
+        const nextButton =
+            document.getElementById(
+                "deckNext"
+            );
 
-    </div>
+        const previousButton =
+            document.getElementById(
+                "deckPrevious"
+            );
 
-
-    <div class="dashboard-card">
-
-        <h3>My Documents</h3>
-
-        <p>
-            View, search, analyze and manage
-            your uploaded documents.
-        </p>
-
-        <br>
-
-        <a
-            href="{{ url_for('documents.list_documents') }}"
-            class="btn"
-        >
-            View Documents
-        </a>
-
-    </div>
+        const currentCounter =
+            document.getElementById(
+                "deckCurrent"
+            );
 
 
-    <div class="dashboard-card">
+        if (
+            !cards.length ||
+            !dots.length ||
+            !nextButton ||
+            !previousButton ||
+            !currentCounter
+        ) {
 
-        <h3>Document Analysis</h3>
+            return;
 
-        <p>
-            Extract text, keywords,
-            important information and summaries.
-        </p>
-
-        <br>
-
-        <a
-            href="{{ url_for('documents.list_documents') }}"
-            class="btn"
-        >
-            Open Analysis
-        </a>
-
-    </div>
-
-</div>
+        }
 
 
-<div class="card dashboard-info">
+        let currentIndex = 0;
 
-    <h2>How It Works</h2>
-
-    <br>
-
-    <div class="workflow">
-
-        <div class="workflow-step">
-            <strong>1. Upload</strong>
-            <p>
-                Upload your document.
-            </p>
-        </div>
+        const totalCards =
+            cards.length;
 
 
-        <div class="workflow-step">
-            <strong>2. Extract</strong>
-            <p>
-                Text is extracted from the document.
-            </p>
-        </div>
+        /* =================================================
+           UPDATE DECK
+           ================================================= */
+
+        function updateDeck(index) {
+
+            currentIndex =
+                (
+                    index + totalCards
+                )
+                % totalCards;
 
 
-        <div class="workflow-step">
-            <strong>3. Analyze</strong>
-            <p>
-                Keywords and important information
-                are identified.
-            </p>
-        </div>
+            cards.forEach(
+                function (card, i) {
+
+                    const position =
+                        (
+                            i -
+                            currentIndex +
+                            totalCards
+                        )
+                        % totalCards;
 
 
-        <div class="workflow-step">
-            <strong>4. Summarize</strong>
-            <p>
-                A concise summary is generated.
-            </p>
-        </div>
+                    card.classList.remove(
+                        "deck-position-front",
+                        "deck-position-second",
+                        "deck-position-third",
+                        "deck-position-back",
+                        "deck-position-hidden"
+                    );
 
-    </div>
 
-</div>
+                    if (
+                        position === 0
+                    ) {
+
+                        card.classList.add(
+                            "deck-position-front"
+                        );
+
+                    }
+
+                    else if (
+                        position === 1
+                    ) {
+
+                        card.classList.add(
+                            "deck-position-second"
+                        );
+
+                    }
+
+                    else if (
+                        position === 2
+                    ) {
+
+                        card.classList.add(
+                            "deck-position-third"
+                        );
+
+                    }
+
+                    else if (
+                        position === 3
+                    ) {
+
+                        card.classList.add(
+                            "deck-position-back"
+                        );
+
+                    }
+
+                    else {
+
+                        card.classList.add(
+                            "deck-position-hidden"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            dots.forEach(
+                function (dot, i) {
+
+                    dot.classList.toggle(
+                        "active",
+                        i === currentIndex
+                    );
+
+                }
+            );
+
+
+            currentCounter.textContent =
+                String(
+                    currentIndex + 1
+                )
+                .padStart(
+                    2,
+                    "0"
+                );
+
+        }
+
+
+        /* =================================================
+           NEXT
+           ================================================= */
+
+        nextButton.addEventListener(
+            "click",
+            function () {
+
+                updateDeck(
+                    currentIndex + 1
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           PREVIOUS
+           ================================================= */
+
+        previousButton.addEventListener(
+            "click",
+            function () {
+
+                updateDeck(
+                    currentIndex - 1
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           DOT NAVIGATION
+           ================================================= */
+
+        dots.forEach(
+            function (dot, index) {
+
+                dot.addEventListener(
+                    "click",
+                    function () {
+
+                        updateDeck(
+                            index
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           KEYBOARD NAVIGATION
+           ================================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "ArrowRight"
+                ) {
+
+                    updateDeck(
+                        currentIndex + 1
+                    );
+
+                }
+
+
+                if (
+                    event.key === "ArrowLeft"
+                ) {
+
+                    updateDeck(
+                        currentIndex - 1
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           INITIAL STATE
+           ================================================= */
+
+        updateDeck(0);
+
+    }
+);
+
+</script>
 
 {% endblock %}
