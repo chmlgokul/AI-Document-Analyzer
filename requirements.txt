@@ -11,3 +11,4 @@ pytest
 anthropic
 python-dotenv
 flask-swagger-ui
+cohere
