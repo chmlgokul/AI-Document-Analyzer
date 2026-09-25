@@ -16,17 +16,23 @@ login_manager = LoginManager()
 
 def create_app():
 
+    if os.environ.get("VERCEL"):
+        instance_path = "/tmp/ai_document_analyzer"
+    else:
+        instance_path = None
+
     app = Flask(
-        __name__,
-        instance_relative_config=True,
-        template_folder=os.path.join(
-            os.path.dirname(__file__),
-            "templates"
-        ),
-        static_folder=os.path.join(
-            os.path.dirname(__file__),
-            "static"
-        )
+    __name__,
+    instance_relative_config=True,
+    instance_path=instance_path,
+    template_folder=os.path.join(
+        os.path.dirname(__file__),
+        "templates"
+    ),
+    static_folder=os.path.join(
+        os.path.dirname(__file__),
+        "static"
+    )
     )
 
     app.config.from_object(Config)
