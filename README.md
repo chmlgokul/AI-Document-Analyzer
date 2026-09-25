@@ -1,14 +1,34 @@
 # AI Document Analyzer
 
-AI Document Analyzer is a Flask-based web application that allows users to upload documents and automatically extract, analyze, and organize useful information from them.
+AI Document Analyzer is a Flask-based web application for uploading, extracting, analyzing, searching, and managing documents through a web interface and REST APIs.
 
-The application supports PDF, DOCX, TXT, JPG, JPEG, and PNG files. It provides text extraction, OCR for images, keyword extraction, structured information extraction, document summarization, search, re-analysis, document deletion, and analysis export.
+The application supports PDF, DOCX, TXT, JPG, JPEG, and PNG files. It combines document text extraction, OCR, keyword extraction, structured information extraction, rule-based summarization, AI-powered analysis using Cohere, document search, re-analysis, deletion, and analysis export.
+
+---
 
 ## Project Overview
 
-The main objective of this project is to simplify document analysis by automatically processing uploaded documents and presenting the extracted information through a web interface.
+The main objective of this project is to simplify document analysis by automatically processing uploaded documents and presenting useful information through an interactive web interface.
 
-Users can create an account, log in securely, upload documents, analyze them, search their documents, re-analyze existing files, export analysis results, and manage their uploaded documents.
+Users can:
+
+- Create an account
+- Log in and log out
+- Upload supported documents
+- Extract text from documents
+- Perform OCR on images
+- Extract keywords and structured information
+- Generate document summaries
+- Generate AI-powered document analysis
+- Search uploaded documents
+- Re-analyze existing documents
+- Export analysis results
+- Delete documents
+- Access their documents through protected user-specific pages
+
+The project also provides REST APIs and Swagger documentation for programmatic access to document analysis functionality.
+
+---
 
 ## Features
 
@@ -20,18 +40,20 @@ Users can create an account, log in securely, upload documents, analyze them, se
 - Secure password hashing
 - User login
 - User logout
-- Unique username and email validation
+- Unique username validation
+- Unique email validation
 - Protected user-specific pages
 
 ### Document Management
 
-- Upload documents
-- View uploaded documents
-- Search documents by filename
-- Search documents using extracted text
-- Analyze documents
-- Re-analyze documents
-- Delete documents
+- Document upload
+- Uploaded document listing
+- Document search
+- Filename-based search
+- Extracted-text search
+- Document analysis
+- Document re-analysis
+- Document deletion
 - User-specific document access
 
 ### Supported File Formats
@@ -45,60 +67,78 @@ Users can create an account, log in securely, upload documents, analyze them, se
 
 ### Text Extraction
 
-The application extracts text from different document formats using specialized Python libraries.
+Different file formats are processed using specialized libraries.
 
-PDF:
+**PDF**
 - PyMuPDF
 
-DOCX:
+**DOCX**
 - python-docx
 
-TXT:
+**TXT**
 - Python file handling
 
-Images:
+**Images**
 - Tesseract OCR
 - pytesseract
 - Pillow
 
 ### OCR
 
-The application uses Tesseract OCR to extract text from image-based documents.
+Image documents are processed using Tesseract OCR.
 
 OCR processing includes:
 
 - Image resizing
 - RGB conversion
 - Grayscale conversion
-- Automatic contrast enhancement
-- Contrast adjustment
+- Contrast enhancement
 - Image sharpening
 - Text extraction using Tesseract
 
+The project also includes Tamil font support for generated document outputs.
+
 ### Keyword Extraction
 
-The application identifies frequently occurring meaningful words from extracted document text.
-
-The keyword extraction process includes:
+The keyword extraction service processes document text using:
 
 - Text normalization
 - Word extraction
 - Stop-word removal
-- Word frequency calculation
+- Word-frequency calculation
 - Top keyword selection
 
 ### Information Extraction
 
-The application extracts structured information from document text, such as:
+The application extracts structured information from document text, including supported:
 
 - Email addresses
 - Phone numbers
 - URLs
-- Other identifiable information supported by the extraction logic
+- Names
+- Dates
+- Education information
+- Occupation information
+- Salary information
+- Other supported structured fields
 
-### Document Summarization
+### Rule-Based Summarization
 
-The application generates a concise summary from the extracted document text using a rule-based summarization approach.
+The application provides a rule-based document summary based on extracted document text.
+
+### AI-Powered Analysis
+
+The application integrates Cohere for AI-assisted document analysis.
+
+AI analysis can provide:
+
+- Document summary
+- Key insights
+- AI-generated analysis based on the uploaded document
+
+The AI service is implemented separately from the core document-processing services.
+
+The application is designed so that the Cohere API key is stored through environment variables rather than hard-coded into the source code.
 
 ### Search and Filter
 
@@ -107,22 +147,28 @@ Users can search their uploaded documents using:
 - Filename
 - Extracted document text
 
-The application also displays an appropriate message when no matching document is found.
+The application provides an appropriate response when no matching document is found.
 
 ### Re-analysis
 
-Users can re-analyze an existing document without uploading it again.
+Existing documents can be analyzed again without uploading the file again.
 
-The application reads the original stored file, performs text extraction again, updates the database, and displays the updated analysis.
+The application:
+
+1. Reads the stored document
+2. Extracts the document text again
+3. Re-processes the analysis
+4. Updates the stored analysis
+5. Returns the updated result
 
 ### Export
 
-Users can export document analysis results in:
+Analysis results can be exported in:
 
-- TXT format
-- PDF format
+- TXT
+- PDF
 
-The exported analysis includes:
+Exported analysis can include:
 
 - Document name
 - Upload date
@@ -133,93 +179,21 @@ The exported analysis includes:
 
 ### User Profile
 
-Users can view their:
+Users can view account information including:
 
 - Username
 - Email address
 - Account creation date
 
-## Technology Stack
+---
 
-### Backend
+# REST API
 
-- Python
-- Flask
-- Flask-SQLAlchemy
-- Flask-Login
-- Werkzeug
+The project provides both the original `/api` endpoints and a versioned `/api/v1` API.
 
-### Document Processing
+## API v1
 
-- PyMuPDF
-- python-docx
-- Pillow
-- pytesseract
-- Tesseract OCR
-
-### Database
-
-- SQLite
-- SQLAlchemy ORM
-
-### PDF Generation
-
-- ReportLab
-
-### Testing
-
-- pytest
-
-### Frontend
-
-- HTML
-- CSS
-- Jinja2 Templates
-
-## Project Structure
+Base URL:
 
 ```text
-Document_Analyzer/
-│
-├── app/
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── document.py
-│   │   └── user.py
-│   │
-│   ├── routes/
-│   │   ├── __init__.py
-│   │   ├── auth.py
-│   │   ├── dashboard.py
-│   │   ├── documents.py
-│   │   └── profile.py
-│   │
-│   ├── services/
-│   │   ├── keyword_extractor.py
-│   │   ├── information_extractor.py
-│   │   ├── summarizer.py
-│   │   ├── ocr_service.py
-│   │   └── text_extractor.py
-│   │
-│   ├── static/
-│   │
-│   ├── templates/
-│   │   ├── auth/
-│   │   ├── analysis.html
-│   │   ├── base.html
-│   │   ├── dashboard.html
-│   │   ├── documents.html
-│   │   ├── profile.html
-│   │   └── upload.html
-│   │
-│   └── __init__.py
-│
-├── tests/
-│   ├── conftest.py
-│   ├── test_extraction.py
-│   └── test_upload.py
-│
-├── app.py
-├── config.py
-├── requirements.txt
-└── README.md
+/api/v1
