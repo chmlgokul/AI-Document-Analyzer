@@ -10,3 +10,4 @@ reportlab
 pytest
 anthropic
 python-dotenv
+flask-swagger-ui
