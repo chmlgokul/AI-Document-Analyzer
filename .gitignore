@@ -1,38 +1,75 @@
+# ==============================
 # Virtual Environment
+# ==============================
 venv/
 .venv/
 
-# Python cache
+# ==============================
+# Python Cache
+# ==============================
 __pycache__/
 *.py[cod]
+*.pyo
 
+# ==============================
 # Pytest
+# ==============================
 .pytest_cache/
 
-# Flask instance data
+# ==============================
+# Flask Instance / Local Data
+# ==============================
 instance/
 instace/
 
-# SQLite database
+# ==============================
+# SQLite Database
+# ==============================
 *.db
 *.sqlite
 *.sqlite3
 
-# Environment variables
+# ==============================
+# Environment Variables / Secrets
+# ==============================
 .env
+.env.*
+!.env.example
 
-# IDE files
+# API keys / secret test files
+test_cases/apikeys.txt
+
+# ==============================
+# IDE
+# ==============================
 .vscode/
 .idea/
 
-# Python build files
+# ==============================
+# Python Build Files
+# ==============================
 build/
 dist/
 *.egg-info/
 
-# OS generated files
+# ==============================
+# OS Generated Files
+# ==============================
 .DS_Store
 Thumbs.db
 
-# Tesseract / OCR installer files
+# ==============================
+# Tesseract / OCR Installer Files
+# ==============================
 OCR_install_file/
+
+# ==============================
+# Local Generated Output
+# ==============================
+output_vid_img/
+
+# ==============================
+# Temporary / Generated Files
+# ==============================
+*.log
+*.tmp
