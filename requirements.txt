@@ -12,3 +12,4 @@ anthropic
 python-dotenv
 flask-swagger-ui
 cohere
+psycopg[binary]

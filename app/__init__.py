@@ -16,23 +16,27 @@ login_manager = LoginManager()
 
 def create_app():
 
+    # =========================
+    # INSTANCE PATH
+    # =========================
+
     if os.environ.get("VERCEL"):
         instance_path = "/tmp/ai_document_analyzer"
     else:
         instance_path = None
 
     app = Flask(
-    __name__,
-    instance_relative_config=True,
-    instance_path=instance_path,
-    template_folder=os.path.join(
-        os.path.dirname(__file__),
-        "templates"
-    ),
-    static_folder=os.path.join(
-        os.path.dirname(__file__),
-        "static"
-    )
+        __name__,
+        instance_relative_config=True,
+        instance_path=instance_path,
+        template_folder=os.path.join(
+            os.path.dirname(__file__),
+            "templates"
+        ),
+        static_folder=os.path.join(
+            os.path.dirname(__file__),
+            "static"
+        )
     )
 
     app.config.from_object(Config)
@@ -42,15 +46,54 @@ def create_app():
         exist_ok=True
     )
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        "sqlite:///"
-        + os.path.join(
-            app.instance_path,
-            "documents_analyzer.db"
+
+    # =========================
+    # DATABASE
+    # =========================
+
+    database_url = os.environ.get("DATABASE_URL")
+
+    if database_url:
+        # Neon / PostgreSQL
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace(
+                "postgres://",
+                "postgresql+psycopg://",
+                1
+            )
+
+        elif database_url.startswith("postgresql://"):
+            database_url = database_url.replace(
+                "postgresql://",
+                "postgresql+psycopg://",
+                1
+            )
+
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+
+    else:
+        # Local development fallback
+        app.config["SQLALCHEMY_DATABASE_URI"] = (
+            "sqlite:///"
+            + os.path.join(
+                app.instance_path,
+                "documents_analyzer.db"
+            )
         )
-    )
+
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+
+    # =========================
+    # DATABASE INIT
+    # =========================
 
     db.init_app(app)
+
+
+    # =========================
+    # LOGIN
+    # =========================
 
     login_manager.init_app(app)
 
@@ -82,8 +125,6 @@ def create_app():
     from app.routes.api_v1 import api_v1
     from app.routes.profile import profile
 
-
-    # Register each blueprint ONLY ONCE
 
     app.register_blueprint(auth)
 
@@ -132,7 +173,6 @@ def create_app():
             "swagger.json"
         )
 
-
         with open(
             swagger_file,
             "r",
@@ -140,7 +180,6 @@ def create_app():
         ) as file:
 
             swagger_data = json.load(file)
-
 
         return jsonify(swagger_data)
 
