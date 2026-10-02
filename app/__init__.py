@@ -87,6 +87,11 @@ def create_app():
     # =========================
     # DATABASE INIT
     # =========================
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300
+    }
+
 
     db.init_app(app)
 
