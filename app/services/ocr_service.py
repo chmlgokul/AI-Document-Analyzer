@@ -244,11 +244,9 @@ def extract_text_vercel(image):
 
     try:
 
-        available_languages = (
-            tesserocr.get_languages(
-                tessdata_folder
-            )
-        )
+        available_languages = tesserocr.get_languages(
+                    tessdata_folder
+        )[1]
 
         print(
             "TESSERACT LANGUAGES:",
