@@ -5,6 +5,7 @@ Werkzeug
 PyMuPDF
 python-docx
 pytesseract
+tesserocr==2.11.0
 Pillow
 reportlab
 pytest
