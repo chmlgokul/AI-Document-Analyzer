@@ -25,9 +25,9 @@ IS_VERCEL = bool(
 # =========================================================
 
 if IS_VERCEL:
-
     try:
         import tesserocr
+
         from tesserocr import (
             PyTessBaseAPI,
             PSM
@@ -36,7 +36,6 @@ if IS_VERCEL:
         TESSEROCR_AVAILABLE = True
 
     except Exception as e:
-
         TESSEROCR_AVAILABLE = False
 
         print(
@@ -45,7 +44,6 @@ if IS_VERCEL:
         )
 
 else:
-
     TESSEROCR_AVAILABLE = False
 
 
@@ -54,14 +52,13 @@ else:
 # =========================================================
 
 if not IS_VERCEL:
-
     pytesseract.pytesseract.tesseract_cmd = (
         r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     )
 
 
 # =========================================================
-# DOWNLOAD TESSDATA FOR VERCEL
+# DOWNLOAD ENGLISH TESSDATA FOR VERCEL
 # =========================================================
 
 def prepare_tessdata():
@@ -82,11 +79,6 @@ def prepare_tessdata():
             "https://raw.githubusercontent.com/"
             "tesseract-ocr/tessdata_fast/main/"
             "eng.traineddata"
-        ),
-        "tam": (
-            "https://raw.githubusercontent.com/"
-            "tesseract-ocr/tessdata_fast/main/"
-            "tam.traineddata"
         )
     }
 
@@ -156,7 +148,6 @@ def preprocess_image(filepath):
 
         file_size = 0
 
-
     if file_size <= 100 * 1024:
 
         scale = 4
@@ -165,10 +156,8 @@ def preprocess_image(filepath):
 
         scale = 2
 
-
     new_width = width * scale
     new_height = height * scale
-
 
     image = image.resize(
         (
@@ -178,7 +167,6 @@ def preprocess_image(filepath):
         Image.Resampling.LANCZOS
     )
 
-
     # -----------------------------------------------------
     # Grayscale
     # -----------------------------------------------------
@@ -186,7 +174,6 @@ def preprocess_image(filepath):
     image = ImageOps.grayscale(
         image
     )
-
 
     # -----------------------------------------------------
     # Auto contrast
@@ -196,7 +183,6 @@ def preprocess_image(filepath):
         image
     )
 
-
     # -----------------------------------------------------
     # Increase contrast
     # -----------------------------------------------------
@@ -204,7 +190,6 @@ def preprocess_image(filepath):
     image = ImageEnhance.Contrast(
         image
     ).enhance(2.0)
-
 
     # -----------------------------------------------------
     # Sharpen
@@ -214,8 +199,68 @@ def preprocess_image(filepath):
         ImageFilter.SHARPEN
     )
 
-
     return image
+
+
+# =========================================================
+# OCR TEXT CLEANUP
+# =========================================================
+
+def clean_ocr_text(text):
+
+    if not text:
+        return ""
+
+    # -----------------------------------------------------
+    # Remove zero-width characters
+    # -----------------------------------------------------
+
+    text = text.replace(
+        "\u200b",
+        ""
+    )
+
+    text = text.replace(
+        "\u200c",
+        ""
+    )
+
+    text = text.replace(
+        "\u200d",
+        ""
+    )
+
+    text = text.replace(
+        "\ufeff",
+        ""
+    )
+
+    # -----------------------------------------------------
+    # Remove completely useless symbol-only lines
+    # -----------------------------------------------------
+
+    cleaned_lines = []
+
+    for line in text.splitlines():
+
+        line = line.strip()
+
+        if not line:
+            continue
+
+        if not any(
+            char.isalnum()
+            for char in line
+        ):
+            continue
+
+        cleaned_lines.append(
+            line
+        )
+
+    return "\n".join(
+        cleaned_lines
+    ).strip()
 
 
 # =========================================================
@@ -232,21 +277,21 @@ def extract_text_vercel(image):
 
         return ""
 
-
     tessdata_folder = (
         prepare_tessdata()
     )
 
-
     # -----------------------------------------------------
-    # Check available languages
+    # Check English language availability
     # -----------------------------------------------------
 
     try:
 
-        available_languages = tesserocr.get_languages(
-                    tessdata_folder
-        )[1]
+        available_languages = (
+            tesserocr.get_languages(
+                tessdata_folder
+            )[1]
+        )
 
         print(
             "TESSERACT LANGUAGES:",
@@ -262,34 +307,20 @@ def extract_text_vercel(image):
 
         available_languages = []
 
-
     # -----------------------------------------------------
-    # Use Tamil + English when both exist
+    # Use English OCR only
     # -----------------------------------------------------
 
-    if (
-        "eng" in available_languages
-        and "tam" in available_languages
-    ):
-
-        language = "eng+tam"
-
-    elif "eng" in available_languages:
-
-        language = "eng"
-
-    elif "tam" in available_languages:
-
-        language = "tam"
-
-    else:
+    if "eng" not in available_languages:
 
         print(
-            "No Tesseract language data available."
+            "English Tesseract language data "
+            "is not available."
         )
 
         return ""
 
+    language = "eng"
 
     # -----------------------------------------------------
     # OCR
@@ -309,13 +340,11 @@ def extract_text_vercel(image):
 
             text = api.GetUTF8Text()
 
-
         return (
             text.strip()
             if text
             else ""
         )
-
 
     except Exception as e:
 
@@ -343,17 +372,19 @@ def extract_text_from_image(filepath):
             filepath
         )
 
-
         # -------------------------------------------------
         # Vercel production OCR
         # -------------------------------------------------
 
         if IS_VERCEL:
 
-            return extract_text_vercel(
+            text = extract_text_vercel(
                 image
             )
 
+            return clean_ocr_text(
+                text
+            )
 
         # -------------------------------------------------
         # Local Windows OCR
@@ -361,17 +392,13 @@ def extract_text_from_image(filepath):
 
         text = pytesseract.image_to_string(
             image,
-            lang="tam+eng",
+            lang="eng",
             config="--psm 11"
         )
 
-
-        return (
-            text.strip()
-            if text
-            else ""
+        return clean_ocr_text(
+            text
         )
-
 
     except Exception as e:
 
