@@ -1,250 +1,1646 @@
 {% extends "base.html" %}
 
+{% block title %}Document Analysis{% endblock %}
+
 {% block content %}
 
-<div class="analysis-container">
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-    <h1>Document Analysis</h1>
+    body {
+        background: #f5f7fb;
+    }
 
-    <h2>{{ document.filename }}</h2>
+    .analysis-page {
+        width: 100%;
+        max-width: 1420px;
+        margin: 0 auto;
+        padding: 42px 42px 70px;
+    }
 
-    <p>
-        Uploaded At: {{ document.uploaded_at }}
-    </p>
+    /* =========================
+       HEADER
+    ========================== */
 
-    <hr>
+    .document-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .header-left {
+        min-width: 0;
+    }
+
+    .eyebrow {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+        color: #315ee8;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 42px;
+        line-height: 1.1;
+        font-weight: 800;
+        color: #101828;
+        letter-spacing: -1.2px;
+    }
+
+    .document-name {
+        margin-top: 12px;
+        color: #667085;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        word-break: break-word;
+    }
+
+    .document-name span {
+        color: #344054;
+        font-weight: 500;
+    }
+
+    /* =========================
+       ACTIONS
+    ========================== */
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .action-btn {
+        height: 44px;
+        padding: 0 18px;
+        border-radius: 9px;
+        border: 1px solid #d0d5dd;
+        background: white;
+        color: #344054;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        border-color: #315ee8;
+        color: #315ee8;
+        transform: translateY(-1px);
+    }
+
+    .action-btn.primary {
+        background: #315ee8;
+        border-color: #315ee8;
+        color: white;
+        box-shadow: 0 5px 14px rgba(49, 94, 232, 0.18);
+    }
+
+    .action-btn.primary:hover {
+        background: #244dcc;
+        border-color: #244dcc;
+        color: white;
+    }
+
+    /* =========================
+       STATS
+    ========================== */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .stat-box {
+        background: #ffffff;
+        border: 1px solid #e4e7ec;
+        border-radius: 12px;
+        padding: 22px 24px;
+        min-height: 115px;
+    }
+
+    .stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: #98a2b3;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 800;
+        color: #101828;
+    }
+
+    .stat-sub {
+        margin-top: 5px;
+        font-size: 12px;
+        color: #667085;
+    }
+
+    /* =========================
+       COPY ALL
+    ========================== */
+
+    .copy-all-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        background: #eef4ff;
+        border: 1px solid #d7e3ff;
+        border-radius: 12px;
+        padding: 17px 20px;
+        margin-bottom: 28px;
+    }
+
+    .copy-all-text h3 {
+        margin: 0 0 4px;
+        font-size: 15px;
+        color: #1d2939;
+    }
+
+    .copy-all-text p {
+        margin: 0;
+        font-size: 13px;
+        color: #667085;
+    }
+
+    .copy-all-btn {
+        border: none;
+        background: #315ee8;
+        color: white;
+        padding: 10px 17px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .copy-all-btn:hover {
+        background: #244dcc;
+    }
+
+    /* =========================
+       SECTION
+    ========================== */
+
+    .analysis-section {
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 13px;
+    }
+
+    .section-title-left {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .section-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #edf2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #101828;
+        font-weight: 800;
+    }
+
+    /* =========================
+       CONTENT CARD
+    ========================== */
+
+    .content-card {
+        background: white;
+        border: 1px solid #e4e7ec;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .card-top {
+        min-height: 58px;
+        padding: 13px 18px;
+        border-bottom: 1px solid #eaecf0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-heading {
+        font-size: 15px;
+        font-weight: 800;
+        color: #1d2939;
+    }
+
+    .copy-btn {
+        border: 1px solid #d7def0;
+        background: white;
+        color: #315ee8;
+        padding: 8px 13px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: #f5f8ff;
+        border-color: #315ee8;
+    }
+
+    .card-body {
+        padding: 28px 30px;
+    }
+
+    /* =========================
+       AI SUMMARY
+    ========================== */
+
+    .ai-summary-content {
+        font-size: 16px;
+        line-height: 1.85;
+        color: #344054;
+        max-width: 1150px;
+    }
+
+    .ai-summary-content p {
+        margin: 0;
+    }
+
+    /* =========================
+       INSIGHTS
+    ========================== */
+
+    .insights-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .insight-item {
+        display: flex;
+        gap: 12px;
+        padding: 16px 17px;
+        background: #f8fafc;
+        border: 1px solid #edf0f5;
+        border-radius: 9px;
+        color: #344054;
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .insight-check {
+        flex: 0 0 auto;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #e7efff;
+        color: #315ee8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 800;
+        margin-top: 1px;
+    }
+
+    /* =========================
+       TWO COLUMN DATA
+    ========================== */
+
+    .data-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        margin-bottom: 28px;
+    }
+
+    .data-card {
+        background: white;
+        border: 1px solid #e4e7ec;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    /* =========================
+       KEYWORDS
+    ========================== */
+
+    .keywords-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .keyword {
+        background: #f3f6ff;
+        border: 1px solid #dce5ff;
+        color: #315ee8;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* =========================
+       INFORMATION
+    ========================== */
+
+    .information-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .information-row {
+        display: grid;
+        grid-template-columns: 170px 1fr;
+        gap: 15px;
+        padding: 12px 14px;
+        background: #f8fafc;
+        border: 1px solid #edf0f5;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .information-key {
+        font-weight: 800;
+        color: #475467;
+    }
+
+    .information-value {
+        color: #344054;
+        word-break: break-word;
+    }
+
+    /* =========================
+       DOCUMENT SUMMARY
+    ========================== */
+
+    .summary-content {
+        font-size: 15px;
+        line-height: 1.85;
+        color: #344054;
+        white-space: pre-wrap;
+    }
+
+    /* =========================
+       EXTRACTED TEXT
+    ========================== */
+
+    .extracted-card {
+        background: white;
+        border: 1px solid #e4e7ec;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .extracted-content {
+        padding: 20px;
+        background: #111827;
+    }
+
+    .extracted-content pre {
+        margin: 0;
+        min-height: 540px;
+        max-height: 700px;
+        overflow: auto;
+        padding: 28px;
+        border-radius: 9px;
+        background: #0b1220;
+        color: #e5e7eb;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .extracted-content pre::-webkit-scrollbar {
+        width: 9px;
+        height: 9px;
+    }
+
+    .extracted-content pre::-webkit-scrollbar-thumb {
+        background: #475467;
+        border-radius: 10px;
+    }
+
+    /* =========================
+       EMPTY
+    ========================== */
+
+    .empty-state {
+        color: #98a2b3;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .error-box {
+        padding: 16px;
+        background: #fff4f4;
+        border: 1px solid #ffd6d6;
+        color: #b42318;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    /* =========================
+       FOOTER ACTIONS
+    ========================== */
+
+    .bottom-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 34px;
+        padding-top: 25px;
+        border-top: 1px solid #e4e7ec;
+    }
+
+    .back-link {
+        color: #475467;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        color: #315ee8;
+    }
+
+    .bottom-export {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* =========================
+       COPY MESSAGE
+    ========================== */
+
+    .copy-success {
+        position: fixed;
+        right: 25px;
+        bottom: 25px;
+        background: #101828;
+        color: white;
+        padding: 12px 17px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: 0.25s ease;
+        z-index: 9999;
+    }
+
+    .copy-success.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media (max-width: 1100px) {
+
+        .analysis-page {
+            padding: 35px 25px 60px;
+        }
+
+        .document-header {
+            flex-direction: column;
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .action-btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .insights-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 760px) {
+
+        .analysis-page {
+            padding: 25px 16px 50px;
+        }
+
+        .page-title {
+            font-size: 32px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .data-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header-actions {
+            flex-direction: column;
+        }
+
+        .copy-all-bar {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .copy-all-btn {
+            width: 100%;
+        }
+
+        .information-row {
+            grid-template-columns: 1fr;
+            gap: 5px;
+        }
+
+        .bottom-actions {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 18px;
+        }
+
+        .bottom-export {
+            flex-direction: column;
+        }
+
+        .extracted-content pre {
+            min-height: 420px;
+            padding: 20px;
+            font-size: 12px;
+        }
+    }
+</style>
 
 
-    <!-- Export Options -->
+<div class="analysis-page">
 
-    <h3>📥 Export Analysis</h3>
+    <!-- =========================
+         DOCUMENT HEADER
+    ========================== -->
 
-    <a
-        href="{{ url_for(
-            'documents.export_txt',
-            document_id=document.id
-        ) }}"
-    >
-        📄 Download TXT
-    </a>
+    <div class="document-header">
 
-    &nbsp;&nbsp;
+        <div class="header-left">
 
-    <a
-        href="{{ url_for(
-            'documents.export_pdf',
-            document_id=document.id
-        ) }}"
-    >
-        📑 Download PDF
-    </a>
+            <div class="eyebrow">
+                AI Document Analyzer
+            </div>
 
+            <h1 class="page-title">
+                Document Analysis
+            </h1>
 
-    <hr>
+            <div class="document-name">
+                📄
+                <span>{{ document.filename }}</span>
+            </div>
+
+        </div>
 
 
-    <!-- AI Powered Analysis -->
+        <div class="header-actions">
 
-    <h3>🤖 AI-Powered Analysis</h3>
+            <a
+                href="{{ url_for('documents.export_pdf', document_id=document.id) }}"
+                class="action-btn primary"
+            >
+                📑 Export PDF
+            </a>
 
-    {% if ai_analysis and ai_analysis.success %}
+            <a
+                href="{{ url_for('documents.export_txt', document_id=document.id) }}"
+                class="action-btn"
+            >
+                📄 Export TXT
+            </a>
 
-        <!-- AI Summary -->
+        </div>
 
-        <h4>🧠 AI Summary</h4>
+    </div>
 
-        {% if ai_analysis.summary %}
 
-            <div class="summary ai-summary">
+    <!-- =========================
+         DOCUMENT STATS
+    ========================== -->
 
-                <p>
-                    {{ ai_analysis.summary }}
-                </p>
+    <div class="stats-grid">
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                File Type
+            </div>
+
+            <div class="stat-value">
+                {{ document.filename.split('.')[-1].upper() }}
+            </div>
+
+            <div class="stat-sub">
+                Uploaded document
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Pages
+            </div>
+
+            <div
+                class="stat-value"
+                id="pageCount"
+            >
+                —
+            </div>
+
+            <div class="stat-sub">
+                Extracted pages
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Word Count
+            </div>
+
+            <div
+                class="stat-value"
+                id="wordCount"
+            >
+                0
+            </div>
+
+            <div class="stat-sub">
+                Extracted content
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-label">
+                Uploaded
+            </div>
+
+            <div class="stat-value">
+                ✓
+            </div>
+
+            <div class="stat-sub">
+                {{ document.uploaded_at }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         COPY ALL
+    ========================== -->
+
+    <div class="copy-all-bar">
+
+        <div class="copy-all-text">
+
+            <h3>
+                📋 Copy complete analysis
+            </h3>
+
+            <p>
+                Copy all available analysis results at once.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            class="copy-all-btn"
+            onclick="copyAllAnalysis()"
+        >
+            📋 Copy All
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         AI SUMMARY
+    ========================== -->
+
+    <section class="analysis-section">
+
+        <div class="section-title">
+
+            <div class="section-title-left">
+
+                <div class="section-icon">
+                    🧠
+                </div>
+
+                <h2>
+                    AI Summary
+                </h2>
 
             </div>
 
-        {% else %}
-
-            <p>
-                No AI summary was generated.
-            </p>
-
-        {% endif %}
+        </div>
 
 
-        <!-- AI Key Insights -->
+        <div class="content-card">
 
-        <h4>💡 Key Insights</h4>
+            <div class="card-top">
 
-        {% if ai_analysis.insights %}
+                <div class="card-heading">
+                    AI-generated overview
+                </div>
 
-            <ul>
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('aiSummaryText', this)"
+                >
+                    📋 Copy
+                </button>
 
-                {% for insight in ai_analysis.insights %}
+            </div>
 
-                    <li>
-                        {{ insight }}
-                    </li>
 
-                {% endfor %}
+            <div class="card-body">
 
-            </ul>
+                {% if ai_analysis and ai_analysis.success %}
 
-        {% else %}
+                    {% if ai_analysis.summary %}
 
-            <p>
-                No AI insights were generated.
-            </p>
+                        <div
+                            id="aiSummaryText"
+                            class="ai-summary-content"
+                        >
+                            <p>
+                                {{ ai_analysis.summary }}
+                            </p>
+                        </div>
 
-        {% endif %}
+                    {% else %}
 
-    {% else %}
+                        <p class="empty-state">
+                            No AI summary was generated.
+                        </p>
 
-        <div class="ai-error">
+                    {% endif %}
 
-            <p>
-                ⚠️
-                {{ ai_analysis.message
-                    if ai_analysis
-                    else
-                    "AI analysis is not available."
-                }}
-            </p>
+                {% else %}
+
+                    <div class="error-box">
+                        ⚠️
+                        {{ ai_analysis.message if ai_analysis else "AI analysis is not available." }}
+                    </div>
+
+                {% endif %}
+
+            </div>
 
         </div>
 
-    {% endif %}
+    </section>
 
 
-    <hr>
+    <!-- =========================
+         KEY INSIGHTS
+    ========================== -->
 
+    <section class="analysis-section">
 
-    <!-- Keywords -->
+        <div class="section-title">
 
-    <h3>🔑 Keywords</h3>
+            <div class="section-title-left">
 
-    {% if keywords %}
+                <div class="section-icon">
+                    💡
+                </div>
 
-        <ul>
+                <h2>
+                    Key Insights
+                </h2>
 
-            {% for keyword in keywords %}
-
-                <li>
-                    {{ keyword }}
-                </li>
-
-            {% endfor %}
-
-        </ul>
-
-    {% else %}
-
-        <p>
-            No keywords found.
-        </p>
-
-    {% endif %}
-
-
-    <hr>
-
-
-    <!-- Extracted Information -->
-
-    <h3>📌 Extracted Information</h3>
-
-    {% if information %}
-
-        <ul>
-
-            {% for key, value in information.items() %}
-
-                <li>
-
-                    <strong>
-                        {{ key.replace("_", " ").title() }}:
-                    </strong>
-
-                    {{ value }}
-
-                </li>
-
-            {% endfor %}
-
-        </ul>
-
-    {% else %}
-
-        <p>
-            No structured information found.
-        </p>
-
-    {% endif %}
-
-
-    <hr>
-
-
-    <!-- Rule-Based Summary -->
-
-    <h3>📝 Summary</h3>
-
-    {% if summary %}
-
-        <div class="summary">
-
-            <p>
-                {{ summary }}
-            </p>
+            </div>
 
         </div>
 
-    {% else %}
 
-        <p>
-            No summary available.
-        </p>
+        <div class="content-card">
 
-    {% endif %}
+            <div class="card-top">
+
+                <div class="card-heading">
+                    Important points identified from the document
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('insightsText', this)"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
 
 
-    <hr>
+            <div class="card-body">
 
+                <div
+                    id="insightsText"
+                    class="insights-list"
+                >
 
-    <!-- Extracted Text -->
+                    {% if ai_analysis and ai_analysis.success and ai_analysis.insights %}
 
-    <h3>
-        📄 Extracted Text
-    </h3>
+                        {% for insight in ai_analysis.insights %}
 
-    {% if document.extracted_text %}
+                            <div class="insight-item">
 
-        <div class="extracted-text">
+                                <div class="insight-check">
+                                    ✓
+                                </div>
 
-            <pre>{{ document.extracted_text }}</pre>
+                                <div>
+                                    {{ insight }}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="empty-state">
+                            No AI insights were generated.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
 
         </div>
 
-    {% else %}
-
-        <p>
-            No text could be extracted
-            from this document.
-        </p>
-
-    {% endif %}
+    </section>
 
 
-    <br>
+    <!-- =========================
+         KEYWORDS + INFORMATION
+    ========================== -->
 
-    <a
-        href="{{ url_for(
-            'documents.list_documents'
-        ) }}"
-    >
-        ← Back to My Documents
-    </a>
+    <div class="data-grid">
+
+
+        <!-- KEYWORDS -->
+
+        <div class="data-card">
+
+            <div class="card-top">
+
+                <div class="card-heading">
+                    🔑 Keywords
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('keywordsText', this)"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div
+                    id="keywordsText"
+                    class="keywords-wrap"
+                >
+
+                    {% if keywords %}
+
+                        {% for keyword in keywords %}
+
+                            <span class="keyword">
+                                {{ keyword }}
+                            </span>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="empty-state">
+                            No keywords found.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- IMPORTANT INFORMATION -->
+
+        <div class="data-card">
+
+            <div class="card-top">
+
+                <div class="card-heading">
+                    📌 Important Information
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('informationText', this)"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div
+                    id="informationText"
+                    class="information-list"
+                >
+
+                    {% if information %}
+
+                        {% for key, value in information.items() %}
+
+                            <div class="information-row">
+
+                                <div class="information-key">
+                                    {{ key.replace("_", " ").title() }}
+                                </div>
+
+                                <div class="information-value">
+                                    {{ value }}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="empty-state">
+                            No structured information found.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         DOCUMENT SUMMARY
+    ========================== -->
+
+    <section class="analysis-section">
+
+        <div class="section-title">
+
+            <div class="section-title-left">
+
+                <div class="section-icon">
+                    📝
+                </div>
+
+                <h2>
+                    Document Summary
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <div class="card-top">
+
+                <div class="card-heading">
+                    Extracted document summary
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('documentSummaryText', this)"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
+
+
+            <div class="card-body">
+
+                {% if summary %}
+
+                    <div
+                        id="documentSummaryText"
+                        class="summary-content"
+                    >
+                        {{ summary }}
+                    </div>
+
+                {% else %}
+
+                    <p class="empty-state">
+                        No summary available.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         EXTRACTED TEXT
+    ========================== -->
+
+    <section class="analysis-section">
+
+        <div class="section-title">
+
+            <div class="section-title-left">
+
+                <div class="section-icon">
+                    📄
+                </div>
+
+                <h2>
+                    Extracted Text
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="extracted-card">
+
+            <div class="card-top">
+
+                <div class="card-heading">
+                    Complete extracted document content
+                </div>
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="copySection('extractedTextContent', this)"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
+
+
+            <div class="extracted-content">
+
+                {% if document.extracted_text %}
+
+                    <pre id="extractedTextContent">{{ document.extracted_text }}</pre>
+
+                {% else %}
+
+                    <pre id="extractedTextContent">No text could be extracted from this document.</pre>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOTTOM ACTIONS
+    ========================== -->
+
+    <div class="bottom-actions">
+
+        <a
+            href="{{ url_for('documents.list_documents') }}"
+            class="back-link"
+        >
+            ← Back to My Documents
+        </a>
+
+
+        <div class="bottom-export">
+
+            <a
+                href="{{ url_for('documents.export_txt', document_id=document.id) }}"
+                class="action-btn"
+            >
+                📄 Download TXT
+            </a>
+
+            <a
+                href="{{ url_for('documents.export_pdf', document_id=document.id) }}"
+                class="action-btn primary"
+            >
+                📑 Download PDF
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
+
+
+<!-- COPY SUCCESS MESSAGE -->
+
+<div
+    id="copySuccess"
+    class="copy-success"
+>
+    ✓ Copied to clipboard
+</div>
+
+
+<script>
+
+    /* =========================================
+       PAGE COUNT
+    ========================================== */
+
+    function calculatePageCount() {
+
+        const extractedElement =
+            document.getElementById("extractedTextContent");
+
+        const pageElement =
+            document.getElementById("pageCount");
+
+        if (!extractedElement || !pageElement) {
+            return;
+        }
+
+        const text =
+            extractedElement.innerText || "";
+
+        const fileName =
+            {{ document.filename|tojson }};
+
+        const extension =
+            fileName.split(".").pop().toLowerCase();
+
+
+        /*
+         * PDF files use page markers created by
+         * the PDF text extractor.
+         */
+
+        if (extension === "pdf") {
+
+            const matches =
+                text.match(/--- Page \d+ ---/g);
+
+            if (matches && matches.length > 0) {
+
+                pageElement.textContent =
+                    matches.length;
+
+            } else {
+
+                pageElement.textContent =
+                    "1";
+
+            }
+
+        }
+
+        /*
+         * DOCX/TXT/images don't have reliable
+         * physical page count at extraction time.
+         */
+
+        else if (extension === "docx") {
+
+            pageElement.textContent =
+                "—";
+
+            pageElement.parentElement
+                .querySelector(".stat-sub")
+                .textContent =
+                "DOCX layout";
+
+        }
+
+        else if (extension === "txt") {
+
+            pageElement.textContent =
+                "—";
+
+            pageElement.parentElement
+                .querySelector(".stat-sub")
+                .textContent =
+                "Text file";
+
+        }
+
+        else {
+
+            pageElement.textContent =
+                "—";
+
+        }
+
+    }
+
+
+    /* =========================================
+       WORD COUNT
+    ========================================== */
+
+    function calculateWordCount() {
+
+        const extractedElement =
+            document.getElementById("extractedTextContent");
+
+        const wordElement =
+            document.getElementById("wordCount");
+
+        if (!extractedElement || !wordElement) {
+            return;
+        }
+
+        const text =
+            extractedElement.innerText
+                .replace(/--- Page \d+ ---/g, " ")
+                .trim();
+
+        if (!text) {
+
+            wordElement.textContent =
+                "0";
+
+            return;
+
+        }
+
+        const words =
+            text.split(/\s+/).filter(Boolean);
+
+        wordElement.textContent =
+            words.length.toLocaleString();
+
+    }
+
+
+    /* =========================================
+       COPY SECTION
+    ========================================== */
+
+    async function copySection(elementId, button) {
+
+        const element =
+            document.getElementById(elementId);
+
+        if (!element) {
+            return;
+        }
+
+        let text = element.innerText || "";
+
+        text = text.trim();
+
+        if (!text) {
+            showCopyMessage("Nothing to copy");
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(text);
+
+            const original =
+                button.innerHTML;
+
+            button.innerHTML =
+                "✓ Copied";
+
+            setTimeout(() => {
+
+                button.innerHTML =
+                    original;
+
+            }, 1500);
+
+            showCopyMessage("Copied to clipboard");
+
+        }
+
+        catch (error) {
+
+            fallbackCopy(text);
+
+            showCopyMessage("Copied to clipboard");
+
+        }
+
+    }
+
+
+    /* =========================================
+       COPY ALL
+    ========================================== */
+
+    async function copyAllAnalysis() {
+
+        const sections = [
+
+            {
+                title: "AI Summary",
+                id: "aiSummaryText"
+            },
+
+            {
+                title: "Key Insights",
+                id: "insightsText"
+            },
+
+            {
+                title: "Keywords",
+                id: "keywordsText"
+            },
+
+            {
+                title: "Important Information",
+                id: "informationText"
+            },
+
+            {
+                title: "Document Summary",
+                id: "documentSummaryText"
+            },
+
+            {
+                title: "Extracted Text",
+                id: "extractedTextContent"
+            }
+
+        ];
+
+
+        let output = "";
+
+        output +=
+            "DOCUMENT ANALYSIS\n";
+
+        output +=
+            "=================\n\n";
+
+
+        sections.forEach(section => {
+
+            const element =
+                document.getElementById(section.id);
+
+            if (!element) {
+                return;
+            }
+
+            const text =
+                element.innerText.trim();
+
+            if (!text) {
+                return;
+            }
+
+            output +=
+                section.title.toUpperCase();
+
+            output +=
+                "\n-----------------\n";
+
+            output +=
+                text;
+
+            output +=
+                "\n\n";
+
+        });
+
+
+        if (!output.trim()) {
+
+            showCopyMessage(
+                "Nothing available to copy"
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                output
+            );
+
+            showCopyMessage(
+                "Complete analysis copied"
+            );
+
+        }
+
+        catch (error) {
+
+            fallbackCopy(output);
+
+            showCopyMessage(
+                "Complete analysis copied"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       FALLBACK COPY
+    ========================================== */
+
+    function fallbackCopy(text) {
+
+        const textarea =
+            document.createElement("textarea");
+
+        textarea.value =
+            text;
+
+        textarea.style.position =
+            "fixed";
+
+        textarea.style.left =
+            "-9999px";
+
+        document.body.appendChild(
+            textarea
+        );
+
+        textarea.focus();
+
+        textarea.select();
+
+        try {
+
+            document.execCommand("copy");
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Copy failed:",
+                error
+            );
+
+        }
+
+        document.body.removeChild(
+            textarea
+        );
+
+    }
+
+
+    /* =========================================
+       SUCCESS MESSAGE
+    ========================================== */
+
+    function showCopyMessage(message) {
+
+        const messageBox =
+            document.getElementById(
+                "copySuccess"
+            );
+
+        if (!messageBox) {
+            return;
+        }
+
+        messageBox.textContent =
+            "✓ " + message;
+
+        messageBox.classList.add(
+            "show"
+        );
+
+
+        setTimeout(() => {
+
+            messageBox.classList.remove(
+                "show"
+            );
+
+        }, 1800);
+
+    }
+
+
+    /* =========================================
+       INITIALIZE
+    ========================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            calculatePageCount();
+
+            calculateWordCount();
+
+        }
+    );
+
+</script>
 
 {% endblock %}
