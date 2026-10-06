@@ -1,957 +1,524 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}
-AI Document Analyzer
-{% endblock %}
+    <title>AI Document Analyzer</title>
 
-{% block content %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- =====================================================
-     ENTRY SCREEN
-     ===================================================== -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<div
-    id="ai-entry-screen"
-    class="ai-entry-screen"
->
+        body {
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            color: #f8fafc;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.28), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(168, 85, 247, 0.24), transparent 28%),
+                radial-gradient(circle at 70% 80%, rgba(14, 165, 233, 0.18), transparent 30%),
+                #070b16;
+            overflow-x: hidden;
+        }
 
-    <div class="entry-grid"></div>
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+        }
 
-    <div class="entry-glow entry-glow-one"></div>
-    <div class="entry-glow entry-glow-two"></div>
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .orb.one {
+            width: 280px;
+            height: 280px;
+            background: #6366f1;
+            top: 80px;
+            left: -120px;
+        }
+
+        .orb.two {
+            width: 250px;
+            height: 250px;
+            background: #a855f7;
+            right: -100px;
+            top: 350px;
+        }
+
+        .container {
+            width: min(1180px, calc(100% - 40px));
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(14px);
+            color: #c4b5fd;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .badge span {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #22c55e;
+        }
+
+        h1 {
+            max-width: 850px;
+            margin: auto;
+            font-size: clamp(42px, 7vw, 78px);
+            line-height: 1.02;
+            letter-spacing: -3px;
+            font-weight: 800;
+        }
+
+        h1 .gradient {
+            background: linear-gradient(
+                90deg,
+                #818cf8,
+                #c084fc,
+                #38bdf8
+            );
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text {
+            max-width: 720px;
+            margin: 25px auto 35px;
+            color: #94a3b8;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 14px 23px;
+            border-radius: 13px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 12px 35px rgba(99,102,241,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(99,102,241,0.45);
+        }
+
+        .btn-secondary {
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.055);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.09);
+        }
+
+        .section {
+            padding: 70px 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-heading .label {
+            color: #818cf8;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .section-heading p {
+            color: #94a3b8;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.58);
+            border: 1px solid rgba(255,255,255,0.09);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            box-shadow: 0 20px 70px rgba(0,0,0,0.25);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature {
+            padding: 28px;
+            transition: 0.25s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(129,140,248,0.3);
+        }
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            background: rgba(99,102,241,0.15);
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature p {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .step {
+            padding: 25px;
+            position: relative;
+        }
+
+        .step-number {
+            color: #818cf8;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .step h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 60px 30px;
+            margin: 40px 0 80px;
+            background:
+                radial-gradient(circle at center, rgba(99,102,241,0.2), transparent 65%),
+                rgba(15,23,42,0.7);
+        }
+
+        .cta h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #64748b;
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        @media (max-width: 850px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                letter-spacing: -2px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .hero {
+                padding-top: 60px;
+            }
+
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-text {
+                font-size: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+
+                <div class="badge">
+                    <span></span>
+                    AI-Powered Document Intelligence
+                </div>
+
+                <h1>
+                    Turn your documents into
+                    <span class="gradient">intelligent insights.</span>
+                </h1>
+
+                <p class="hero-text">
+                    Upload your documents and let AI Document Analyzer extract,
+                    analyze, summarize and organize the important information
+                    automatically.
+                </p>
+
+                <div class="buttons">
+
+                    <a href="{{ url_for('documents.upload_document') }}"
+                       class="btn btn-primary">
+                        🚀 Analyze a Document
+                    </a>
+
+                    <a href="{{ url_for('documents.list_documents') }}"
+                       class="btn btn-secondary">
+                        📁 My Documents
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
 
 
-    <div class="entry-content">
+        <!-- FEATURES -->
+        <section class="section">
 
-        <div class="entry-ai-mark">
-            AI
-        </div>
+            <div class="container">
 
+                <div class="section-heading">
+                    <div class="label">Capabilities</div>
+                    <h2>Everything you need to understand documents</h2>
+                    <p>From raw files to meaningful information.</p>
+                </div>
 
-        <div class="entry-line"></div>
+                <div class="features">
 
+                    <div class="feature glass">
+                        <div class="icon">📄</div>
+                        <h3>Smart Extraction</h3>
+                        <p>
+                            Extract text from PDF, DOCX, TXT and image documents
+                            using intelligent document processing and OCR.
+                        </p>
+                    </div>
 
-        <p class="entry-kicker">
-            INTELLIGENT DOCUMENT PROCESSING
-        </p>
+                    <div class="feature glass">
+                        <div class="icon">🧠</div>
+                        <h3>AI Analysis</h3>
+                        <p>
+                            Generate summaries, key insights and useful information
+                            from your uploaded documents.
+                        </p>
+                    </div>
 
+                    <div class="feature glass">
+                        <div class="icon">🔎</div>
+                        <h3>Keyword Intelligence</h3>
+                        <p>
+                            Automatically identify important keywords and technical
+                            concepts from your documents.
+                        </p>
+                    </div>
 
-        <h1 class="entry-title">
-            AI Document Analyzer
-        </h1>
-
-
-        <p class="entry-subtitle">
-            Extract. Analyze. Understand.
-        </p>
-
-
-        <button
-            type="button"
-            id="enter-analyzer"
-            class="entry-enter-btn"
-        >
-
-            <span>
-                Enter Analyzer
-            </span>
-
-            <strong>
-                →
-            </strong>
-
-        </button>
-
-
-        <p class="entry-hint">
-            Click or press Enter to continue
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     MAIN HOME PAGE
-     ===================================================== -->
-
-<div
-    id="ai-main-home"
-    class="ai-home-page ai-main-hidden"
->
-
-    <!-- Animated Background -->
-
-    <div class="ai-background">
-
-        <div class="grid-overlay"></div>
-
-        <div class="glow-orb orb-one"></div>
-
-        <div class="glow-orb orb-two"></div>
-
-        <div class="glow-orb orb-three"></div>
-
-    </div>
-
-
-    <!-- =================================================
-         HERO
-         ================================================= -->
-
-    <section class="ai-hero">
-
-        <div class="hero-content">
-
-            <div class="hero-badge">
-
-                <span class="status-dot"></span>
-
-                Intelligent Document Processing
+                </div>
 
             </div>
 
-
-            <h1>
-
-                Turn Documents
-
-                <span>
-                    Into Intelligence.
-                </span>
-
-            </h1>
+        </section>
 
 
-            <p class="hero-description">
+        <!-- WORKFLOW -->
+        <section class="section">
 
-                Upload your documents and let AI Document Analyzer
-                extract text, identify important information,
-                discover keywords and generate meaningful summaries.
+            <div class="container">
 
-            </p>
+                <div class="section-heading">
+                    <div class="label">Workflow</div>
+                    <h2>Simple. Fast. Intelligent.</h2>
+                    <p>Four steps from document to insight.</p>
+                </div>
+
+                <div class="workflow">
+
+                    <div class="step glass">
+                        <div class="step-number">01</div>
+                        <h3>Upload</h3>
+                        <p>
+                            Select your PDF, DOCX, TXT or image document.
+                        </p>
+                    </div>
+
+                    <div class="step glass">
+                        <div class="step-number">02</div>
+                        <h3>Extract</h3>
+                        <p>
+                            Text is extracted automatically using document
+                            processing and OCR.
+                        </p>
+                    </div>
+
+                    <div class="step glass">
+                        <div class="step-number">03</div>
+                        <h3>Analyze</h3>
+                        <p>
+                            AI identifies summaries, insights and important
+                            information.
+                        </p>
+                    </div>
+
+                    <div class="step glass">
+                        <div class="step-number">04</div>
+                        <h3>Understand</h3>
+                        <p>
+                            Explore the results and use the information
+                            effectively.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
 
 
-            <div class="hero-actions">
+        <!-- CTA -->
+        <section class="container">
 
-                <a
-                    href="{{ url_for('auth.register') }}"
-                    class="hero-btn hero-btn-primary"
-                >
+            <div class="cta glass">
 
-                    Start Analyzing
+                <h2>Ready to analyze your document?</h2>
 
-                    <span>
-                        →
-                    </span>
+                <p>
+                    Upload a document and let the analyzer do the heavy lifting.
+                </p>
 
+                <a href="{{ url_for('documents.upload_document') }}"
+                   class="btn btn-primary">
+                    ✨ Start Analyzing
                 </a>
 
-
-                <a
-                    href="{{ url_for('auth.login') }}"
-                    class="hero-btn hero-btn-secondary"
-                >
-                    Sign In
-                </a>
-
             </div>
 
+        </section>
 
-            <div class="format-row">
+    </main>
 
-                <span>PDF</span>
-                <span>DOCX</span>
-                <span>TXT</span>
-                <span>JPG</span>
-                <span>PNG</span>
 
-            </div>
-
+    <footer>
+        <div class="container">
+            AI Document Analyzer · Intelligent document processing
         </div>
+    </footer>
 
-
-        <!-- AI VISUAL -->
-
-        <div class="hero-visual">
-
-            <div class="visual-glow"></div>
-
-
-            <!-- Document -->
-
-            <div class="floating-document">
-
-                <div class="document-top">
-
-                    <div class="document-file-icon">
-                        PDF
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            document.pdf
-                        </strong>
-
-                        <small>
-                            Processing document
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="document-lines">
-
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span class="short"></span>
-                    <span></span>
-
-                </div>
-
-
-                <div class="document-status">
-
-                    <span class="mini-check">
-                        ✓
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Text extracted
-                        </strong>
-
-                        <small>
-                            Ready for analysis
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- AI Core -->
-
-            <div class="ai-core">
-
-                <div class="core-ring ring-one"></div>
-
-                <div class="core-ring ring-two"></div>
-
-                <div class="core-center">
-                    AI
-                </div>
-
-            </div>
-
-
-            <!-- Result Cards -->
-
-            <div class="result-card result-one">
-
-                <div class="result-icon">
-                    T
-                </div>
-
-                <div>
-
-                    <strong>
-                        Text
-                    </strong>
-
-                    <small>
-                        Extracted
-                    </small>
-
-                </div>
-
-                <span class="result-check">
-                    ✓
-                </span>
-
-            </div>
-
-
-            <div class="result-card result-two">
-
-                <div class="result-icon">
-                    K
-                </div>
-
-                <div>
-
-                    <strong>
-                        Keywords
-                    </strong>
-
-                    <small>
-                        Identified
-                    </small>
-
-                </div>
-
-                <span class="result-check">
-                    ✓
-                </span>
-
-            </div>
-
-
-            <div class="result-card result-three">
-
-                <div class="result-icon">
-                    S
-                </div>
-
-                <div>
-
-                    <strong>
-                        Summary
-                    </strong>
-
-                    <small>
-                        Generated
-                    </small>
-
-                </div>
-
-                <span class="result-check">
-                    ✓
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         INTELLIGENCE SECTION
-         ================================================= -->
-
-    <section class="intelligence-section reveal-section">
-
-        <div class="section-intro">
-
-            <span class="section-kicker">
-                DOCUMENT INTELLIGENCE
-            </span>
-
-            <h2>
-
-                One platform.
-
-                <span>
-                    Multiple layers of analysis.
-                </span>
-
-            </h2>
-
-            <p>
-
-                Transform raw documents into structured and
-                useful information through a simple workflow.
-
-            </p>
-
-        </div>
-
-
-        <div class="intelligence-grid">
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    01
-                </div>
-
-                <div class="card-symbol">
-                    TXT
-                </div>
-
-                <h3>
-                    Text Extraction
-                </h3>
-
-                <p>
-                    Extract readable text from PDF, DOCX
-                    and TXT documents automatically.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    02
-                </div>
-
-                <div class="card-symbol">
-                    OCR
-                </div>
-
-                <h3>
-                    Image Recognition
-                </h3>
-
-                <p>
-                    Convert text inside JPG, JPEG and PNG
-                    images into usable document content.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    03
-                </div>
-
-                <div class="card-symbol">
-                    KEY
-                </div>
-
-                <h3>
-                    Keyword Analysis
-                </h3>
-
-                <p>
-                    Identify important words and recurring
-                    terms from extracted document content.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    04
-                </div>
-
-                <div class="card-symbol">
-                    INFO
-                </div>
-
-                <h3>
-                    Information Detection
-                </h3>
-
-                <p>
-                    Detect structured information such as
-                    email addresses, phone numbers and URLs.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    05
-                </div>
-
-                <div class="card-symbol">
-                    SUM
-                </div>
-
-                <h3>
-                    Smart Summary
-                </h3>
-
-                <p>
-                    Generate a concise representation of
-                    the important document content.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-
-            <div class="intelligence-card">
-
-                <div class="card-number">
-                    06
-                </div>
-
-                <div class="card-symbol">
-                    DOC
-                </div>
-
-                <h3>
-                    Document Management
-                </h3>
-
-                <p>
-                    Search, analyze, re-analyze, export
-                    and manage uploaded documents.
-                </p>
-
-                <div class="card-line"></div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         WORKFLOW
-         ================================================= -->
-
-    <section class="analysis-flow-section reveal-section">
-
-        <div class="section-intro">
-
-            <span class="section-kicker">
-                HOW IT WORKS
-            </span>
-
-            <h2>
-
-                From document
-
-                <span>
-                    to useful information.
-                </span>
-
-            </h2>
-
-        </div>
-
-
-        <div class="analysis-flow">
-
-
-            <div class="flow-step">
-
-                <div class="flow-number">
-                    01
-                </div>
-
-                <div class="flow-content">
-
-                    <h3>
-                        Upload
-                    </h3>
-
-                    <p>
-                        Select a supported document
-                        and upload it to the platform.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="flow-connector"></div>
-
-
-            <div class="flow-step">
-
-                <div class="flow-number">
-                    02
-                </div>
-
-                <div class="flow-content">
-
-                    <h3>
-                        Extract
-                    </h3>
-
-                    <p>
-                        The system extracts text using
-                        document processing and OCR.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="flow-connector"></div>
-
-
-            <div class="flow-step">
-
-                <div class="flow-number">
-                    03
-                </div>
-
-                <div class="flow-content">
-
-                    <h3>
-                        Analyze
-                    </h3>
-
-                    <p>
-                        Keywords and important information
-                        are identified from the content.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="flow-connector"></div>
-
-
-            <div class="flow-step">
-
-                <div class="flow-number">
-                    04
-                </div>
-
-                <div class="flow-content">
-
-                    <h3>
-                        Understand
-                    </h3>
-
-                    <p>
-                        A concise summary helps you
-                        understand the document faster.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         CTA
-         ================================================= -->
-
-    <section class="ai-cta reveal-section">
-
-        <div class="cta-glow"></div>
-
-        <div class="cta-content">
-
-            <span class="section-kicker">
-                READY TO ANALYZE?
-            </span>
-
-            <h2>
-
-                Give your documents
-
-                <span>
-                    a smarter workflow.
-                </span>
-
-            </h2>
-
-            <p>
-
-                Upload a document and explore the analysis
-                capabilities of AI Document Analyzer.
-
-            </p>
-
-            <a
-                href="{{ url_for('auth.register') }}"
-                class="hero-btn hero-btn-primary"
-            >
-
-                Get Started
-
-                <span>
-                    →
-                </span>
-
-            </a>
-
-        </div>
-
-    </section>
-
-</div>
-
-
-<!-- =====================================================
-     ENTRY SCREEN SCRIPT
-     ===================================================== -->
-
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const entryScreen =
-            document.getElementById(
-                "ai-entry-screen"
-            );
-
-
-        const mainHome =
-            document.getElementById(
-                "ai-main-home"
-            );
-
-
-        const enterButton =
-            document.getElementById(
-                "enter-analyzer"
-            );
-
-
-        if (
-            !entryScreen ||
-            !mainHome ||
-            !enterButton
-        ) {
-            return;
-        }
-
-
-        /* =================================================
-           ENTER ANALYZER
-           ================================================= */
-
-        let entering = false;
-
-
-        function enterAnalyzer() {
-
-            if (entering) {
-                return;
-            }
-
-
-            entering = true;
-
-            enterButton.disabled = true;
-
-
-            /*
-             * Reveal the Home page immediately underneath
-             * the entry screen.
-             */
-
-            mainHome.classList.remove(
-                "ai-main-hidden"
-            );
-
-            mainHome.classList.add(
-                "ai-main-visible"
-            );
-
-
-            /*
-             * Start cinematic entry animation.
-             */
-
-            entryScreen.classList.add(
-                "entry-entering"
-            );
-
-
-            requestAnimationFrame(
-                function () {
-
-                    requestAnimationFrame(
-                        function () {
-
-                            entryScreen.classList.add(
-                                "entry-title-zoom"
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-
-            /*
-             * Remove the entry screen after
-             * the animation has completed.
-             */
-
-            setTimeout(
-                function () {
-
-                    entryScreen.style.display =
-                        "none";
-
-                    entryScreen.setAttribute(
-                        "aria-hidden",
-                        "true"
-                    );
-
-
-                    window.scrollTo(
-                        0,
-                        0
-                    );
-
-                },
-                1050
-            );
-
-        }
-
-
-        /*
-         * Mouse click
-         */
-
-        enterButton.addEventListener(
-            "click",
-            enterAnalyzer
-        );
-
-
-        /*
-         * Keyboard Enter
-         */
-
-        document.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Enter" &&
-                    !entering
-                ) {
-
-                    enterAnalyzer();
-
-                }
-
-            }
-        );
-
-
-        /* =================================================
-           HOME SCROLL REVEAL
-           ================================================= */
-
-        const revealElements =
-            document.querySelectorAll(
-                ".reveal-section"
-            );
-
-
-        const revealObserver =
-            new IntersectionObserver(
-                function (entries) {
-
-                    entries.forEach(
-                        function (entry) {
-
-                            if (
-                                entry.isIntersecting
-                            ) {
-
-                                entry.target.classList.add(
-                                    "visible"
-                                );
-
-                            }
-
-                        }
-                    );
-
-                },
-                {
-                    threshold: 0.15
-                }
-            );
-
-
-        revealElements.forEach(
-            function (element) {
-
-                revealObserver.observe(
-                    element
-                );
-
-            }
-        );
-
-
-        /* =================================================
-           HERO MOUSE MOVEMENT
-           ================================================= */
-
-        const visual =
-            document.querySelector(
-                ".hero-visual"
-            );
-
-
-        if (visual) {
-
-            document.addEventListener(
-                "mousemove",
-                function (event) {
-
-                    /*
-                     * Don't move the visual while
-                     * the entry animation is running.
-                     */
-
-                    if (entering) {
-                        return;
-                    }
-
-
-                    const x =
-                        (
-                            window.innerWidth / 2
-                            - event.clientX
-                        ) / 80;
-
-
-                    const y =
-                        (
-                            window.innerHeight / 2
-                            - event.clientY
-                        ) / 80;
-
-
-                    visual.style.transform =
-                        `translate(${x}px, ${y}px)`;
-
-                }
-            );
-
-        }
-
-    }
-);
-
-</script>
-
-{% endblock %}
+</body>
+</html>

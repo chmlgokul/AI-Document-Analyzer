@@ -10,642 +10,387 @@ Upload Document | AI Document Analyzer
 <style>
 
 /* =========================================================
-   BOOK UPLOAD PAGE
+   UPLOAD PAGE — PREMIUM GLASS UI
    ========================================================= */
 
-.book-page {
+.upload-page {
 
-    min-height: calc(100vh - 140px);
+    min-height:
+        calc(100vh - 150px);
 
-    display: flex;
+    padding:
+        45px 20px 70px;
 
-    justify-content: center;
-
-    padding: 42px 20px 60px;
+    color:
+        #f8fafc;
 
     background:
         radial-gradient(
             circle at 15% 20%,
-            rgba(37, 99, 235, 0.08),
-            transparent 28%
+            rgba(99, 102, 241, 0.15),
+            transparent 30%
         ),
         radial-gradient(
-            circle at 85% 80%,
-            rgba(79, 70, 229, 0.07),
-            transparent 28%
+            circle at 85% 65%,
+            rgba(139, 92, 246, 0.13),
+            transparent 30%
         );
 
 }
 
 
-.book-container {
+.upload-shell {
 
-    width: min(1120px, 96%);
+    width:
+        min(1050px, 94%);
 
-}
-
-
-/* =========================================================
-   HEADING
-   ========================================================= */
-
-.book-heading {
-
-    margin-bottom: 26px;
-
-}
-
-
-.book-kicker {
-
-    margin: 0 0 8px;
-
-    color: #2563eb;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-
-}
-
-
-.book-heading h1 {
-
-    margin: 0 0 10px;
-
-    color: #0f172a;
-
-    font-size: clamp(
-        36px,
-        5vw,
-        58px
-    );
-
-    line-height: 1.05;
-
-    letter-spacing: -1.5px;
-
-}
-
-
-.book-heading p {
-
-    max-width: 680px;
-
-    margin: 0;
-
-    color: #64748b;
-
-    line-height: 1.7;
+    margin:
+        0 auto;
 
 }
 
 
 /* =========================================================
-   BOOK
+   HEADER
    ========================================================= */
 
-.book-wrapper {
+.upload-kicker {
 
-    position: relative;
+    margin:
+        0 0 9px;
 
-    perspective: 1800px;
+    color:
+        #a5b4fc;
+
+    font-size:
+        11px;
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        1.8px;
+
+    text-transform:
+        uppercase;
 
 }
 
 
-.book {
+.upload-title {
 
-    position: relative;
+    margin:
+        0 0 12px;
 
-    min-height: 580px;
+    color:
+        #f8fafc;
 
-    padding: 14px;
+    font-size:
+        clamp(
+            38px,
+            5vw,
+            58px
+        );
 
-    border-radius: 25px;
+    line-height:
+        1.05;
+
+    letter-spacing:
+        -1.5px;
+
+}
+
+
+.upload-subtitle {
+
+    max-width:
+        680px;
+
+    margin:
+        0 0 30px;
+
+    color:
+        #a8b3c7;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.75;
+
+}
+
+
+/* =========================================================
+   MAIN UPLOAD CARD
+   ========================================================= */
+
+.upload-card {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    padding:
+        28px;
+
+    border:
+        1px solid
+        rgba(148, 163, 184, 0.17);
+
+    border-radius:
+        25px;
 
     background:
         linear-gradient(
             145deg,
-            #e5edf7,
-            #d7e1ee
+            rgba(30, 41, 59, 0.78),
+            rgba(15, 23, 42, 0.62)
         );
 
     box-shadow:
-        0 30px 75px
-        rgba(15, 23, 42, 0.15);
+        0 30px 80px
+        rgba(0, 0, 0, 0.35),
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.035);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
 
 }
 
 
-.book-spread {
+.upload-card::before {
 
-    position: relative;
+    content:
+        "";
 
-    min-height: 550px;
+    position:
+        absolute;
 
-    overflow: hidden;
+    width:
+        330px;
 
-    border-radius: 18px;
+    height:
+        330px;
 
-    background: #ffffff;
+    top:
+        -170px;
 
-    transform-style: preserve-3d;
+    right:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(99, 102, 241, 0.18),
+            transparent 70%
+        );
+
+    filter:
+        blur(12px);
+
+    pointer-events:
+        none;
 
 }
 
 
 /* =========================================================
-   BOOK CENTER
+   DROP ZONE
    ========================================================= */
 
-.book-spread::before {
+.upload-dropzone {
 
-    content: "";
+    position:
+        relative;
 
-    position: absolute;
+    z-index:
+        2;
 
-    top: 0;
-    bottom: 0;
+    min-height:
+        370px;
 
-    left: 50%;
+    display:
+        flex;
 
-    width: 2px;
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    text-align:
+        center;
+
+    padding:
+        35px;
+
+    border:
+        1.5px dashed
+        rgba(129, 140, 248, 0.45);
+
+    border-radius:
+        20px;
 
     background:
         linear-gradient(
-            #dbe4ef,
-            #94a3b8,
-            #dbe4ef
+            145deg,
+            rgba(99, 102, 241, 0.08),
+            rgba(15, 23, 42, 0.42)
         );
-
-    transform:
-        translateX(-50%);
-
-    z-index: 50;
-
-    opacity: 0.65;
-
-}
-
-
-/* =========================================================
-   PAGES
-   ========================================================= */
-
-.book-page-item {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 50%;
-
-    height: 100%;
-
-    padding: 44px;
-
-    background: #ffffff;
-
-    overflow: hidden;
-
-    backface-visibility: hidden;
-
-    transform-style: preserve-3d;
 
     transition:
-        transform 0.85s
-        cubic-bezier(
-            0.22,
-            1,
-            0.36,
-            1
-        );
+        border-color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 
 }
 
 
-.book-page-left {
+.upload-dropzone:hover {
 
-    left: 0;
+    border-color:
+        rgba(129, 140, 248, 0.72);
 
-    transform-origin: left center;
+    background:
+        rgba(99, 102, 241, 0.11);
 
-    z-index: 20;
-
-}
-
-
-.book-page-right {
-
-    left: 50%;
-
-    transform-origin: right center;
-
-    z-index: 19;
+    box-shadow:
+        0 20px 50px
+        rgba(99, 102, 241, 0.10);
 
 }
 
 
-.book-page-item.flipped {
+.upload-dropzone.drag-over {
+
+    border-color:
+        #818cf8;
+
+    background:
+        rgba(99, 102, 241, 0.16);
 
     transform:
-        rotateY(-180deg);
+        scale(1.008);
 
-}
-
-
-.book-page-inner {
-
-    height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
+    box-shadow:
+        0 25px 65px
+        rgba(99, 102, 241, 0.18);
 
 }
 
 
 /* =========================================================
-   PAGE CONTENT
+   UPLOAD ICON
    ========================================================= */
 
-.page-number {
+.upload-icon {
 
-    margin-bottom: 18px;
+    width:
+        82px;
 
-    color: #94a3b8;
+    height:
+        82px;
 
-    font-size: 11px;
+    display:
+        flex;
 
-    font-weight: 800;
+    align-items:
+        center;
 
-    letter-spacing: 1px;
+    justify-content:
+        center;
 
-}
+    margin-bottom:
+        20px;
 
-
-.page-icon {
-
-    width: 62px;
-    height: 62px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 23px;
-
-    border-radius: 16px;
+    border-radius:
+        23px;
 
     background:
         linear-gradient(
             135deg,
-            #2563eb,
-            #4f46e5
+            #6366f1,
+            #8b5cf6,
+            #06b6d4
         );
 
-    color: white;
+    color:
+        #ffffff;
 
-    font-size: 27px;
+    font-size:
+        34px;
+
+    font-weight:
+        850;
 
     box-shadow:
-        0 12px 28px
-        rgba(37, 99, 235, 0.20);
+        0 18px 40px
+        rgba(99, 102, 241, 0.30);
+
+    animation:
+        uploadFloat 3s ease-in-out infinite;
 
 }
 
 
-.page-title {
+@keyframes uploadFloat {
 
-    margin: 0 0 12px;
+    0%,
+    100% {
+        transform:
+            translateY(0);
+    }
 
-    color: #0f172a;
-
-    font-size: 34px;
-
-    line-height: 1.15;
-
-    letter-spacing: -0.8px;
-
-}
-
-
-.page-description {
-
-    margin: 0;
-
-    color: #64748b;
-
-    font-size: 14px;
-
-    line-height: 1.8;
+    50% {
+        transform:
+            translateY(-5px);
+    }
 
 }
 
 
 /* =========================================================
-   UPLOAD AREA
+   DROP TEXT
    ========================================================= */
 
-.upload-form {
+.upload-dropzone h2 {
 
-    margin-top: 28px;
-
-}
-
-
-.upload-area {
-
-    padding: 23px;
-
-    border:
-        1.5px dashed
-        #bfdbfe;
-
-    border-radius: 16px;
-
-    background:
-        #eff6ff;
-
-}
-
-
-.upload-area label {
-
-    display: block;
-
-    margin-bottom: 10px;
-
-    color: #334155;
-
-    font-size: 13px;
-
-    font-weight: 750;
-
-}
-
-
-.file-input {
-
-    width: 100%;
-
-    padding: 11px;
-
-    border:
-        1px solid
-        #dbeafe;
-
-    border-radius: 10px;
-
-    background: white;
-
-    color: #475569;
-
-}
-
-
-.supported-formats {
-
-    margin-top: 14px;
-
-    color: #64748b;
-
-    font-size: 11px;
-
-    line-height: 1.6;
-
-}
-
-
-.supported-formats strong {
-
-    color: #334155;
-
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.book-button {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 9px;
-
-    width: fit-content;
-
-    margin-top: 20px;
-
-    padding: 13px 18px;
-
-    border: 0;
-
-    border-radius: 11px;
-
-    background:
-        #2563eb;
-
-    color: white;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 750;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
-
-}
-
-
-.book-button:hover {
-
-    background:
-        #1d4ed8;
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 9px 20px
-        rgba(
-            37,
-            99,
-            235,
-            0.18
-        );
-
-}
-
-
-/* =========================================================
-   DOCUMENT LIST
-   ========================================================= */
-
-.documents-list {
-
-    margin-top: 22px;
-
-    max-height: 350px;
-
-    overflow-y: auto;
-
-    padding-right: 6px;
-
-}
-
-
-.documents-list::-webkit-scrollbar {
-
-    width: 5px;
-
-}
-
-
-.documents-list::-webkit-scrollbar-thumb {
-
-    background: #cbd5e1;
-
-    border-radius: 999px;
-
-}
-
-
-.document-row {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 12px 0;
-
-    border-bottom:
-        1px solid
-        #e2e8f0;
-
-}
-
-
-.document-row:last-child {
-
-    border-bottom: 0;
-
-}
-
-
-.document-icon {
-
-    flex:
-        0 0 auto;
-
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 10px;
-
-    background:
-        #eff6ff;
+    margin:
+        0 0 8px;
 
     color:
-        #2563eb;
+        #f8fafc;
 
-    font-size: 16px;
+    font-size:
+        24px;
 
-}
-
-
-.document-info {
-
-    min-width: 0;
-
-    flex: 1;
+    font-weight:
+        850;
 
 }
 
 
-.document-name {
+.upload-dropzone p {
 
-    display: block;
+    max-width:
+        520px;
 
-    overflow: hidden;
-
-    color: #1e293b;
-
-    font-size: 12px;
-
-    font-weight: 750;
-
-    text-decoration: none;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-}
-
-
-.document-name:hover {
-
-    color:
-        #2563eb;
-
-}
-
-
-.document-date {
-
-    margin-top: 4px;
-
-    color:
-        #94a3b8;
-
-    font-size: 10px;
-
-}
-
-
-.document-open {
-
-    color:
-        #2563eb;
-
-    font-size: 16px;
-
-    text-decoration: none;
-
-}
-
-
-.empty-documents {
-
-    padding:
-        45px
-        10px;
-
-    text-align:
-        center;
+    margin:
+        0 0 22px;
 
     color:
         #94a3b8;
@@ -653,10 +398,17 @@ Upload Document | AI Document Analyzer
     font-size:
         13px;
 
+    line-height:
+        1.7;
+
 }
 
 
-.document-count {
+/* =========================================================
+   FILE BUTTON
+   ========================================================= */
+
+.file-label {
 
     display:
         inline-flex;
@@ -667,29 +419,164 @@ Upload Document | AI Document Analyzer
     justify-content:
         center;
 
-    min-width:
-        26px;
-
-    height:
-        26px;
-
-    margin-left:
-        7px;
+    min-height:
+        46px;
 
     padding:
-        0 8px;
+        0 21px;
 
     border-radius:
-        999px;
+        12px;
 
     background:
-        #eff6ff;
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
 
     color:
-        #2563eb;
+        #ffffff;
 
     font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 12px 28px
+        rgba(99, 102, 241, 0.28);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+
+}
+
+
+.file-label:hover {
+
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.08);
+
+    box-shadow:
+        0 17px 35px
+        rgba(99, 102, 241, 0.38);
+
+}
+
+
+#document {
+
+    display:
+        none;
+
+}
+
+
+/* =========================================================
+   SELECTED FILE
+   ========================================================= */
+
+.selected-file {
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-top:
+        18px;
+
+    padding:
+        10px 14px;
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.18);
+
+    border-radius:
         11px;
+
+    background:
+        rgba(34, 197, 94, 0.07);
+
+    color:
+        #86efac;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+}
+
+
+.selected-file.show {
+
+    display:
+        inline-flex;
+
+}
+
+
+/* =========================================================
+   FORMAT TAGS
+   ========================================================= */
+
+.upload-formats {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    margin-top:
+        22px;
+
+}
+
+
+.upload-format {
+
+    padding:
+        7px 11px;
+
+    border:
+        1px solid
+        rgba(148, 163, 184, 0.15);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(30, 41, 59, 0.55);
+
+    color:
+        #a8b3c7;
+
+    font-size:
+        10px;
 
     font-weight:
         800;
@@ -698,93 +585,123 @@ Upload Document | AI Document Analyzer
 
 
 /* =========================================================
-   PAGE NAVIGATION
+   SUBMIT
    ========================================================= */
 
-.book-navigation {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        15px;
+.upload-submit {
 
     margin-top:
         20px;
 
-}
-
-
-.book-nav-button {
-
     width:
-        43px;
+        100%;
 
-    height:
-        43px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
+    min-height:
+        48px;
 
     border:
-        1px solid
-        #dbeafe;
+        0;
 
     border-radius:
-        11px;
+        12px;
 
     background:
-        #ffffff;
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
 
     color:
-        #2563eb;
+        #ffffff;
 
     font-size:
-        18px;
+        13px;
+
+    font-weight:
+        850;
 
     cursor:
         pointer;
 
     box-shadow:
-        0 5px 15px
-        rgba(
-            15,
-            23,
-            42,
-            0.05
-        );
+        0 12px 28px
+        rgba(99, 102, 241, 0.24);
 
     transition:
         transform 0.2s ease,
-        background 0.2s ease;
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 
 }
 
 
-.book-nav-button:hover {
-
-    background:
-        #eff6ff;
+.upload-submit:hover {
 
     transform:
         translateY(-2px);
 
+    filter:
+        brightness(1.08);
+
+    box-shadow:
+        0 17px 36px
+        rgba(99, 102, 241, 0.34);
+
 }
 
 
-.book-dots {
+.upload-submit:disabled {
+
+    opacity:
+        0.55;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+}
+
+
+/* =========================================================
+   PROCESSING
+   ========================================================= */
+
+.upload-processing {
+
+    display:
+        none;
+
+    margin-top:
+        18px;
+
+    padding:
+        15px 17px;
+
+    border:
+        1px solid
+        rgba(129, 140, 248, 0.18);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(99, 102, 241, 0.07);
+
+}
+
+
+.upload-processing.show {
+
+    display:
+        block;
+
+}
+
+
+.processing-row {
 
     display:
         flex;
@@ -793,149 +710,335 @@ Upload Document | AI Document Analyzer
         center;
 
     gap:
-        7px;
+        10px;
+
+    color:
+        #c7d2fe;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
 
 }
 
 
-.book-dot {
+.processing-spinner {
 
     width:
-        8px;
+        17px;
 
     height:
-        8px;
-
-    padding:
-        0;
+        17px;
 
     border:
-        0;
+        2px solid
+        rgba(129, 140, 248, 0.22);
+
+    border-top-color:
+        #818cf8;
 
     border-radius:
-        999px;
+        50%;
 
-    background:
-        #cbd5e1;
-
-    cursor:
-        pointer;
-
-    transition:
-        width 0.25s ease,
-        background 0.25s ease;
+    animation:
+        spin 0.8s linear infinite;
 
 }
 
 
-.book-dot.active {
+@keyframes spin {
 
-    width:
-        24px;
-
-    background:
-        #2563eb;
+    to {
+        transform:
+            rotate(360deg);
+    }
 
 }
 
 
 /* =========================================================
-   MOBILE
+   INFO CARDS
    ========================================================= */
 
-@media (max-width: 800px) {
+.upload-info-grid {
 
-    .book {
+    display:
+        grid;
 
-        min-height:
-            720px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-    }
+    gap:
+        13px;
 
+    margin-top:
+        18px;
 
-    .book-spread {
-
-        min-height:
-            690px;
-
-    }
-
-
-    .book-spread::before {
-
-        display:
-            none;
-
-    }
+}
 
 
-    .book-page-item {
+.upload-info-card {
 
-        width:
-            100%;
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(148, 163, 184, 0.13);
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(15, 23, 42, 0.52);
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+
+.upload-info-icon {
+
+    margin-bottom:
+        10px;
+
+    font-size:
+        20px;
+
+}
+
+
+.upload-info-card h3 {
+
+    margin:
+        0 0 6px;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        13px;
+
+}
+
+
+.upload-info-card p {
+
+    margin:
+        0;
+
+    color:
+        #7f8da5;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+.upload-history {
+
+    margin-top:
+        30px;
+
+}
+
+
+.upload-history-header {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        13px;
+
+}
+
+
+.upload-history-header h2 {
+
+    margin:
+        0;
+
+    color:
+        #f1f5f9;
+
+    font-size:
+        18px;
+
+}
+
+
+.upload-history-header a {
+
+    color:
+        #a5b4fc;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    text-decoration:
+        none;
+
+}
+
+
+.upload-history-list {
+
+    display:
+        grid;
+
+    gap:
+        9px;
+
+}
+
+
+.history-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+    padding:
+        14px 16px;
+
+    border:
+        1px solid
+        rgba(148, 163, 184, 0.12);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(30, 41, 59, 0.52);
+
+}
+
+
+.history-name {
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        #dbeafe;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.history-date {
+
+    color:
+        #71809a;
+
+    font-size:
+        10px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .upload-page {
 
         padding:
-            32px 25px;
+            30px 12px 50px;
 
     }
 
 
-    .book-page-right {
+    .upload-card {
 
-        left:
-            0;
+        padding:
+            15px;
 
     }
 
 
-    .page-title {
+    .upload-dropzone {
+
+        min-height:
+            330px;
+
+        padding:
+            25px 16px;
+
+    }
+
+
+    .upload-info-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .upload-title {
 
         font-size:
-            29px;
-
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL SCREEN
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-    .book-page {
-
-        padding:
-            25px 10px
-            45px;
+            38px;
 
     }
 
 
-    .book {
+    .history-item {
 
-        padding:
-            8px;
+        flex-direction:
+            column;
 
-        min-height:
-            700px;
-
-    }
-
-
-    .book-spread {
-
-        min-height:
-            675px;
-
-    }
-
-
-    .book-page-item {
-
-        padding:
-            26px 20px;
+        align-items:
+            flex-start;
 
     }
 
@@ -948,274 +1051,220 @@ Upload Document | AI Document Analyzer
 
 {% block content %}
 
-<div class="book-page">
+<div class="upload-page">
 
-    <div class="book-container">
-
-
-        <!-- =================================================
-             HEADING
-             ================================================= -->
-
-        <div class="book-heading">
-
-            <p class="book-kicker">
-                DOCUMENT WORKSPACE
-            </p>
-
-            <h1>
-                Upload &amp; Browse
-            </h1>
-
-            <p>
-                Upload a document and flip through your
-                existing files like pages in a book.
-            </p>
-
-        </div>
+    <div class="upload-shell">
 
 
-        <!-- =================================================
-             BOOK
-             ================================================= -->
+        <!-- HEADER -->
 
-        <div class="book-wrapper">
+        <p class="upload-kicker">
+            DOCUMENT INGESTION
+        </p>
 
-            <div class="book">
+
+        <h1 class="upload-title">
+            Upload Document
+        </h1>
+
+
+        <p class="upload-subtitle">
+            Upload your document and let AI Document Analyzer
+            extract, understand and organize the information
+            inside it.
+        </p>
+
+
+        <!-- UPLOAD CARD -->
+
+        <div class="upload-card">
+
+
+            <form
+                id="uploadForm"
+                action="{{ url_for(
+                    'documents.upload_document'
+                ) }}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
 
                 <div
-                    class="book-spread"
-                    id="documentBook"
+                    class="upload-dropzone"
+                    id="uploadDropzone"
                 >
 
 
-                    <!-- =====================================
-                         PAGE 1 — UPLOAD
-                         ===================================== -->
+                    <div class="upload-icon">
+                        ↑
+                    </div>
 
-                    <section
-                        class="book-page-item book-page-left"
-                        data-page="0"
+
+                    <h2>
+                        Drop your document here
+                    </h2>
+
+
+                    <p>
+                        Drag and drop your file into this area,
+                        or browse your computer to select one.
+                    </p>
+
+
+                    <label
+                        for="document"
+                        class="file-label"
+                    >
+                        Choose Document
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="document"
+                        name="document"
+                        accept="
+                            .pdf,
+                            .docx,
+                            .txt,
+                            .jpg,
+                            .jpeg,
+                            .png
+                        "
                     >
 
-                        <div class="book-page-inner">
 
-                            <div class="page-number">
-                                PAGE 01
-                            </div>
-
-                            <div class="page-icon">
-                                ↑
-                            </div>
-
-                            <h2 class="page-title">
-                                Upload Document
-                            </h2>
-
-                            <p class="page-description">
-                                Select a document and upload it
-                                for text extraction, keyword
-                                extraction and analysis.
-                            </p>
-
-
-                            <form
-                                action="{{ url_for('documents.upload_document') }}"
-                                method="POST"
-                                enctype="multipart/form-data"
-                                class="upload-form"
-                            >
-
-                                <div class="upload-area">
-
-                                    <label for="document">
-                                        Select Document
-                                    </label>
-
-                                    <input
-                                        type="file"
-                                        id="document"
-                                        name="document"
-                                        class="file-input"
-                                        accept=".pdf,.docx,.txt,.jpg,.jpeg,.png"
-                                        required
-                                    >
-
-                                    <div
-                                        class="supported-formats"
-                                    >
-
-                                        <strong>
-                                            Supported formats:
-                                        </strong>
-
-                                        PDF, DOCX, TXT, JPG,
-                                        JPEG and PNG
-
-                                    </div>
-
-                                </div>
-
-
-                                <button
-                                    type="submit"
-                                    class="book-button"
-                                >
-
-                                    Upload and Analyze
-
-                                    <span>
-                                        →
-                                    </span>
-
-                                </button>
-
-                            </form>
-
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =====================================
-                         PAGE 2 — DOCUMENTS
-                         ===================================== -->
-
-                    <section
-                        class="book-page-item book-page-right"
-                        data-page="1"
+                    <div
+                        class="selected-file"
+                        id="selectedFile"
                     >
-
-                        <div class="book-page-inner">
-
-                            <div class="page-number">
-                                PAGE 02
-                            </div>
-
-                            <div class="page-icon">
-                                ▰
-                            </div>
-
-                            <h2 class="page-title">
-
-                                My Documents
-
-                                {% if documents %}
-
-                                    <span class="document-count">
-                                        {{ documents|length }}
-                                    </span>
-
-                                {% endif %}
-
-                            </h2>
-
-                            <p class="page-description">
-
-                                Your recently uploaded documents
-                                are available here.
-
-                            </p>
+                        ✓
+                        <span id="selectedFileName">
+                            File selected
+                        </span>
+                    </div>
 
 
-                            {% if documents %}
+                    <div class="upload-formats">
 
-                                <div
-                                    class="documents-list"
-                                >
+                        <span class="upload-format">
+                            PDF
+                        </span>
 
-                                    {% for document in documents %}
+                        <span class="upload-format">
+                            DOCX
+                        </span>
 
-                                        <div
-                                            class="document-row"
-                                        >
+                        <span class="upload-format">
+                            TXT
+                        </span>
 
-                                            <div
-                                                class="document-icon"
-                                            >
-                                                📄
-                                            </div>
+                        <span class="upload-format">
+                            JPG
+                        </span>
 
+                        <span class="upload-format">
+                            JPEG
+                        </span>
 
-                                            <div
-                                                class="document-info"
-                                            >
+                        <span class="upload-format">
+                            PNG
+                        </span>
 
-                                                <a
-                                                    href="{{ url_for(
-                                                        'documents.analyze_document',
-                                                        document_id=document.id
-                                                    ) }}"
-                                                    class="document-name"
-                                                    title="{{ document.filename }}"
-                                                >
+                    </div>
 
-                                                    {{ document.filename }}
-
-                                                </a>
+                </div>
 
 
-                                                <div
-                                                    class="document-date"
-                                                >
-
-                                                    {{ document.uploaded_at }}
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <a
-                                                href="{{ url_for(
-                                                    'documents.analyze_document',
-                                                    document_id=document.id
-                                                ) }}"
-                                                class="document-open"
-                                                title="Open document"
-                                            >
-                                                →
-                                            </a>
-
-                                        </div>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            {% else %}
-
-                                <div
-                                    class="empty-documents"
-                                >
-
-                                    No documents uploaded yet.
-
-                                </div>
-
-                            {% endif %}
+                <button
+                    type="submit"
+                    class="upload-submit"
+                    id="uploadSubmit"
+                    disabled
+                >
+                    Analyze Document →
+                </button>
 
 
-                            <a
-                                href="{{ url_for(
-                                    'documents.list_documents'
-                                ) }}"
-                                class="book-button"
-                            >
+                <div
+                    class="upload-processing"
+                    id="uploadProcessing"
+                >
 
-                                Open Full Library
+                    <div class="processing-row">
 
-                                <span>
-                                    →
-                                </span>
+                        <span
+                            class="processing-spinner"
+                        ></span>
 
-                            </a>
+                        <span>
+                            Uploading and processing
+                            your document...
+                        </span>
 
-                        </div>
+                    </div>
 
-                    </section>
+                </div>
 
+            </form>
+
+
+            <!-- INFO -->
+
+            <div class="upload-info-grid">
+
+
+                <div class="upload-info-card">
+
+                    <div class="upload-info-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Secure Upload
+                    </h3>
+
+                    <p>
+                        Your uploaded document is associated
+                        with your authenticated account.
+                    </p>
+
+                </div>
+
+
+                <div class="upload-info-card">
+
+                    <div class="upload-info-icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        AI Analysis
+                    </h3>
+
+                    <p>
+                        Extract text, keywords, information
+                        and AI-generated insights.
+                    </p>
+
+                </div>
+
+
+                <div class="upload-info-card">
+
+                    <div class="upload-info-icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Multiple Formats
+                    </h3>
+
+                    <p>
+                        PDF, DOCX, TXT, JPG, JPEG and PNG
+                        documents are supported.
+                    </p>
 
                 </div>
 
@@ -1224,51 +1273,53 @@ Upload Document | AI Document Analyzer
         </div>
 
 
-        <!-- =================================================
-             NAVIGATION
-             ================================================= -->
+        <!-- RECENT DOCUMENTS -->
 
-        <div class="book-navigation">
+        {% if documents %}
 
-            <button
-                type="button"
-                class="book-nav-button"
-                id="bookPrevious"
-                aria-label="Previous page"
-            >
-                ←
-            </button>
+        <section class="upload-history">
 
+            <div class="upload-history-header">
 
-            <div class="book-dots">
+                <h2>
+                    Recent Documents
+                </h2>
 
-                <button
-                    type="button"
-                    class="book-dot active"
-                    data-page-target="0"
-                    aria-label="Upload page"
-                ></button>
-
-                <button
-                    type="button"
-                    class="book-dot"
-                    data-page-target="1"
-                    aria-label="Documents page"
-                ></button>
+                <a
+                    href="{{ url_for(
+                        'documents.list_documents'
+                    ) }}"
+                >
+                    View All →
+                </a>
 
             </div>
 
 
-            <button
-                type="button"
-                class="book-nav-button"
-                id="bookNext"
-                aria-label="Next page"
-            >
-                →
-            </button>
+            <div class="upload-history-list">
 
-        </div>
+                {% for document in documents[:5] %}
+
+                    <div class="history-item">
+
+                        <div class="history-name">
+                            📄
+                            {{ document.filename }}
+                        </div>
+
+                        <div class="history-date">
+                            {{ document.uploaded_at }}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
 
 
     </div>
@@ -1279,135 +1330,169 @@ Upload Document | AI Document Analyzer
 <script>
 
 /* =========================================================
-   BOOK FLIP
+   UPLOAD INTERACTION
    ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        const pages =
-            document.querySelectorAll(
-                ".book-page-item"
-            );
-
-        const dots =
-            document.querySelectorAll(
-                ".book-dot"
-            );
-
-        const previous =
+        const input =
             document.getElementById(
-                "bookPrevious"
+                "document"
             );
 
-        const next =
+        const form =
             document.getElementById(
-                "bookNext"
+                "uploadForm"
+            );
+
+        const dropzone =
+            document.getElementById(
+                "uploadDropzone"
+            );
+
+        const submit =
+            document.getElementById(
+                "uploadSubmit"
+            );
+
+        const selectedFile =
+            document.getElementById(
+                "selectedFile"
+            );
+
+        const selectedFileName =
+            document.getElementById(
+                "selectedFileName"
+            );
+
+        const processing =
+            document.getElementById(
+                "uploadProcessing"
             );
 
 
-        let currentPage = 0;
+        if (
+            !input ||
+            !form ||
+            !dropzone
+        ) {
 
-
-        function updateBook(page) {
-
-            if (!pages.length) {
-                return;
-            }
-
-
-            currentPage =
-                Math.max(
-                    0,
-                    Math.min(
-                        page,
-                        pages.length - 1
-                    )
-                );
-
-
-            pages.forEach(
-                function (
-                    current,
-                    index
-                ) {
-
-                    if (
-                        index <
-                        currentPage
-                    ) {
-
-                        current.classList.add(
-                            "flipped"
-                        );
-
-                    } else {
-
-                        current.classList.remove(
-                            "flipped"
-                        );
-
-                    }
-
-                }
-            );
-
-
-            dots.forEach(
-                function (
-                    dot,
-                    index
-                ) {
-
-                    dot.classList.toggle(
-                        "active",
-                        index === currentPage
-                    );
-
-                }
-            );
+            return;
 
         }
 
 
-        next.addEventListener(
-            "click",
-            function () {
+        const allowedExtensions = [
 
-                updateBook(
-                    currentPage + 1
-                );
+            "pdf",
+            "docx",
+            "txt",
+            "jpg",
+            "jpeg",
+            "png"
 
-            }
-        );
+        ];
 
 
-        previous.addEventListener(
-            "click",
-            function () {
+        function handleFile(file) {
 
-                updateBook(
-                    currentPage - 1
-                );
+            if (!file) {
+
+                return;
 
             }
-        );
 
 
-        dots.forEach(
-            function (
-                dot
+            const parts =
+                file.name.split(".");
+
+
+            const extension =
+                parts.length > 1
+                    ? parts.pop().toLowerCase()
+                    : "";
+
+
+            if (
+                !allowedExtensions.includes(
+                    extension
+                )
             ) {
 
-                dot.addEventListener(
-                    "click",
-                    function () {
+                alert(
+                    "Please select a PDF, DOCX, TXT, JPG, JPEG or PNG file."
+                );
 
-                        updateBook(
-                            Number(
-                                dot.dataset.pageTarget
-                            )
+                input.value = "";
+
+                submit.disabled =
+                    true;
+
+                selectedFile.classList.remove(
+                    "show"
+                );
+
+                return;
+
+            }
+
+
+            selectedFileName.textContent =
+                file.name;
+
+
+            selectedFile.classList.add(
+                "show"
+            );
+
+
+            submit.disabled =
+                false;
+
+        }
+
+
+        input.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    this.files &&
+                    this.files.length
+                ) {
+
+                    handleFile(
+                        this.files[0]
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           DRAG ENTER
+           ================================================= */
+
+        [
+            "dragenter",
+            "dragover"
+        ].forEach(
+            function (eventName) {
+
+                dropzone.addEventListener(
+                    eventName,
+                    function (event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+                        dropzone.classList.add(
+                            "drag-over"
                         );
 
                     }
@@ -1417,40 +1502,123 @@ document.addEventListener(
         );
 
 
-        document.addEventListener(
-            "keydown",
-            function (
-                event
-            ) {
+        /* =================================================
+           DRAG LEAVE
+           ================================================= */
 
-                if (
-                    event.key ===
-                    "ArrowRight"
-                ) {
+        [
+            "dragleave",
+            "drop"
+        ].forEach(
+            function (eventName) {
 
-                    updateBook(
-                        currentPage + 1
-                    );
+                dropzone.addEventListener(
+                    eventName,
+                    function (event) {
 
-                }
+                        event.preventDefault();
 
+                        event.stopPropagation();
 
-                if (
-                    event.key ===
-                    "ArrowLeft"
-                ) {
+                        dropzone.classList.remove(
+                            "drag-over"
+                        );
 
-                    updateBook(
-                        currentPage - 1
-                    );
-
-                }
+                    }
+                );
 
             }
         );
 
 
-        updateBook(0);
+        /* =================================================
+           DROP
+           ================================================= */
+
+        dropzone.addEventListener(
+            "drop",
+            function (event) {
+
+                const files =
+                    event.dataTransfer.files;
+
+
+                if (
+                    !files ||
+                    !files.length
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const dataTransfer =
+                        new DataTransfer();
+
+
+                    dataTransfer.items.add(
+                        files[0]
+                    );
+
+
+                    input.files =
+                        dataTransfer.files;
+
+                }
+
+                catch (error) {
+
+                    console.warn(
+                        "Could not assign dropped file:",
+                        error
+                    );
+
+                }
+
+
+                handleFile(
+                    files[0]
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           FORM SUBMIT
+           ================================================= */
+
+        form.addEventListener(
+            "submit",
+            function () {
+
+                if (
+                    !input.files ||
+                    !input.files.length
+                ) {
+
+                    return;
+
+                }
+
+
+                submit.disabled =
+                    true;
+
+
+                submit.textContent =
+                    "Processing...";
+
+
+                processing.classList.add(
+                    "show"
+                );
+
+            }
+        );
 
     }
 );

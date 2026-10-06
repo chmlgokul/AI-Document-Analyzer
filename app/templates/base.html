@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -12,35 +11,728 @@
     >
 
     <title>
-
         {% block title %}
         AI Document Analyzer
         {% endblock %}
-
     </title>
 
 
-    <!-- MAIN CSS -->
+    <!-- Google Font -->
 
     <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
-        href="{{ url_for(
-            'static',
-            filename='css/style.css'
-        ) }}"
     >
 
 
-    <!-- NAVBAR CSS -->
+    <!-- =====================================================
+         GLOBAL CSS
+         ===================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for(
-            'static',
-            filename='css/navbar.css'
-        ) }}"
-    >
+    <style>
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            font-family: "Inter", sans-serif;
+
+            min-height: 100vh;
+
+            color: #f8fafc;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(99, 102, 241, 0.22),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 90% 15%,
+                    rgba(168, 85, 247, 0.18),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 70% 85%,
+                    rgba(14, 165, 233, 0.13),
+                    transparent 30%
+                ),
+
+                #070b16;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =================================================
+           BACKGROUND GRID
+           ================================================= */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =================================================
+           NAVBAR
+           ================================================= */
+
+        .app-navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 999;
+
+            width: 100%;
+
+            padding: 12px 22px;
+
+            background:
+                rgba(7, 11, 22, 0.86);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                0 8px 30px
+                rgba(0,0,0,0.16);
+        }
+
+
+        .navbar-inner {
+
+            width:
+                min(1250px, 100%);
+
+            margin:
+                0 auto;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                20px;
+        }
+
+
+        /* =================================================
+           BRAND
+           ================================================= */
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                11px;
+
+            text-decoration:
+                none;
+
+            color:
+                #ffffff;
+
+            flex-shrink:
+                0;
+        }
+
+
+        .brand-logo {
+
+            width:
+                40px;
+
+            height:
+                40px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            color:
+                #ffffff;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6,
+                    #0ea5e9
+                );
+
+            box-shadow:
+
+                0 8px 25px
+                rgba(99,102,241,0.35);
+        }
+
+
+        .brand-text {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            line-height:
+                1.1;
+        }
+
+
+        .brand-title {
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -0.2px;
+        }
+
+
+        .brand-subtitle {
+
+            margin-top:
+                4px;
+
+            font-size:
+                8px;
+
+            font-weight:
+                600;
+
+            color:
+                #64748b;
+
+            letter-spacing:
+                1.1px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =================================================
+           NAV LINKS
+           ================================================= */
+
+        .nav-links {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                5px;
+
+            flex:
+                1;
+        }
+
+
+        .nav-link {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                10px 13px;
+
+            border-radius:
+                10px;
+
+            color:
+                #94a3b8;
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+
+            border:
+                1px solid
+                transparent;
+
+            transition:
+                all 0.22s ease;
+        }
+
+
+        .nav-link:hover {
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border-color:
+                rgba(255,255,255,0.07);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .nav-icon {
+
+            font-size:
+                15px;
+
+            line-height:
+                1;
+        }
+
+
+        /* =================================================
+           PROFILE BUTTON
+           ================================================= */
+
+        .nav-profile {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            padding:
+                5px 10px 5px 5px;
+
+            border-radius:
+                999px;
+
+            text-decoration:
+                none;
+
+            color:
+                #e2e8f0;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            transition:
+                all 0.22s ease;
+        }
+
+
+        .nav-profile:hover {
+
+            background:
+                rgba(255,255,255,0.08);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .nav-avatar {
+
+            width:
+                31px;
+
+            height:
+                31px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                50%;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            color:
+                #ffffff;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #a855f7
+                );
+        }
+
+
+        .nav-profile-name {
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+        }
+
+
+        /* =================================================
+           MOBILE BUTTON
+           ================================================= */
+
+        .menu-button {
+
+            display:
+                none;
+
+            width:
+                40px;
+
+            height:
+                40px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            color:
+                #ffffff;
+
+            font-size:
+                19px;
+
+            cursor:
+                pointer;
+        }
+
+
+        /* =================================================
+           MOBILE MENU
+           ================================================= */
+
+        .mobile-menu {
+
+            display:
+                none;
+
+            width:
+                min(1250px, 100%);
+
+            margin:
+                12px auto 0;
+
+            padding:
+                10px;
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(15,23,42,0.96);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            backdrop-filter:
+                blur(20px);
+        }
+
+
+        .mobile-menu.open {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                4px;
+        }
+
+
+        /* =================================================
+           PAGE WRAPPER
+           ================================================= */
+
+        .page-content {
+
+            min-height:
+                calc(100vh - 70px);
+
+            position:
+                relative;
+
+            z-index:
+                1;
+        }
+
+
+        /* =================================================
+           FLASH MESSAGE
+           ================================================= */
+
+        .flash-container {
+
+            width:
+                min(900px, calc(100% - 30px));
+
+            margin:
+                18px auto 0;
+
+            position:
+                relative;
+
+            z-index:
+                20;
+        }
+
+
+        .flash-message {
+
+            padding:
+                13px 16px;
+
+            margin-bottom:
+                10px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(30,41,59,0.90);
+
+            border:
+                1px solid
+                rgba(129,140,248,0.16);
+
+            color:
+                #cbd5e1;
+
+            font-size:
+                13px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.22);
+        }
+
+
+        /* =================================================
+           FOOTER
+           ================================================= */
+
+        .app-footer {
+
+            padding:
+                28px 20px;
+
+            text-align:
+                center;
+
+            color:
+                #475569;
+
+            font-size:
+                11px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.05);
+        }
+
+
+        /* =================================================
+           RESPONSIVE
+           ================================================= */
+
+        @media (max-width: 1050px) {
+
+            .nav-link {
+
+                padding:
+                    9px 10px;
+            }
+
+            .nav-link span:not(.nav-icon) {
+
+                display:
+                    none;
+            }
+
+            .nav-profile-name {
+
+                display:
+                    none;
+            }
+        }
+
+
+        @media (max-width: 720px) {
+
+            .app-navbar {
+
+                padding:
+                    10px 14px;
+            }
+
+
+            .nav-links {
+
+                display:
+                    none;
+            }
+
+
+            .nav-profile {
+
+                display:
+                    none;
+            }
+
+
+            .menu-button {
+
+                display:
+                    grid;
+
+                place-items:
+                    center;
+            }
+        }
+
+
+        @media (max-width: 420px) {
+
+            .brand-subtitle {
+
+                display:
+                    none;
+            }
+
+
+            .brand-title {
+
+                font-size:
+                    13px;
+            }
+        }
+
+    </style>
+
+
+    <!-- =====================================================
+         PAGE-SPECIFIC CSS
+         IMPORTANT:
+         This block is OUTSIDE the global <style>
+         ===================================================== -->
 
     {% block extra_css %}
     {% endblock %}
@@ -55,200 +747,263 @@
          NAVBAR
          ===================================================== -->
 
-    <header
-        class="site-header navbar-visible"
-        id="siteHeader"
-    >
+    <header class="app-navbar">
 
-        <div class="navbar">
+        <div class="navbar-inner">
 
 
             <!-- BRAND -->
 
             <a
-                href="{{
-                    url_for(
-                        'dashboard'
-                    )
-                    if current_user.is_authenticated
-                    else
-                    url_for(
-                        'home'
-                    )
-                }}"
+                href="/"
                 class="brand"
+                title="Home"
             >
 
-                <span class="brand-icon">
+                <div class="brand-logo">
                     AI
+                </div>
+
+                <div class="brand-text">
+
+                    <div class="brand-title">
+                        AI Document Analyzer
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Document Intelligence
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <nav class="nav-links">
+
+
+                <!-- HOME -->
+
+                <a
+                    href="/"
+                    class="nav-link"
+                    title="Home"
+                >
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    <span>
+                        Home
+                    </span>
+
+                </a>
+
+
+                <!-- DASHBOARD -->
+
+                <a
+                    href="/dashboard"
+                    class="nav-link"
+                    title="Dashboard"
+                >
+
+                    <span class="nav-icon">
+                        ▦
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- UPLOAD -->
+
+                <a
+                    href="{{ url_for('documents.upload_document') }}"
+                    class="nav-link"
+                    title="Upload Document"
+                >
+
+                    <span class="nav-icon">
+                        ↑
+                    </span>
+
+                    <span>
+                        Upload
+                    </span>
+
+                </a>
+
+
+                <!-- DOCUMENTS / ANALYZE -->
+
+                <a
+                    href="{{ url_for('documents.list_documents') }}"
+                    class="nav-link"
+                    title="Documents & Analysis"
+                >
+
+                    <span class="nav-icon">
+                        ◫
+                    </span>
+
+                    <span>
+                        Documents
+                    </span>
+
+                </a>
+
+
+                <!-- PROFILE -->
+
+                <a
+                    href="{{ url_for('profile.profile_page') }}"
+                    class="nav-link"
+                    title="Profile"
+                >
+
+                    <span class="nav-icon">
+                        ●
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- PROFILE CHIP -->
+
+            <a
+                href="{{ url_for('profile.profile_page') }}"
+                class="nav-profile"
+                title="Open Profile"
+            >
+
+                <div class="nav-avatar">
+                    GL
+                </div>
+
+                <div class="nav-profile-name">
+                    Profile
+                </div>
+
+            </a>
+
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button
+                type="button"
+                class="menu-button"
+                id="menuButton"
+                aria-label="Open navigation"
+            >
+                ☰
+            </button>
+
+
+        </div>
+
+
+        <!-- =================================================
+             MOBILE NAVIGATION
+             ================================================= -->
+
+        <div
+            class="mobile-menu"
+            id="mobileMenu"
+        >
+
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+
+                <span class="nav-icon">
+                    ⌂
                 </span>
 
-
-                <span class="brand-text">
-
-                    <strong>
-                        AI Document
-                    </strong>
-
-                    <small>
-                        Analyzer
-                    </small>
-
+                <span>
+                    Home
                 </span>
 
             </a>
 
 
-            <!-- NAVIGATION -->
+            <a
+                href="/dashboard"
+                class="nav-link"
+            >
 
-            {% if current_user.is_authenticated %}
+                <span class="nav-icon">
+                    ▦
+                </span>
 
-                <nav class="nav-links">
+                <span>
+                    Dashboard
+                </span>
 
-
-                    <!-- DASHBOARD -->
-
-                    <a
-                        href="{{ url_for('dashboard') }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'dashboard' %}
-                                active
-                            {% endif %}
-                        "
-                    >
-
-                        Dashboard
-
-                    </a>
+            </a>
 
 
-                    <!-- MY DOCUMENTS -->
+            <a
+                href="{{ url_for('documents.upload_document') }}"
+                class="nav-link"
+            >
 
-                    <a
-                        href="{{
-                            url_for(
-                                'documents.list_documents'
-                            )
-                        }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'documents.list_documents' %}
-                                active
-                            {% endif %}
-                        "
-                    >
+                <span class="nav-icon">
+                    ↑
+                </span>
 
-                        My Documents
+                <span>
+                    Upload Document
+                </span>
 
-                    </a>
+            </a>
 
 
-                    <!-- UPLOAD -->
+            <a
+                href="{{ url_for('documents.list_documents') }}"
+                class="nav-link"
+            >
 
-                    <a
-                        href="{{
-                            url_for(
-                                'documents.upload_document'
-                            )
-                        }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'documents.upload_document' %}
-                                active
-                            {% endif %}
-                        "
-                    >
+                <span class="nav-icon">
+                    ◫
+                </span>
 
-                        Upload Document
+                <span>
+                    Documents / Analyze
+                </span>
 
-                    </a>
+            </a>
 
 
-                    <!-- PROFILE -->
+            <a
+                href="{{ url_for('profile.profile_page') }}"
+                class="nav-link"
+            >
 
-                    <a
-                        href="{{
-                            url_for(
-                                'profile.profile_page'
-                            )
-                        }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'profile.profile_page' %}
-                                active
-                            {% endif %}
-                        "
-                    >
+                <span class="nav-icon">
+                    ●
+                </span>
 
-                        Profile
+                <span>
+                    Profile
+                </span>
 
-                    </a>
+            </a>
 
-
-                    <!-- LOGOUT -->
-
-                    <a
-                        href="{{ url_for('auth.logout') }}"
-                        class="
-                            nav-link
-                            nav-logout
-                        "
-                    >
-
-                        Logout
-
-                    </a>
-
-                </nav>
-
-
-            {% else %}
-
-
-                <nav class="nav-links">
-
-                    <a
-                        href="{{ url_for('home') }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'home' %}
-                                active
-                            {% endif %}
-                        "
-                    >
-                        Home
-                    </a>
-
-
-                    <a
-                        href="{{ url_for('auth.login') }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'auth.login' %}
-                                active
-                            {% endif %}
-                        "
-                    >
-                        Login
-                    </a>
-
-
-                    <a
-                        href="{{ url_for('auth.register') }}"
-                        class="
-                            nav-link
-                            {% if request.endpoint == 'auth.register' %}
-                                active
-                            {% endif %}
-                        "
-                    >
-                        Register
-                    </a>
-
-                </nav>
-
-            {% endif %}
 
         </div>
 
@@ -268,7 +1023,9 @@
                 {% for message in messages %}
 
                     <div class="flash-message">
+
                         {{ message }}
+
                     </div>
 
                 {% endfor %}
@@ -284,7 +1041,7 @@
          MAIN CONTENT
          ===================================================== -->
 
-    <main>
+    <main class="page-content">
 
         {% block content %}
         {% endblock %}
@@ -296,33 +1053,144 @@
          FOOTER
          ===================================================== -->
 
-    <footer class="site-footer">
+    <footer class="app-footer">
 
-        <p>
-            AI Document Analyzer © 2026
-        </p>
+        AI Document Analyzer
+        ·
+        Intelligent Document Processing
 
     </footer>
 
 
     <!-- =====================================================
-         JAVASCRIPT
+         GLOBAL JAVASCRIPT
          ===================================================== -->
 
-    <script
-        src="{{ url_for(
-            'static',
-            filename='js/main.js'
-        ) }}"
-    ></script>
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
 
 
-    <script
-        src="{{ url_for(
-            'static',
-            filename='js/navbar.js'
-        ) }}"
-    ></script>
+                /* =============================================
+                   MOBILE MENU
+                   ============================================= */
+
+                const menuButton =
+                    document.getElementById(
+                        "menuButton"
+                    );
+
+
+                const mobileMenu =
+                    document.getElementById(
+                        "mobileMenu"
+                    );
+
+
+                if (
+                    menuButton &&
+                    mobileMenu
+                ) {
+
+                    menuButton.addEventListener(
+                        "click",
+                        function () {
+
+                            mobileMenu.classList.toggle(
+                                "open"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =============================================
+                   CLOSE MOBILE MENU AFTER CLICK
+                   ============================================= */
+
+                if (mobileMenu) {
+
+                    const mobileLinks =
+                        mobileMenu.querySelectorAll(
+                            "a"
+                        );
+
+
+                    mobileLinks.forEach(
+                        function (link) {
+
+                            link.addEventListener(
+                                "click",
+                                function () {
+
+                                    mobileMenu.classList.remove(
+                                        "open"
+                                    );
+
+                                }
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =============================================
+                   AUTO HIDE FLASH MESSAGE
+                   ============================================= */
+
+                setTimeout(
+                    function () {
+
+                        const messages =
+                            document.querySelectorAll(
+                                ".flash-message"
+                            );
+
+
+                        messages.forEach(
+                            function (message) {
+
+                                message.style.transition =
+                                    "opacity 0.4s ease";
+
+                                message.style.opacity =
+                                    "0";
+
+
+                                setTimeout(
+                                    function () {
+
+                                        message.remove();
+
+                                    },
+                                    400
+                                );
+
+                            }
+                        );
+
+                    },
+                    4500
+                );
+
+            }
+        );
+
+    </script>
+
+
+    <!-- =====================================================
+         PAGE-SPECIFIC JAVASCRIPT
+         ===================================================== -->
+
+    {% block extra_js %}
+    {% endblock %}
 
 
 </body>
