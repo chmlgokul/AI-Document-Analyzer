@@ -4,6 +4,479 @@
 Login - AI Document Analyzer
 {% endblock %}
 
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   AUTH PAGE
+   ========================================================= */
+
+.auth-page {
+    min-height: calc(100vh - 90px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 20px 70px;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(99, 102, 241, 0.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 75%,
+            rgba(6, 182, 212, 0.14),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #eef2ff
+        );
+}
+
+
+/* =========================================================
+   BACKGROUND GRID
+   ========================================================= */
+
+.auth-page::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.35;
+
+    background-image:
+        linear-gradient(
+            rgba(148, 163, 184, 0.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(148, 163, 184, 0.08) 1px,
+            transparent 1px
+        );
+
+    background-size: 42px 42px;
+}
+
+
+/* =========================================================
+   GLOW EFFECTS
+   ========================================================= */
+
+.auth-page::after {
+    content: "";
+
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    left: -140px;
+    bottom: -120px;
+
+    border-radius: 50%;
+
+    background: rgba(79, 70, 229, 0.16);
+
+    filter: blur(80px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+.auth-card {
+    position: relative;
+    z-index: 2;
+
+    width: min(460px, 100%);
+
+    padding: 42px;
+
+    border-radius: 26px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.85);
+
+    box-shadow:
+        0 30px 80px
+        rgba(15, 23, 42, 0.12);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    animation:
+        authCardIn
+        0.6s
+        ease
+        both;
+}
+
+
+/* =========================================================
+   CARD ANIMATION
+   ========================================================= */
+
+@keyframes authCardIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.auth-header {
+    text-align: center;
+
+    margin-bottom: 32px;
+}
+
+
+.auth-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #2563eb
+        );
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(79, 70, 229, 0.28);
+}
+
+
+.auth-header h1 {
+    margin: 0 0 10px;
+
+    color: #0f172a;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+}
+
+
+.auth-header p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-form {
+    width: 100%;
+}
+
+
+.auth-form .form-group {
+    margin-bottom: 21px;
+}
+
+
+.auth-form label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.auth-form input {
+    width: 100%;
+
+    height: 50px;
+
+    padding:
+        0 15px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #dbe3ef;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255, 255, 255, 0.92);
+
+    color: #0f172a;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.auth-form input::placeholder {
+    color: #94a3b8;
+}
+
+
+.auth-form input:hover {
+    border-color: #b8c5d8;
+}
+
+
+.auth-form input:focus {
+    border-color: #6366f1;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99, 102, 241, 0.10);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    height: 51px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #2563eb
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 25px
+        rgba(37, 99, 235, 0.20);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+
+.auth-submit:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.04);
+
+    box-shadow:
+        0 17px 32px
+        rgba(37, 99, 235, 0.26);
+}
+
+
+.auth-submit:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.auth-footer {
+    margin-top: 25px;
+
+    text-align: center;
+}
+
+
+.auth-footer p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.auth-footer a {
+    color: #4f46e5;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.auth-footer a:hover {
+    color: #2563eb;
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .auth-page {
+        min-height: calc(100vh - 70px);
+
+        padding:
+            35px 16px
+            50px;
+    }
+
+
+    .auth-card {
+        padding: 30px 22px;
+
+        border-radius: 22px;
+    }
+
+
+    .auth-header {
+        margin-bottom: 27px;
+    }
+
+
+    .auth-icon {
+        width: 52px;
+        height: 52px;
+
+        border-radius: 16px;
+
+        font-size: 16px;
+    }
+
+
+    .auth-header h1 {
+        font-size: 26px;
+    }
+
+
+    .auth-header p {
+        font-size: 13px;
+    }
+
+
+    .auth-form input {
+        height: 48px;
+    }
+
+
+    .auth-submit {
+        height: 49px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
 <div class="auth-page">
@@ -11,13 +484,16 @@ Login - AI Document Analyzer
     <div class="auth-card">
 
         <!-- Header -->
+
         <div class="auth-header">
 
             <div class="auth-icon">
                 AI
             </div>
 
-            <h1>Welcome Back</h1>
+            <h1>
+                Welcome Back
+            </h1>
 
             <p>
                 Sign in to continue to AI Document Analyzer
@@ -27,6 +503,7 @@ Login - AI Document Analyzer
 
 
         <!-- Login Form -->
+
         <form
             method="POST"
             action="{{ url_for('auth.login') }}"
@@ -34,6 +511,7 @@ Login - AI Document Analyzer
         >
 
             <!-- Email -->
+
             <div class="form-group">
 
                 <label for="email">
@@ -53,15 +531,12 @@ Login - AI Document Analyzer
 
 
             <!-- Password -->
+
             <div class="form-group">
 
-                <div class="form-label-row">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                </div>
+                <label for="password">
+                    Password
+                </label>
 
                 <input
                     type="password"
@@ -76,6 +551,7 @@ Login - AI Document Analyzer
 
 
             <!-- Submit -->
+
             <button
                 type="submit"
                 class="auth-submit"
@@ -86,14 +562,20 @@ Login - AI Document Analyzer
         </form>
 
 
-        <!-- Register Link -->
+        <!-- Register -->
+
         <div class="auth-footer">
 
             <p>
+
                 Don't have an account?
-                <a href="{{ url_for('auth.register') }}">
+
+                <a
+                    href="{{ url_for('auth.register') }}"
+                >
                     Create an account
                 </a>
+
             </p>
 
         </div>
