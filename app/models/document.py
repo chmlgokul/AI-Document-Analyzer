@@ -43,6 +43,46 @@ class Document(db.Model):
     )
 
     # =========================================================
+    # PAGE COUNT
+    #
+    # Saved during upload so analysis does not need the
+    # original file to still exist on the server.
+    # =========================================================
+
+    page_count = db.Column(
+        db.Integer,
+        nullable=True
+    )
+
+    # =========================================================
+    # PAGE COUNT EXACTNESS
+    #
+    # True  -> actual page count
+    # False -> estimated / unavailable
+    # =========================================================
+
+    page_count_exact = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=False
+    )
+
+    # =========================================================
+    # PAGE COUNT LABEL
+    #
+    # Examples:
+    # "Actual Word pages"
+    # "Actual PDF pages"
+    # "Estimated text pages"
+    # "Page count unavailable"
+    # =========================================================
+
+    page_count_label = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    # =========================================================
     # UPLOAD DATE / TIME
     # =========================================================
 
