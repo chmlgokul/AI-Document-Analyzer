@@ -1,1192 +1,660 @@
 {% extends "base.html" %}
 
-
 {% block title %}
 Document Analysis | AI Document Analyzer
 {% endblock %}
-
 
 {% block extra_css %}
 
 <style>
 
-    /* =====================================================
-       GLOBAL ANALYSIS
-       ===================================================== */
-
-    .analysis-page {
-
-        width: 100%;
-
-        max-width: 1400px;
-
-        margin: 0 auto;
-
-        padding: 38px 24px 70px;
-
-        color: #e2e8f0;
-    }
-
-
-    /* =====================================================
-       HEADER
-       ===================================================== */
-
-    .document-header {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        align-items: flex-start;
-
-        gap: 25px;
-
-        margin-bottom: 28px;
-    }
-
-
-    .header-left {
-
-        min-width: 0;
-
-        flex: 1;
-    }
-
-
-    .eyebrow {
-
-        margin-bottom: 9px;
-
-        color: #818cf8;
-
-        font-size: 11px;
-
-        font-weight: 800;
-
-        letter-spacing: 1.7px;
-
-        text-transform: uppercase;
-    }
-
-
-    .page-title {
-
-        margin: 0;
-
-        color: #f8fafc;
-
-        font-size: clamp(30px, 4vw, 44px);
-
-        line-height: 1.1;
-
-        font-weight: 800;
-
-        letter-spacing: -1.3px;
-    }
-
-
-    .document-name {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 8px;
-
-        margin-top: 11px;
-
-        color: #94a3b8;
-
-        font-size: 14px;
-
-        word-break: break-word;
-    }
-
-
-    .document-name span {
-
-        color: #cbd5e1;
-
-        font-weight: 600;
-    }
-
-
-    /* =====================================================
-       ACTIONS
-       ===================================================== */
-
-    .header-actions {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 9px;
-
-        flex-shrink: 0;
-    }
-
-
-    .action-btn {
-
-        min-height: 42px;
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        gap: 7px;
-
-        padding: 0 15px;
-
-        border-radius: 10px;
-
-        border: 1px solid
-            rgba(255,255,255,0.10);
-
-        background:
-            rgba(255,255,255,0.045);
-
-        color: #cbd5e1;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        text-decoration: none;
-
-        transition: all 0.22s ease;
-    }
-
-
-    .action-btn:hover {
-
-        color: #ffffff;
-
-        border-color:
-            rgba(129,140,248,0.45);
-
-        background:
-            rgba(99,102,241,0.12);
-
-        transform:
-            translateY(-2px);
-    }
-
-
-    .action-btn.primary {
-
-        color: #ffffff;
-
-        border-color:
-            rgba(99,102,241,0.65);
-
-        background:
-            linear-gradient(
-                135deg,
-                #6366f1,
-                #8b5cf6
-            );
-
-        box-shadow:
-            0 8px 25px
-            rgba(99,102,241,0.25);
-    }
-
-
-    .action-btn.primary:hover {
-
-        box-shadow:
-            0 12px 30px
-            rgba(99,102,241,0.35);
-
-        transform:
-            translateY(-2px);
-    }
-
-
-    /* =====================================================
-       STATS
-       ===================================================== */
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.analysis-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 38px 24px 70px;
+    color: #e2e8f0;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.document-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 25px;
+    margin-bottom: 28px;
+}
+
+.header-left {
+    min-width: 0;
+    flex: 1;
+}
+
+.eyebrow {
+    margin-bottom: 9px;
+    color: #818cf8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+}
+
+.page-title {
+    margin: 0;
+    color: #f8fafc;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -1.3px;
+}
+
+.document-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 11px;
+    color: #94a3b8;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.document-name span:last-child {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-shrink: 0;
+}
+
+.action-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.045);
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.22s ease;
+}
+
+.action-btn:hover {
+    color: #ffffff;
+    border-color: rgba(129,140,248,0.45);
+    background: rgba(99,102,241,0.12);
+    transform: translateY(-2px);
+}
+
+.action-btn.primary {
+    color: #ffffff;
+    border-color: rgba(99,102,241,0.65);
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+    box-shadow: 0 8px 25px rgba(99,102,241,0.25);
+}
+
+.action-btn.primary:hover {
+    box-shadow: 0 12px 30px rgba(99,102,241,0.35);
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.stat-box {
+    min-height: 110px;
+    padding: 19px 20px;
+    border-radius: 15px;
+    background: rgba(15,23,42,0.68);
+    border: 1px solid rgba(255,255,255,0.075);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.14);
+    backdrop-filter: blur(12px);
+    transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(129,140,248,0.25);
+}
+
+.stat-label {
+    margin-bottom: 9px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    color: #f8fafc;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.stat-sub {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   COPY ALL
+========================================================= */
+
+.copy-all-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding: 17px 20px;
+    border-radius: 15px;
+    background: linear-gradient(
+        135deg,
+        rgba(99,102,241,0.10),
+        rgba(14,165,233,0.06)
+    );
+    border: 1px solid rgba(129,140,248,0.15);
+}
+
+.copy-all-text h3 {
+    margin: 0 0 4px;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.copy-all-text p {
+    margin: 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.copy-all-btn {
+    border: 1px solid rgba(129,140,248,0.28);
+    border-radius: 9px;
+    padding: 10px 15px;
+    background: rgba(99,102,241,0.13);
+    color: #a5b4fc;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.copy-all-btn:hover {
+    color: #ffffff;
+    background: rgba(99,102,241,0.25);
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.analysis-section {
+    margin-bottom: 28px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.section-title-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.section-icon {
+    width: 31px;
+    height: 31px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(99,102,241,0.13);
+    border: 1px solid rgba(129,140,248,0.12);
+    font-size: 14px;
+}
+
+.section-title h2 {
+    margin: 0;
+    color: #f1f5f9;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.content-card,
+.data-card,
+.extracted-card {
+    overflow: hidden;
+    border-radius: 15px;
+    background: rgba(15,23,42,0.68);
+    border: 1px solid rgba(255,255,255,0.075);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.14);
+    backdrop-filter: blur(12px);
+}
+
+.card-top {
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 17px;
+    border-bottom: 1px solid rgba(255,255,255,0.055);
+}
+
+.card-heading {
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.copy-btn {
+    padding: 7px 11px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.09);
+    background: rgba(255,255,255,0.045);
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    color: #ffffff;
+    border-color: rgba(129,140,248,0.35);
+    background: rgba(99,102,241,0.12);
+}
+
+
+/* =========================================================
+   AI SUMMARY
+========================================================= */
+
+.ai-summary-content {
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.85;
+    max-width: 1150px;
+}
+
+.ai-summary-content p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   INSIGHTS
+========================================================= */
+
+.insights-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+}
+
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 11px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.055);
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.insight-check {
+    width: 21px;
+    height: 21px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.12);
+    color: #4ade80;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   TWO COLUMN DATA
+========================================================= */
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+
+/* =========================================================
+   KEYWORDS
+========================================================= */
+
+.keywords-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.keyword {
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(129,140,248,0.17);
+    background: rgba(99,102,241,0.09);
+    color: #a5b4fc;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.keyword:hover {
+    background: rgba(99,102,241,0.18);
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   INFORMATION
+========================================================= */
+
+.information-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.information-row {
+    display: grid;
+    grid-template-columns: 165px minmax(0, 1fr);
+    gap: 15px;
+    padding: 11px 13px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.045);
+    font-size: 12px;
+}
+
+.information-key {
+    color: #94a3b8;
+    font-weight: 800;
+}
+
+.information-value {
+    color: #cbd5e1;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   DOCUMENT SUMMARY
+========================================================= */
+
+.summary-content {
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.85;
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   EXTRACTED TEXT
+========================================================= */
+
+.extracted-content {
+    padding: 14px;
+    background: rgba(2,6,23,0.70);
+}
+
+.extracted-content pre {
+    min-height: 480px;
+    max-height: 680px;
+    overflow: auto;
+    margin: 0;
+    padding: 24px;
+    border-radius: 10px;
+    background: #020617;
+    color: #dbeafe;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.extracted-content pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.extracted-content pre::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BOTTOM ACTIONS
+========================================================= */
+
+.bottom-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 28px;
+}
+
+.back-link {
+    color: #818cf8;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #c4b5fd;
+}
+
+.bottom-export {
+    display: flex;
+    gap: 9px;
+}
+
+
+/* =========================================================
+   COPY SUCCESS
+========================================================= */
+
+.copy-success {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    z-index: 9999;
+    transform: translate(-50%, 20px);
+    padding: 11px 17px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.95);
+    border: 1px solid rgba(129,140,248,0.28);
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(15px);
+}
+
+.copy-success.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
 
     .stats-grid {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr));
-
-        gap: 14px;
-
-        margin-bottom: 24px;
+        grid-template-columns: repeat(2, 1fr);
     }
-
-
-    .stat-box {
-
-        min-height: 110px;
-
-        padding: 19px 20px;
-
-        border-radius: 15px;
-
-        background:
-            rgba(15,23,42,0.68);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.075);
-
-        box-shadow:
-            0 15px 45px
-            rgba(0,0,0,0.14);
-
-        backdrop-filter:
-            blur(12px);
-
-        transition:
-            transform 0.22s ease,
-            border-color 0.22s ease;
-    }
-
-
-    .stat-box:hover {
-
-        transform:
-            translateY(-3px);
-
-        border-color:
-            rgba(129,140,248,0.25);
-    }
-
-
-    .stat-label {
-
-        margin-bottom: 9px;
-
-        color: #64748b;
-
-        font-size: 10px;
-
-        font-weight: 800;
-
-        letter-spacing: 1.1px;
-
-        text-transform: uppercase;
-    }
-
-
-    .stat-value {
-
-        color: #f8fafc;
-
-        font-size: 24px;
-
-        font-weight: 800;
-    }
-
-
-    .stat-sub {
-
-        margin-top: 5px;
-
-        color: #64748b;
-
-        font-size: 11px;
-
-        line-height: 1.4;
-    }
-
-
-    /* =====================================================
-       COPY ALL
-       ===================================================== */
-
-    .copy-all-bar {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 20px;
-
-        margin-bottom: 28px;
-
-        padding: 17px 20px;
-
-        border-radius: 15px;
-
-        background:
-            linear-gradient(
-                135deg,
-                rgba(99,102,241,0.10),
-                rgba(14,165,233,0.06)
-            );
-
-        border:
-            1px solid
-            rgba(129,140,248,0.15);
-    }
-
-
-    .copy-all-text h3 {
-
-        margin: 0 0 4px;
-
-        color: #e2e8f0;
-
-        font-size: 14px;
-
-        font-weight: 800;
-    }
-
-
-    .copy-all-text p {
-
-        margin: 0;
-
-        color: #64748b;
-
-        font-size: 12px;
-    }
-
-
-    .copy-all-btn {
-
-        border: 1px solid
-            rgba(129,140,248,0.28);
-
-        border-radius: 9px;
-
-        padding: 10px 15px;
-
-        background:
-            rgba(99,102,241,0.13);
-
-        color: #a5b4fc;
-
-        font-size: 12px;
-
-        font-weight: 800;
-
-        cursor: pointer;
-
-        transition:
-            all 0.2s ease;
-
-        white-space: nowrap;
-    }
-
-
-    .copy-all-btn:hover {
-
-        color: #ffffff;
-
-        background:
-            rgba(99,102,241,0.25);
-
-        transform:
-            translateY(-1px);
-    }
-
-
-    /* =====================================================
-       SECTIONS
-       ===================================================== */
-
-    .analysis-section {
-
-        margin-bottom: 28px;
-    }
-
-
-    .section-title {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        margin-bottom: 12px;
-    }
-
-
-    .section-title-left {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 9px;
-    }
-
-
-    .section-icon {
-
-        width: 31px;
-
-        height: 31px;
-
-        display: grid;
-
-        place-items: center;
-
-        border-radius: 9px;
-
-        background:
-            rgba(99,102,241,0.13);
-
-        border:
-            1px solid
-            rgba(129,140,248,0.12);
-
-        font-size: 14px;
-    }
-
-
-    .section-title h2 {
-
-        margin: 0;
-
-        color: #f1f5f9;
-
-        font-size: 17px;
-
-        font-weight: 800;
-    }
-
-
-    /* =====================================================
-       CONTENT CARD
-       ===================================================== */
-
-    .content-card {
-
-        overflow: hidden;
-
-        border-radius: 15px;
-
-        background:
-            rgba(15,23,42,0.68);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.075);
-
-        box-shadow:
-            0 15px 45px
-            rgba(0,0,0,0.14);
-
-        backdrop-filter:
-            blur(12px);
-    }
-
-
-    .card-top {
-
-        min-height: 56px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 15px;
-
-        padding: 12px 17px;
-
-        border-bottom:
-            1px solid
-            rgba(255,255,255,0.055);
-    }
-
-
-    .card-heading {
-
-        color: #cbd5e1;
-
-        font-size: 13px;
-
-        font-weight: 800;
-    }
-
-
-    .copy-btn {
-
-        padding: 7px 11px;
-
-        border-radius: 8px;
-
-        border:
-            1px solid
-            rgba(255,255,255,0.09);
-
-        background:
-            rgba(255,255,255,0.045);
-
-        color: #94a3b8;
-
-        font-size: 11px;
-
-        font-weight: 700;
-
-        cursor: pointer;
-
-        transition:
-            all 0.2s ease;
-    }
-
-
-    .copy-btn:hover {
-
-        color: #ffffff;
-
-        border-color:
-            rgba(129,140,248,0.35);
-
-        background:
-            rgba(99,102,241,0.12);
-    }
-
-
-    .card-body {
-
-        padding: 24px;
-    }
-
-
-    /* =====================================================
-       AI SUMMARY
-       ===================================================== */
-
-    .ai-summary-content {
-
-        color: #cbd5e1;
-
-        font-size: 15px;
-
-        line-height: 1.85;
-
-        max-width: 1150px;
-    }
-
-
-    .ai-summary-content p {
-
-        margin: 0;
-    }
-
-
-    /* =====================================================
-       INSIGHTS
-       ===================================================== */
-
-    .insights-list {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 11px;
-    }
-
-
-    .insight-item {
-
-        display: flex;
-
-        align-items: flex-start;
-
-        gap: 10px;
-
-        padding: 14px;
-
-        border-radius: 11px;
-
-        background:
-            rgba(255,255,255,0.025);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.055);
-
-        color: #cbd5e1;
-
-        font-size: 13px;
-
-        line-height: 1.65;
-    }
-
-
-    .insight-check {
-
-        width: 21px;
-
-        height: 21px;
-
-        display: grid;
-
-        place-items: center;
-
-        flex: 0 0 auto;
-
-        border-radius: 50%;
-
-        background:
-            rgba(34,197,94,0.12);
-
-        color: #4ade80;
-
-        font-size: 11px;
-
-        font-weight: 800;
-    }
-
-
-    /* =====================================================
-       TWO COLUMN DATA
-       ===================================================== */
 
     .data-grid {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 18px;
-
-        margin-bottom: 28px;
+        grid-template-columns: 1fr;
     }
 
-
-    .data-card {
-
-        overflow: hidden;
-
-        border-radius: 15px;
-
-        background:
-            rgba(15,23,42,0.68);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.075);
-
-        box-shadow:
-            0 15px 45px
-            rgba(0,0,0,0.12);
-
-        backdrop-filter:
-            blur(12px);
-    }
-
-
-    /* =====================================================
-       KEYWORDS
-       ===================================================== */
-
-    .keywords-wrap {
-
-        display: flex;
-
+    .header-actions {
         flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
 
-        gap: 8px;
+
+@media (max-width: 720px) {
+
+    .analysis-page {
+        padding: 25px 14px 50px;
     }
 
-
-    .keyword {
-
-        padding: 7px 11px;
-
-        border-radius: 999px;
-
-        border:
-            1px solid
-            rgba(129,140,248,0.17);
-
-        background:
-            rgba(99,102,241,0.09);
-
-        color: #a5b4fc;
-
-        font-size: 11px;
-
-        font-weight: 700;
-
-        transition:
-            all 0.2s ease;
-    }
-
-
-    .keyword:hover {
-
-        background:
-            rgba(99,102,241,0.18);
-
-        transform:
-            translateY(-1px);
-    }
-
-
-    /* =====================================================
-       INFORMATION
-       ===================================================== */
-
-    .information-list {
-
-        display: flex;
-
+    .document-header {
         flex-direction: column;
-
-        gap: 9px;
     }
 
+    .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .insights-list {
+        grid-template-columns: 1fr;
+    }
 
     .information-row {
-
-        display: grid;
-
-        grid-template-columns:
-            165px minmax(0, 1fr);
-
-        gap: 15px;
-
-        padding: 11px 13px;
-
-        border-radius: 9px;
-
-        background:
-            rgba(255,255,255,0.025);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.045);
-
-        font-size: 12px;
+        grid-template-columns: 1fr;
+        gap: 5px;
     }
 
-
-    .information-key {
-
-        color: #94a3b8;
-
-        font-weight: 800;
+    .copy-all-bar {
+        flex-direction: column;
+        align-items: flex-start;
     }
-
-
-    .information-value {
-
-        color: #cbd5e1;
-
-        word-break: break-word;
-    }
-
-
-    /* =====================================================
-       DOCUMENT SUMMARY
-       ===================================================== */
-
-    .summary-content {
-
-        color: #cbd5e1;
-
-        font-size: 14px;
-
-        line-height: 1.85;
-
-        white-space: pre-wrap;
-    }
-
-
-    /* =====================================================
-       EXTRACTED TEXT
-       ===================================================== */
-
-    .extracted-card {
-
-        overflow: hidden;
-
-        border-radius: 15px;
-
-        background:
-            rgba(15,23,42,0.68);
-
-        border:
-            1px solid
-            rgba(255,255,255,0.075);
-    }
-
-
-    .extracted-content {
-
-        padding: 14px;
-
-        background:
-            rgba(2,6,23,0.70);
-    }
-
-
-    .extracted-content pre {
-
-        min-height: 480px;
-
-        max-height: 680px;
-
-        overflow: auto;
-
-        margin: 0;
-
-        padding: 24px;
-
-        border-radius: 10px;
-
-        background:
-            #020617;
-
-        color: #dbeafe;
-
-        font-family:
-            Consolas,
-            "Courier New",
-            monospace;
-
-        font-size: 12px;
-
-        line-height: 1.75;
-
-        white-space: pre-wrap;
-
-        word-break: break-word;
-    }
-
-
-    .extracted-content pre::-webkit-scrollbar {
-
-        width: 8px;
-
-        height: 8px;
-    }
-
-
-    .extracted-content pre::-webkit-scrollbar-thumb {
-
-        background:
-            #334155;
-
-        border-radius:
-            999px;
-    }
-
-
-    /* =====================================================
-       EMPTY / ERROR
-       ===================================================== */
-
-    .empty-state {
-
-        margin: 0;
-
-        color: #64748b;
-
-        font-size: 13px;
-    }
-
-
-    .error-box {
-
-        padding: 15px;
-
-        border-radius: 10px;
-
-        background:
-            rgba(239,68,68,0.07);
-
-        border:
-            1px solid
-            rgba(239,68,68,0.16);
-
-        color: #fca5a5;
-
-        font-size: 13px;
-
-        line-height: 1.6;
-    }
-
-
-    /* =====================================================
-       BOTTOM ACTIONS
-       ===================================================== */
 
     .bottom-actions {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 20px;
-
-        margin-top: 28px;
+        flex-direction: column;
+        align-items: flex-start;
     }
-
-
-    .back-link {
-
-        color: #818cf8;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        text-decoration: none;
-
-        transition:
-            color 0.2s ease;
-    }
-
-
-    .back-link:hover {
-
-        color: #c4b5fd;
-    }
-
 
     .bottom-export {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
 
-        display: flex;
 
-        gap: 9px;
+@media (max-width: 480px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
 
-
-    /* =====================================================
-       COPY SUCCESS
-       ===================================================== */
-
-    .copy-success {
-
-        position: fixed;
-
-        left: 50%;
-
-        bottom: 30px;
-
-        z-index: 9999;
-
-        transform:
-            translate(-50%, 20px);
-
-        padding: 11px 17px;
-
-        border-radius: 999px;
-
-        background:
-            rgba(15,23,42,0.95);
-
-        border:
-            1px solid
-            rgba(129,140,248,0.28);
-
-        color: #e2e8f0;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        box-shadow:
-            0 15px 40px
-            rgba(0,0,0,0.35);
-
-        opacity: 0;
-
-        pointer-events: none;
-
-        transition:
-            all 0.25s ease;
-
-        backdrop-filter:
-            blur(15px);
+    .header-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
     }
 
-
-    .copy-success.show {
-
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
+    .action-btn {
+        width: 100%;
     }
 
-
-    /* =====================================================
-       RESPONSIVE
-       ===================================================== */
-
-    @media (max-width: 1000px) {
-
-        .stats-grid {
-
-            grid-template-columns:
-                repeat(2, 1fr);
-        }
-
-
-        .data-grid {
-
-            grid-template-columns:
-                1fr;
-        }
-
-
-        .header-actions {
-
-            flex-wrap: wrap;
-
-            justify-content: flex-end;
-        }
+    .card-body {
+        padding: 18px;
     }
 
-
-    @media (max-width: 720px) {
-
-        .analysis-page {
-
-            padding:
-                25px 14px 50px;
-        }
-
-
-        .document-header {
-
-            flex-direction:
-                column;
-        }
-
-
-        .header-actions {
-
-            width:
-                100%;
-
-            justify-content:
-                flex-start;
-        }
-
-
-        .stats-grid {
-
-            grid-template-columns:
-                1fr 1fr;
-        }
-
-
-        .insights-list {
-
-            grid-template-columns:
-                1fr;
-        }
-
-
-        .information-row {
-
-            grid-template-columns:
-                1fr;
-
-            gap:
-                5px;
-        }
-
-
-        .copy-all-bar {
-
-            flex-direction:
-                column;
-
-            align-items:
-                flex-start;
-        }
-
-
-        .bottom-actions {
-
-            flex-direction:
-                column;
-
-            align-items:
-                flex-start;
-        }
-
-
-        .bottom-export {
-
-            width:
-                100%;
-
-            flex-wrap:
-                wrap;
-        }
+    .extracted-content pre {
+        padding: 17px;
+        min-height: 380px;
+        font-size: 11px;
     }
-
-
-    @media (max-width: 480px) {
-
-        .stats-grid {
-
-            grid-template-columns:
-                1fr;
-        }
-
-
-        .header-actions {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            width:
-                100%;
-        }
-
-
-        .action-btn {
-
-            width:
-                100%;
-        }
-
-
-        .card-body {
-
-            padding:
-                18px;
-        }
-
-
-        .extracted-content pre {
-
-            padding:
-                17px;
-
-            min-height:
-                380px;
-
-            font-size:
-                11px;
-        }
-    }
+}
 
 </style>
 
@@ -1198,12 +666,9 @@ Document Analysis | AI Document Analyzer
 <div class="analysis-page">
 
 
-    <!-- =================================================
-         SAFE DOCUMENT DATA
-
-         IMPORTANT:
-         We do NOT put Jinja directly inside JavaScript.
-         ================================================= -->
+    <!-- =====================================================
+         DOCUMENT META
+    ====================================================== -->
 
     <div
         id="analysisMeta"
@@ -1212,12 +677,11 @@ Document Analysis | AI Document Analyzer
     ></div>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          HEADER
-         ================================================= -->
+    ====================================================== -->
 
     <section class="document-header">
-
 
         <div class="header-left">
 
@@ -1225,22 +689,16 @@ Document Analysis | AI Document Analyzer
                 DOCUMENT INTELLIGENCE
             </div>
 
-
             <h1 class="page-title">
                 Document Analysis
             </h1>
 
-
             <div class="document-name">
-
-                <span>
-                    📄
-                </span>
+                <span>📄</span>
 
                 <span>
                     {{ document.filename }}
                 </span>
-
             </div>
 
         </div>
@@ -1248,11 +706,8 @@ Document Analysis | AI Document Analyzer
 
         <div class="header-actions">
 
-
             <a
-                href="{{ url_for(
-                    'documents.list_documents'
-                ) }}"
+                href="{{ url_for('documents.list_documents') }}"
                 class="action-btn"
             >
                 ← Documents
@@ -1280,18 +735,19 @@ Document Analysis | AI Document Analyzer
                 📑 PDF
             </a>
 
-
         </div>
 
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          STATS
-         ================================================= -->
+    ====================================================== -->
 
     <section class="stats-grid">
 
+
+        <!-- DOCUMENT -->
 
         <div class="stat-box">
 
@@ -1310,6 +766,14 @@ Document Analysis | AI Document Analyzer
         </div>
 
 
+        <!-- =================================================
+             PAGE COUNT
+
+             IMPORTANT:
+             NO CLIENT-SIDE ESTIMATION.
+             DIRECTLY USE page_info FROM documents.py.
+        ================================================== -->
+
         <div class="stat-box">
 
             <div class="stat-label">
@@ -1320,15 +784,42 @@ Document Analysis | AI Document Analyzer
                 class="stat-value"
                 id="pageCount"
             >
-                —
+                {% if page_info and page_info.get("count") is not none %}
+
+                    {{ page_info.get("count") }}
+
+                {% elif page_info and page_info.get("pages") is not none %}
+
+                    {{ page_info.get("pages") }}
+
+                {% else %}
+
+                    —
+
+                {% endif %}
             </div>
 
-            <div class="stat-sub">
-                Extracted pages
+            <div
+                class="stat-sub"
+                id="pageCountSub"
+            >
+
+                {% if page_info and page_info.get("label") %}
+
+                    {{ page_info.get("label") }}
+
+                {% else %}
+
+                    Page count unavailable
+
+                {% endif %}
+
             </div>
 
         </div>
 
+
+        <!-- WORD COUNT -->
 
         <div class="stat-box">
 
@@ -1350,6 +841,8 @@ Document Analysis | AI Document Analyzer
         </div>
 
 
+        <!-- UPLOADED -->
+
         <div class="stat-box">
 
             <div class="stat-label">
@@ -1366,16 +859,14 @@ Document Analysis | AI Document Analyzer
 
         </div>
 
-
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          COPY ALL
-         ================================================= -->
+    ====================================================== -->
 
     <div class="copy-all-bar">
-
 
         <div class="copy-all-text">
 
@@ -1398,16 +889,14 @@ Document Analysis | AI Document Analyzer
             📋 Copy All
         </button>
 
-
     </div>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          AI SUMMARY
-         ================================================= -->
+    ====================================================== -->
 
     <section class="analysis-section">
-
 
         <div class="section-title">
 
@@ -1428,13 +917,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="content-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     AI-generated overview
                 </div>
-
 
                 <button
                     type="button"
@@ -1457,8 +944,7 @@ Document Analysis | AI Document Analyzer
                     class="ai-summary-content"
                 >
 
-                    {% if ai_analysis
-                          and ai_analysis.get("success") %}
+                    {% if ai_analysis and ai_analysis.get("success") %}
 
                         {{ ai_analysis.get(
                             "summary",
@@ -1487,12 +973,11 @@ Document Analysis | AI Document Analyzer
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          KEY INSIGHTS
-         ================================================= -->
+    ====================================================== -->
 
     <section class="analysis-section">
-
 
         <div class="section-title">
 
@@ -1513,13 +998,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="content-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     AI-generated insights
                 </div>
-
 
                 <button
                     type="button"
@@ -1537,23 +1020,21 @@ Document Analysis | AI Document Analyzer
 
             <div class="card-body">
 
-
                 <div
                     id="insightsText"
                     class="insights-list"
                 >
 
-                    {% if ai_analysis
-                          and ai_analysis.get("success")
-                          and ai_analysis.get("insights") %}
+                    {% if
+                        ai_analysis
+                        and ai_analysis.get("success")
+                        and ai_analysis.get("insights")
+                    %}
 
-
-                        {% for insight
-                            in ai_analysis.get(
-                                "insights",
-                                []
-                            ) %}
-
+                        {% for insight in ai_analysis.get(
+                            "insights",
+                            []
+                        ) %}
 
                             <div class="insight-item">
 
@@ -1567,9 +1048,7 @@ Document Analysis | AI Document Analyzer
 
                             </div>
 
-
                         {% endfor %}
-
 
                     {% else %}
 
@@ -1596,9 +1075,9 @@ Document Analysis | AI Document Analyzer
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          KEYWORDS + INFORMATION
-         ================================================= -->
+    ====================================================== -->
 
     <div class="data-grid">
 
@@ -1607,13 +1086,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="data-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     🔑 Keywords
                 </div>
-
 
                 <button
                     type="button"
@@ -1631,14 +1108,12 @@ Document Analysis | AI Document Analyzer
 
             <div class="card-body">
 
-
                 <div
                     id="keywordsText"
                     class="keywords-wrap"
                 >
 
                     {% if keywords %}
-
 
                         {% for keyword in keywords %}
 
@@ -1647,7 +1122,6 @@ Document Analysis | AI Document Analyzer
                             </span>
 
                         {% endfor %}
-
 
                     {% else %}
 
@@ -1668,13 +1142,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="data-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     📌 Important Information
                 </div>
-
 
                 <button
                     type="button"
@@ -1692,7 +1164,6 @@ Document Analysis | AI Document Analyzer
 
             <div class="card-body">
 
-
                 <div
                     id="informationText"
                     class="information-list"
@@ -1700,36 +1171,21 @@ Document Analysis | AI Document Analyzer
 
                     {% if information %}
 
-
-                        {% for key, value
-                            in information.items() %}
-
+                        {% for key, value in information.items() %}
 
                             <div class="information-row">
 
-
-                                <div
-                                    class="information-key"
-                                >
-                                    {{ key
-                                        .replace("_", " ")
-                                        .title()
-                                    }}
+                                <div class="information-key">
+                                    {{ key.replace("_", " ").title() }}
                                 </div>
 
-
-                                <div
-                                    class="information-value"
-                                >
+                                <div class="information-value">
                                     {{ value }}
                                 </div>
 
-
                             </div>
 
-
                         {% endfor %}
-
 
                     {% else %}
 
@@ -1745,16 +1201,14 @@ Document Analysis | AI Document Analyzer
 
         </div>
 
-
     </div>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          DOCUMENT SUMMARY
-         ================================================= -->
+    ====================================================== -->
 
     <section class="analysis-section">
-
 
         <div class="section-title">
 
@@ -1775,13 +1229,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="content-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     Extracted document summary
                 </div>
-
 
                 <button
                     type="button"
@@ -1798,7 +1250,6 @@ Document Analysis | AI Document Analyzer
 
 
             <div class="card-body">
-
 
                 {% if summary %}
 
@@ -1820,7 +1271,6 @@ Document Analysis | AI Document Analyzer
 
                 {% endif %}
 
-
             </div>
 
         </div>
@@ -1828,12 +1278,11 @@ Document Analysis | AI Document Analyzer
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          EXTRACTED TEXT
-         ================================================= -->
+    ====================================================== -->
 
     <section class="analysis-section">
-
 
         <div class="section-title">
 
@@ -1854,13 +1303,11 @@ Document Analysis | AI Document Analyzer
 
         <div class="extracted-card">
 
-
             <div class="card-top">
 
                 <div class="card-heading">
                     Complete extracted document content
                 </div>
-
 
                 <button
                     type="button"
@@ -1878,25 +1325,15 @@ Document Analysis | AI Document Analyzer
 
             <div class="extracted-content">
 
-
                 {% if document.extracted_text %}
 
-
-                    <pre
-                        id="extractedTextContent"
-                    >{{ document.extracted_text }}</pre>
-
+                    <pre id="extractedTextContent">{{ document.extracted_text }}</pre>
 
                 {% else %}
 
-
-                    <pre
-                        id="extractedTextContent"
-                    >No text could be extracted from this document.</pre>
-
+                    <pre id="extractedTextContent">No text could be extracted from this document.</pre>
 
                 {% endif %}
-
 
             </div>
 
@@ -1905,17 +1342,14 @@ Document Analysis | AI Document Analyzer
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          BOTTOM ACTIONS
-         ================================================= -->
+    ====================================================== -->
 
     <div class="bottom-actions">
 
-
         <a
-            href="{{ url_for(
-                'documents.list_documents'
-            ) }}"
+            href="{{ url_for('documents.list_documents') }}"
             class="back-link"
         >
             ← Back to My Documents
@@ -1923,7 +1357,6 @@ Document Analysis | AI Document Analyzer
 
 
         <div class="bottom-export">
-
 
             <a
                 href="{{ url_for(
@@ -1946,18 +1379,16 @@ Document Analysis | AI Document Analyzer
                 📑 Download PDF
             </a>
 
-
         </div>
 
     </div>
 
-
 </div>
 
 
-<!-- =====================================================
-     COPY SUCCESS
-     ===================================================== -->
+<!-- =========================================================
+     COPY SUCCESS MESSAGE
+========================================================= -->
 
 <div
     id="copySuccess"
@@ -1967,288 +1398,125 @@ Document Analysis | AI Document Analyzer
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      JAVASCRIPT
-     ===================================================== -->
+========================================================= -->
 
 <script>
 
-    /* =====================================================
-       GET FILE NAME SAFELY
 
-       IMPORTANT:
-       No Jinja syntax is directly inside JavaScript.
-       ===================================================== */
+/* =========================================================
+   GET DOCUMENT FILE NAME
+========================================================= */
 
-    function getDocumentFileName() {
+function getDocumentFileName() {
 
-        const meta =
-            document.getElementById(
-                "analysisMeta"
-            );
+    const meta =
+        document.getElementById("analysisMeta");
 
-        if (!meta) {
+    if (!meta) {
+        return "";
+    }
 
-            return "";
+    return meta.dataset.filename || "";
+}
 
-        }
 
-        return (
-            meta.dataset.filename || ""
+/* =========================================================
+   WORD COUNT
+
+   IMPORTANT:
+   Page count is NOT calculated here.
+   Page count comes directly from backend page_info.
+========================================================= */
+
+function calculateWordCount() {
+
+    const element =
+        document.getElementById(
+            "extractedTextContent"
         );
 
+    const counter =
+        document.getElementById(
+            "wordCount"
+        );
+
+    if (!element || !counter) {
+        return;
     }
 
-
-    /* =====================================================
-       PAGE COUNT
-       ===================================================== */
-
-    function calculatePageCount() {
-
-        const extractedElement =
-            document.getElementById(
-                "extractedTextContent"
-            );
-
-
-        const pageElement =
-            document.getElementById(
-                "pageCount"
-            );
-
-
-        if (
-            !extractedElement ||
-            !pageElement
-        ) {
-
-            return;
-
-        }
-
-
-        const text =
-            extractedElement.innerText || "";
-
-
-        const fileName =
-            getDocumentFileName();
-
-
-        const extension =
-            fileName
-                .split(".")
-                .pop()
-                .toLowerCase();
-
-
-        if (
-            extension === "pdf"
-        ) {
-
-            const matches =
-                text.match(
-                    /--- Page \d+ ---/g
-                );
-
-
-            if (
-                matches &&
-                matches.length > 0
-            ) {
-
-                pageElement.textContent =
-                    matches.length;
-
-            }
-
-            else {
-
-                pageElement.textContent =
-                    "1";
-
-            }
-
-        }
-
-
-        else if (
-            extension === "docx"
-        ) {
-
-            pageElement.textContent =
-                "—";
-
-
-            const sub =
-                pageElement
-                    .parentElement
-                    ?.querySelector(
-                        ".stat-sub"
-                    );
-
-
-            if (sub) {
-
-                sub.textContent =
-                    "DOCX layout";
-
-            }
-
-        }
-
-
-        else if (
-            extension === "txt"
-        ) {
-
-            pageElement.textContent =
-                "—";
-
-
-            const sub =
-                pageElement
-                    .parentElement
-                    ?.querySelector(
-                        ".stat-sub"
-                    );
-
-
-            if (sub) {
-
-                sub.textContent =
-                    "Text file";
-
-            }
-
-        }
-
-
-        else {
-
-            pageElement.textContent =
-                "—";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       WORD COUNT
-       ===================================================== */
-
-    function calculateWordCount() {
-
-        const extractedElement =
-            document.getElementById(
-                "extractedTextContent"
-            );
-
-
-        const wordElement =
-            document.getElementById(
-                "wordCount"
-            );
-
-
-        if (
-            !extractedElement ||
-            !wordElement
-        ) {
-
-            return;
-
-        }
-
-
-        const text =
-            extractedElement.innerText
-                .replace(
-                    /--- Page \d+ ---/g,
-                    " "
-                )
-                .trim();
-
-
-        if (!text) {
-
-            wordElement.textContent =
-                "0";
-
-            return;
-
-        }
-
-
-        const words =
-            text
-                .split(/\s+/)
-                .filter(Boolean);
-
-
-        wordElement.textContent =
-            words.length.toLocaleString();
-
-    }
-
-
-    /* =====================================================
-       COPY SECTION
-       ===================================================== */
-
-    async function copySection(
-        elementId,
-        button
+    const text =
+        element.innerText || "";
+
+    const words =
+        text
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+    if (
+        !text.trim() ||
+        words.length === 0
     ) {
 
-        const element =
-            document.getElementById(
-                elementId
-            );
+        counter.textContent = "0";
+
+        return;
+    }
+
+    counter.textContent =
+        words.length.toLocaleString();
+}
 
 
-        if (!element) {
+/* =========================================================
+   COPY SECTION
+========================================================= */
 
-            return;
+async function copySection(
+    elementId,
+    button
+) {
 
-        }
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+    if (!element) {
+        return;
+    }
+
+    let text =
+        element.innerText || "";
+
+    text =
+        text.trim();
+
+    if (!text) {
+
+        showCopyMessage(
+            "Nothing to copy"
+        );
+
+        return;
+    }
 
 
-        let text =
-            element.innerText || "";
+    try {
 
+        await navigator.clipboard.writeText(
+            text
+        );
 
-        text =
-            text.trim();
-
-
-        if (!text) {
-
-            showCopyMessage(
-                "Nothing to copy"
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            await navigator.clipboard.writeText(
-                text
-            );
-
+        if (button) {
 
             const original =
                 button.innerHTML;
 
-
             button.innerHTML =
                 "✓ Copied";
-
 
             setTimeout(
                 function () {
@@ -2259,283 +1527,243 @@ Document Analysis | AI Document Analyzer
                 },
                 1500
             );
-
-
-            showCopyMessage(
-                "Copied to clipboard"
-            );
-
         }
 
-
-        catch (error) {
-
-            fallbackCopy(text);
-
-
-            showCopyMessage(
-                "Copied to clipboard"
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       COPY ALL ANALYSIS
-       ===================================================== */
-
-    async function copyAllAnalysis() {
-
-        const sections = [
-
-            {
-                title: "AI Summary",
-                id: "aiSummaryText"
-            },
-
-            {
-                title: "Key Insights",
-                id: "insightsText"
-            },
-
-            {
-                title: "Keywords",
-                id: "keywordsText"
-            },
-
-            {
-                title: "Important Information",
-                id: "informationText"
-            },
-
-            {
-                title: "Document Summary",
-                id: "documentSummaryText"
-            },
-
-            {
-                title: "Extracted Text",
-                id: "extractedTextContent"
-            }
-
-        ];
-
-
-        let output =
-            "DOCUMENT ANALYSIS\n";
-
-        output +=
-            "=================\n\n";
-
-
-        sections.forEach(
-            function (section) {
-
-                const element =
-                    document.getElementById(
-                        section.id
-                    );
-
-
-                if (!element) {
-
-                    return;
-
-                }
-
-
-                const text =
-                    element.innerText.trim();
-
-
-                if (!text) {
-
-                    return;
-
-                }
-
-
-                output +=
-                    section.title.toUpperCase();
-
-
-                output +=
-                    "\n-----------------\n";
-
-
-                output +=
-                    text;
-
-
-                output +=
-                    "\n\n";
-
-            }
-        );
-
-
-        if (!output.trim()) {
-
-            showCopyMessage(
-                "Nothing available to copy"
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            await navigator.clipboard.writeText(
-                output
-            );
-
-
-            showCopyMessage(
-                "Complete analysis copied"
-            );
-
-        }
-
-
-        catch (error) {
-
-            fallbackCopy(output);
-
-
-            showCopyMessage(
-                "Complete analysis copied"
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       FALLBACK COPY
-       ===================================================== */
-
-    function fallbackCopy(text) {
-
-        const textarea =
-            document.createElement(
-                "textarea"
-            );
-
-
-        textarea.value =
-            text;
-
-
-        textarea.style.position =
-            "fixed";
-
-
-        textarea.style.left =
-            "-9999px";
-
-
-        textarea.style.top =
-            "0";
-
-
-        document.body.appendChild(
-            textarea
-        );
-
-
-        textarea.focus();
-
-        textarea.select();
-
-
-        try {
-
-            document.execCommand(
-                "copy"
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Copy failed:",
-                error
-            );
-
-        }
-
-
-        document.body.removeChild(
-            textarea
+        showCopyMessage(
+            "Copied to clipboard"
         );
 
     }
 
+    catch (error) {
 
-    /* =====================================================
-       COPY MESSAGE
-       ===================================================== */
+        fallbackCopy(text);
 
-    function showCopyMessage(
-        message
-    ) {
-
-        const messageBox =
-            document.getElementById(
-                "copySuccess"
-            );
+        showCopyMessage(
+            "Copied to clipboard"
+        );
+    }
+}
 
 
-        if (!messageBox) {
+/* =========================================================
+   COPY ALL ANALYSIS
+========================================================= */
 
-            return;
+async function copyAllAnalysis() {
 
+    const sections = [
+
+        {
+            title: "AI Summary",
+            id: "aiSummaryText"
+        },
+
+        {
+            title: "Key Insights",
+            id: "insightsText"
+        },
+
+        {
+            title: "Keywords",
+            id: "keywordsText"
+        },
+
+        {
+            title: "Important Information",
+            id: "informationText"
+        },
+
+        {
+            title: "Document Summary",
+            id: "documentSummaryText"
+        },
+
+        {
+            title: "Extracted Text",
+            id: "extractedTextContent"
         }
 
-
-        messageBox.textContent =
-            "✓ " + message;
+    ];
 
 
-        messageBox.classList.add(
-            "show"
-        );
+    let output =
+        "DOCUMENT ANALYSIS\n";
+
+    output +=
+        "=================\n\n";
 
 
-        setTimeout(
-            function () {
+    sections.forEach(
+        function(section) {
 
-                messageBox.classList.remove(
-                    "show"
+            const element =
+                document.getElementById(
+                    section.id
                 );
 
-            },
-            1800
+            if (!element) {
+                return;
+            }
+
+            const text =
+                element.innerText.trim();
+
+            if (!text) {
+                return;
+            }
+
+            output +=
+                section.title.toUpperCase();
+
+            output +=
+                "\n-----------------\n";
+
+            output +=
+                text;
+
+            output +=
+                "\n\n";
+        }
+    );
+
+
+    if (!output.trim()) {
+
+        showCopyMessage(
+            "Nothing available to copy"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            output
+        );
+
+        showCopyMessage(
+            "Complete analysis copied"
         );
 
     }
 
+    catch (error) {
 
-    /* =====================================================
-       INITIALIZE
-       ===================================================== */
+        fallbackCopy(output);
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
+        showCopyMessage(
+            "Complete analysis copied"
+        );
+    }
+}
 
-            calculatePageCount();
 
-            calculateWordCount();
+/* =========================================================
+   FALLBACK COPY
+========================================================= */
 
-        }
+function fallbackCopy(text) {
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+    textarea.value =
+        text;
+
+    textarea.style.position =
+        "fixed";
+
+    textarea.style.left =
+        "-9999px";
+
+    textarea.style.top =
+        "0";
+
+    document.body.appendChild(
+        textarea
     );
+
+    textarea.focus();
+
+    textarea.select();
+
+    try {
+
+        document.execCommand(
+            "copy"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Copy failed:",
+            error
+        );
+    }
+
+    document.body.removeChild(
+        textarea
+    );
+}
+
+
+/* =========================================================
+   COPY MESSAGE
+========================================================= */
+
+function showCopyMessage(
+    message
+) {
+
+    const messageBox =
+        document.getElementById(
+            "copySuccess"
+        );
+
+    if (!messageBox) {
+        return;
+    }
+
+    messageBox.textContent =
+        "✓ " + message;
+
+    messageBox.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        function() {
+
+            messageBox.classList.remove(
+                "show"
+            );
+
+        },
+        1800
+    );
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        calculateWordCount();
+
+    }
+);
 
 </script>
 
