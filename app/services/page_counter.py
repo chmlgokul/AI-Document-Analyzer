@@ -2,33 +2,29 @@
 # PAGE COUNTER SERVICE
 # ============================================================
 #
-# Purpose:
-#   Calculate document page counts.
-#
 # PDF:
-#   Uses PyMuPDF for exact page count.
+#   Exact page count using PyMuPDF.
 #
-# DOCX on Windows:
-#   1. Microsoft Word COM -> exact Word page count
-#   2. LibreOffice fallback -> exact PDF page count
+# DOCX:
+#   1. Microsoft Word COM on Windows (exact)
+#   2. LibreOffice if available
+#   3. DOCX internal metadata (Vercel/Linux friendly)
+#   4. Rendered page-break fallback
 #
 # TXT:
-#   Uses line-based estimation.
+#   Line-based estimate.
 #
 # IMAGE:
 #   One image = one page.
 #
-# IMPORTANT:
-#   For DOCX, Microsoft Word is preferred because the page
-#   count should match the page count shown by Microsoft Word.
-#
 # ============================================================
-
 
 import os
 import shutil
 import subprocess
 import tempfile
+import zipfile
+import xml.etree.ElementTree as ET
 
 from pathlib import Path
 
@@ -38,61 +34,33 @@ from pathlib import Path
 # ============================================================
 
 def find_libreoffice():
-    """
-    Find LibreOffice / soffice executable.
-
-    Supports common Windows and Linux locations.
-    """
-
     possible_commands = [
         "soffice",
         "libreoffice",
     ]
 
-    # --------------------------------------------------------
-    # Check PATH
-    # --------------------------------------------------------
-
     for command in possible_commands:
-
         found = shutil.which(command)
 
         if found:
             return found
 
-    # --------------------------------------------------------
-    # Common Windows locations
-    # --------------------------------------------------------
-
     windows_paths = [
-
         r"C:\Program Files\LibreOffice\program\soffice.exe",
-
         r"C:\Program Files (x86)\LibreOffice\program\soffice.exe",
-
     ]
 
     for path in windows_paths:
-
         if os.path.exists(path):
             return path
 
-    # --------------------------------------------------------
-    # Linux locations
-    # --------------------------------------------------------
-
     linux_paths = [
-
         "/usr/bin/soffice",
-
         "/usr/bin/libreoffice",
-
         "/snap/bin/libreoffice",
-
     ]
 
     for path in linux_paths:
-
         if os.path.exists(path):
             return path
 
@@ -105,14 +73,14 @@ def find_libreoffice():
 
 def count_docx_pages_with_word(filepath):
     """
-    Get the exact DOCX page count using Microsoft Word.
+    Get exact DOCX page count using Microsoft Word.
 
-    This is the preferred method on Windows because it uses
-    the same pagination engine that Microsoft Word uses.
+    This works on Windows when Microsoft Word and pywin32
+    are available.
 
     Returns:
         Integer page count
-        None if Microsoft Word / pywin32 is unavailable
+        None if unavailable.
     """
 
     word = None
@@ -120,34 +88,17 @@ def count_docx_pages_with_word(filepath):
 
     try:
 
-        # ----------------------------------------------------
-        # Microsoft Word COM
-        # ----------------------------------------------------
-
         import pythoncom
-
         import win32com.client
 
-
         pythoncom.CoInitialize()
-
-
-        # ----------------------------------------------------
-        # Start Microsoft Word
-        # ----------------------------------------------------
 
         word = win32com.client.DispatchEx(
             "Word.Application"
         )
 
         word.Visible = False
-
         word.DisplayAlerts = 0
-
-
-        # ----------------------------------------------------
-        # Open DOCX
-        # ----------------------------------------------------
 
         document = word.Documents.Open(
             os.path.abspath(filepath),
@@ -157,60 +108,29 @@ def count_docx_pages_with_word(filepath):
             Visible=False
         )
 
-
-        # ----------------------------------------------------
-        # Force pagination
-        # ----------------------------------------------------
-
         try:
-
             document.Repaginate()
-
         except Exception:
-
             pass
-
-
-        # ----------------------------------------------------
-        # Word WdStatisticPages = 2
-        # ----------------------------------------------------
 
         page_count = document.ComputeStatistics(
             2
         )
-
 
         print(
             "MICROSOFT WORD PAGE COUNT:",
             page_count
         )
 
-
-        # ----------------------------------------------------
-        # Validate
-        # ----------------------------------------------------
-
-        if page_count is None:
-            return None
-
-
         try:
-
-            page_count = int(
-                page_count
-            )
-
+            page_count = int(page_count)
         except Exception:
-
             return None
-
 
         if page_count <= 0:
             return None
 
-
         return page_count
-
 
     except ImportError as e:
 
@@ -221,7 +141,6 @@ def count_docx_pages_with_word(filepath):
 
         return None
 
-
     except Exception as e:
 
         print(
@@ -231,44 +150,23 @@ def count_docx_pages_with_word(filepath):
 
         return None
 
-
     finally:
-
-        # ----------------------------------------------------
-        # Close Word document
-        # ----------------------------------------------------
 
         if document is not None:
 
             try:
-
                 document.Close(
                     SaveChanges=False
                 )
-
             except Exception:
-
                 pass
-
-
-        # ----------------------------------------------------
-        # Quit Word
-        # ----------------------------------------------------
 
         if word is not None:
 
             try:
-
                 word.Quit()
-
             except Exception:
-
                 pass
-
-
-        # ----------------------------------------------------
-        # Uninitialize COM
-        # ----------------------------------------------------
 
         try:
 
@@ -277,7 +175,6 @@ def count_docx_pages_with_word(filepath):
             pythoncom.CoUninitialize()
 
         except Exception:
-
             pass
 
 
@@ -294,28 +191,22 @@ def count_pdf_pages(filepath):
 
         import fitz
 
-
         document = fitz.open(
             filepath
         )
-
 
         page_count = len(
             document
         )
 
-
         document.close()
-
 
         print(
             "PDF PAGE COUNT:",
             page_count
         )
 
-
         return page_count
-
 
     except Exception as e:
 
@@ -335,16 +226,12 @@ def convert_docx_to_pdf(filepath):
     """
     Convert DOCX to PDF using LibreOffice.
 
-    This is a fallback method when Microsoft Word
-    is not available.
-
     Returns:
-        PDF path if successful
-        None if conversion fails
+        Temporary PDF path if successful.
+        None if conversion fails.
     """
 
     libreoffice = find_libreoffice()
-
 
     if not libreoffice:
 
@@ -354,11 +241,9 @@ def convert_docx_to_pdf(filepath):
 
         return None
 
-
     source_path = Path(
         filepath
     )
-
 
     if not source_path.exists():
 
@@ -369,11 +254,9 @@ def convert_docx_to_pdf(filepath):
 
         return None
 
-
     temp_dir = tempfile.mkdtemp(
         prefix="docx_page_count_"
     )
-
 
     try:
 
@@ -395,12 +278,10 @@ def convert_docx_to_pdf(filepath):
 
         ]
 
-
         print(
             "DOCX -> PDF COMMAND:",
             command
         )
-
 
         result = subprocess.run(
 
@@ -416,12 +297,10 @@ def convert_docx_to_pdf(filepath):
 
         )
 
-
         print(
             "LIBREOFFICE STDOUT:",
             result.stdout
         )
-
 
         if result.stderr:
 
@@ -429,7 +308,6 @@ def convert_docx_to_pdf(filepath):
                 "LIBREOFFICE STDERR:",
                 result.stderr
             )
-
 
         if result.returncode != 0:
 
@@ -440,18 +318,15 @@ def convert_docx_to_pdf(filepath):
 
             return None
 
-
         pdf_name = (
             source_path.stem
             + ".pdf"
         )
 
-
         pdf_path = (
             Path(temp_dir)
             / pdf_name
         )
-
 
         if not pdf_path.exists():
 
@@ -462,24 +337,19 @@ def convert_docx_to_pdf(filepath):
 
             return None
 
-
         persistent_temp = tempfile.NamedTemporaryFile(
             suffix=".pdf",
             delete=False
         )
 
-
         persistent_temp.close()
-
 
         shutil.copy2(
             pdf_path,
             persistent_temp.name
         )
 
-
         return persistent_temp.name
-
 
     except subprocess.TimeoutExpired:
 
@@ -488,7 +358,6 @@ def convert_docx_to_pdf(filepath):
         )
 
         return None
-
 
     except Exception as e:
 
@@ -499,7 +368,6 @@ def convert_docx_to_pdf(filepath):
 
         return None
 
-
     finally:
 
         shutil.rmtree(
@@ -509,25 +377,207 @@ def convert_docx_to_pdf(filepath):
 
 
 # ============================================================
+# DOCX INTERNAL PAGE COUNT
+# ============================================================
+
+def count_docx_pages_from_metadata(filepath):
+    """
+    Read the page count stored inside the DOCX file.
+
+    Microsoft Word commonly stores the last saved page
+    count inside:
+
+        docProps/app.xml
+
+    This method works on Linux/Vercel because DOCX is
+    internally a ZIP/XML file.
+
+    Returns:
+        Integer page count or None.
+    """
+
+    try:
+
+        with zipfile.ZipFile(
+            filepath,
+            "r"
+        ) as archive:
+
+            if (
+                "docProps/app.xml"
+                not in archive.namelist()
+            ):
+
+                return None
+
+            xml_data = archive.read(
+                "docProps/app.xml"
+            )
+
+        root = ET.fromstring(
+            xml_data
+        )
+
+        pages = None
+
+        for element in root.iter():
+
+            tag = element.tag.split(
+                "}"
+            )[-1]
+
+            if tag.lower() == "pages":
+
+                pages = element.text
+
+                break
+
+        if not pages:
+
+            return None
+
+        page_count = int(
+            str(pages).strip()
+        )
+
+        if page_count <= 0:
+
+            return None
+
+        print(
+            "DOCX PAGE COUNT FROM METADATA:",
+            page_count
+        )
+
+        return page_count
+
+    except Exception as e:
+
+        print(
+            "DOCX METADATA PAGE COUNT ERROR:",
+            repr(e)
+        )
+
+        return None
+
+
+# ============================================================
+# DOCX RENDERED PAGE BREAK FALLBACK
+# ============================================================
+
+def count_docx_pages_from_rendered_breaks(filepath):
+    """
+    Fallback for DOCX files without saved <Pages>
+    metadata.
+
+    Word may store rendered page breaks as:
+
+        w:lastRenderedPageBreak
+
+    This represents the last saved pagination and can
+    provide an estimated page count on Vercel/Linux.
+
+    Returns:
+        Estimated page count or None.
+    """
+
+    try:
+
+        with zipfile.ZipFile(
+            filepath,
+            "r"
+        ) as archive:
+
+            if (
+                "word/document.xml"
+                not in archive.namelist()
+            ):
+
+                return None
+
+            xml_data = archive.read(
+                "word/document.xml"
+            )
+
+        root = ET.fromstring(
+            xml_data
+        )
+
+        rendered_breaks = 0
+
+        explicit_breaks = 0
+
+        for element in root.iter():
+
+            tag = element.tag.split(
+                "}"
+            )[-1]
+
+            if tag == "lastRenderedPageBreak":
+
+                rendered_breaks += 1
+
+            elif tag == "br":
+
+                break_type = None
+
+                for key, value in element.attrib.items():
+
+                    if (
+                        key.split("}")[-1]
+                        == "type"
+                    ):
+
+                        break_type = value
+
+                if break_type == "page":
+
+                    explicit_breaks += 1
+
+        total_breaks = max(
+            rendered_breaks,
+            explicit_breaks
+        )
+
+        if total_breaks <= 0:
+
+            return None
+
+        page_count = (
+            total_breaks + 1
+        )
+
+        print(
+            "DOCX PAGE COUNT FROM RENDERED BREAKS:",
+            page_count
+        )
+
+        return page_count
+
+    except Exception as e:
+
+        print(
+            "DOCX RENDERED BREAK PAGE COUNT ERROR:",
+            repr(e)
+        )
+
+        return None
+
+
+# ============================================================
 # DOCX PAGE COUNT
 # ============================================================
 
 def count_docx_pages(filepath):
     """
-    Calculate exact DOCX page count.
+    Calculate DOCX page count.
 
     Priority:
 
         1. Microsoft Word
         2. LibreOffice
-
-    Microsoft Word is preferred because its page count
-    should match the page count shown by the user's
-    Microsoft Word application.
-
-    Returns:
-        Integer page count
-        None if exact calculation is unavailable
+        3. DOCX saved page metadata
+        4. Rendered page-break fallback
     """
 
     # ========================================================
@@ -539,11 +589,11 @@ def count_docx_pages(filepath):
         "TRYING MICROSOFT WORD PAGE COUNT..."
     )
 
-
-    word_count = count_docx_pages_with_word(
-        filepath
+    word_count = (
+        count_docx_pages_with_word(
+            filepath
+        )
     )
-
 
     if word_count is not None:
 
@@ -552,7 +602,15 @@ def count_docx_pages(filepath):
             word_count
         )
 
-        return word_count
+        return {
+
+            "count": word_count,
+
+            "exact": True,
+
+            "label": "Actual Word pages"
+
+        }
 
 
     # ========================================================
@@ -568,43 +626,43 @@ def count_docx_pages(filepath):
         "TRYING LIBREOFFICE..."
     )
 
-
     pdf_path = None
-
 
     try:
 
-        pdf_path = convert_docx_to_pdf(
-            filepath
+        pdf_path = (
+            convert_docx_to_pdf(
+                filepath
+            )
         )
 
+        if pdf_path is not None:
 
-        if pdf_path is None:
-
-            return None
-
-
-        pdf_count = count_pdf_pages(
-            pdf_path
-        )
-
-
-        if pdf_count is not None:
-
-            print(
-                "EXACT DOCX PAGE COUNT FROM LIBREOFFICE:",
-                pdf_count
+            pdf_count = (
+                count_pdf_pages(
+                    pdf_path
+                )
             )
 
+            if pdf_count is not None:
 
-        return pdf_count
+                print(
+                    "EXACT DOCX PAGE COUNT FROM LIBREOFFICE:",
+                    pdf_count
+                )
 
+                return {
+
+                    "count": pdf_count,
+
+                    "exact": True,
+
+                    "label":
+                        "Actual Word pages"
+
+                }
 
     finally:
-
-        # ----------------------------------------------------
-        # Remove temporary PDF
-        # ----------------------------------------------------
 
         if pdf_path:
 
@@ -615,8 +673,81 @@ def count_docx_pages(filepath):
                 )
 
             except Exception:
-
                 pass
+
+
+    # ========================================================
+    # METHOD 3
+    # DOCX INTERNAL METADATA
+    # ========================================================
+
+    print(
+        "TRYING DOCX INTERNAL PAGE METADATA..."
+    )
+
+    metadata_count = (
+        count_docx_pages_from_metadata(
+            filepath
+        )
+    )
+
+    if metadata_count is not None:
+
+        return {
+
+            "count": metadata_count,
+
+            "exact": True,
+
+            "label":
+                "Saved Word pages"
+
+        }
+
+
+    # ========================================================
+    # METHOD 4
+    # RENDERED PAGE BREAK FALLBACK
+    # ========================================================
+
+    print(
+        "TRYING DOCX RENDERED PAGE BREAK FALLBACK..."
+    )
+
+    rendered_count = (
+        count_docx_pages_from_rendered_breaks(
+            filepath
+        )
+    )
+
+    if rendered_count is not None:
+
+        return {
+
+            "count": rendered_count,
+
+            "exact": False,
+
+            "label":
+                "Estimated Word pages"
+
+        }
+
+
+    # ========================================================
+    # NOTHING AVAILABLE
+    # ========================================================
+
+    return {
+
+        "count": None,
+
+        "exact": False,
+
+        "label":
+            "Page count unavailable"
+
+    }
 
 
 # ============================================================
@@ -641,21 +772,13 @@ def count_txt_pages(filepath):
 
             text = file.read()
 
-
         if not text.strip():
 
             return 0
 
-
         lines = text.splitlines()
 
-
-        # ----------------------------------------------------
-        # Conservative estimate
-        # ----------------------------------------------------
-
-        LINES_PER_PAGE = 50
-
+        lines_per_page = 50
 
         page_count = max(
 
@@ -663,16 +786,14 @@ def count_txt_pages(filepath):
 
             (
                 len(lines)
-                + LINES_PER_PAGE
+                + lines_per_page
                 - 1
             )
-            // LINES_PER_PAGE
+            // lines_per_page
 
         )
 
-
         return page_count
-
 
     except Exception as e:
 
@@ -690,13 +811,12 @@ def count_txt_pages(filepath):
 
 def count_image_pages(filepath):
     """
-    A supported image document represents one page.
+    One supported image = one page.
     """
 
     if os.path.exists(filepath):
 
         return 1
-
 
     return None
 
@@ -739,7 +859,7 @@ def get_page_count(filepath):
             "exact": False,
 
             "label":
-                "Page count unavailable",
+                "Page count unavailable"
 
         }
 
@@ -753,7 +873,7 @@ def get_page_count(filepath):
             "exact": False,
 
             "label":
-                "File not found",
+                "File not found"
 
         }
 
@@ -783,12 +903,12 @@ def get_page_count(filepath):
             filepath
         )
 
-
         return {
 
             "count": count,
 
-            "exact": count is not None,
+            "exact":
+                count is not None,
 
             "label": (
 
@@ -799,7 +919,7 @@ def get_page_count(filepath):
                 else
                 "Page count unavailable"
 
-            ),
+            )
 
         }
 
@@ -810,29 +930,9 @@ def get_page_count(filepath):
 
     if extension == ".docx":
 
-        count = count_docx_pages(
+        return count_docx_pages(
             filepath
         )
-
-
-        return {
-
-            "count": count,
-
-            "exact": count is not None,
-
-            "label": (
-
-                "Actual Word pages"
-
-                if count is not None
-
-                else
-                "Install Microsoft Word"
-
-            ),
-
-        }
 
 
     # ========================================================
@@ -845,18 +945,14 @@ def get_page_count(filepath):
             filepath
         )
 
-
         return {
 
             "count": count,
 
             "exact": False,
 
-            "label": (
-
+            "label":
                 "Estimated text pages"
-
-            ),
 
         }
 
@@ -871,7 +967,7 @@ def get_page_count(filepath):
 
         ".jpeg",
 
-        ".png",
+        ".png"
 
     ):
 
@@ -879,12 +975,12 @@ def get_page_count(filepath):
             filepath
         )
 
-
         return {
 
             "count": count,
 
-            "exact": count is not None,
+            "exact":
+                count is not None,
 
             "label": (
 
@@ -895,7 +991,7 @@ def get_page_count(filepath):
                 else
                 "Page count unavailable"
 
-            ),
+            )
 
         }
 
@@ -911,6 +1007,6 @@ def get_page_count(filepath):
         "exact": False,
 
         "label":
-            "Page count unavailable",
+            "Page count unavailable"
 
     }
